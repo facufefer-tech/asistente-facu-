@@ -1,0 +1,11 @@
+node_modules/
+.env
+.DS_Store
+npm-debug.log*
+*.log
+
+# Historial y datos locales (estructura de carpetas en repo con .gitkeep)
+data/sesiones/*
+!data/sesiones/.gitkeep
+data/templates/*
+!data/templates/.gitkeep
