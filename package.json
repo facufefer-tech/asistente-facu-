@@ -1,0 +1,19 @@
+{
+  "name": "odoo-payments-chat-mvp",
+  "version": "1.0.0",
+  "description": "MVP chat web app para crear pagos en ODOO usando Gemini",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "axios": "^1.15.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "puppeteer": "^24.42.0"
+  }
+}
