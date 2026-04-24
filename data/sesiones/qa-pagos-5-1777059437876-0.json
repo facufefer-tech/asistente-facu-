@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5-1777059437876-0",
+  "savedAt": 1777059438067,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "entró plata de Gary 85000 por mp"
+    },
+    {
+      "role": "assistant",
+      "content": "No entendí bien qué querés hacer. ¿Es alguna de estas opciones?"
+    }
+  ]
+}

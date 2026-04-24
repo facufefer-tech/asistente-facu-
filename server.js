@@ -2,8 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const { spawn } = require("child_process");
 const puppeteer = require("puppeteer");
+const archiver = require("archiver");
 const axios = require("axios");
+const { generarPropuestaBordada } = require("./tools/propuesta-bordada");
+const { generarPropuesta } = require("./tools/propuesta-orquestador");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,12 +22,34 @@ let pendingPurchaseOrders = [];
 let allSuppliers = [];
 let whatsappTemplates = [];
 let saleOrderTemplates = [];
+/** Base de diseño desde data/productos-diseno-con-odoo.json (ingesta PDFs) */
+let productDesignDB = [];
+let sharedProposalBrowser = null;
+let sharedProposalBrowserPromise = null;
 const sessions = new Map();
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/api/agent", async (req, res) => {
+  let sessionForResponse = null;
+  const originalJson = res.json.bind(res);
+  res.json = (payload) => {
+    if (
+      sessionForResponse &&
+      sessionForResponse.contextCompressedFlag &&
+      payload &&
+      typeof payload.reply === "string"
+    ) {
+      payload = {
+        ...payload,
+        reply: `${payload.reply}\n(contexto resumido para continuar la sesión)`
+      };
+      sessionForResponse.contextCompressedFlag = false;
+      persistSessionToDisk(String(req.body?.sessionId || ""), sessionForResponse);
+    }
+    return originalJson(payload);
+  };
   try {
     const message = req.body?.message?.trim();
     const incomingSessionId = req.body?.sessionId?.trim();
@@ -34,6 +60,7 @@ app.post("/api/agent", async (req, res) => {
 
     validateEnv();
     const session = getOrCreateSession(sessionId);
+    sessionForResponse = session;
     pushHistory(session, "user", message);
 
     if (isNegative(message)) {
@@ -150,6 +177,32 @@ app.post("/api/agent", async (req, res) => {
         action: w.action || "pregunta",
         sessionId
       });
+    }
+
+    if (intentModule === "PAGOS") {
+      const directPayment = tryParseDirectPaymentCommand(message);
+      if (directPayment && directPayment.type === "customer") {
+        try {
+          const result = await executePayment(directPayment.data, "customer");
+          pushHistory(session, "assistant", result.reply);
+          return res.json({ reply: result.reply, options: [], action: "ejecutada", sessionId });
+        } catch (e) {
+          const reply = `No pude completar el movimiento. ${String((e && e.message) || e)}`.slice(0, 600);
+          pushHistory(session, "assistant", reply);
+          return res.json({ reply, options: [], action: "pregunta", sessionId });
+        }
+      }
+      if (directPayment && directPayment.type === "supplier") {
+        try {
+          const result = await executePayment(directPayment.data, "supplier");
+          pushHistory(session, "assistant", result.reply);
+          return res.json({ reply: result.reply, options: [], action: "ejecutada", sessionId });
+        } catch (e) {
+          const reply = `No pude completar el movimiento. ${String((e && e.message) || e)}`.slice(0, 600);
+          pushHistory(session, "assistant", reply);
+          return res.json({ reply, options: [], action: "pregunta", sessionId });
+        }
+      }
     }
 
     const preLlm = await runPreLlmChain(message, session, intentModule);
@@ -338,19 +391,46 @@ app.post("/api/agent", async (req, res) => {
 
 const PROPUESTAS_DIR = path.join(__dirname, "propuestas");
 const LOGOS_DIR = path.join(__dirname, "logos");
+const SESIONES_DIR = path.join(__dirname, "data", "sesiones");
+const DESKTOP_DIR = path.join(process.env.USERPROFILE || process.env.HOME || __dirname, "Desktop");
+const APROBAR_DIR = path.join(DESKTOP_DIR, "aprobar");
+const APROBAR_LOGS_DIR = path.join(APROBAR_DIR, "logs");
+const APROBAR_TMP_DIR = path.join(APROBAR_DIR, "tmp");
+const ILLUSTRATOR_AUTOM_DIR = path.resolve(__dirname, "..", "automatizacion");
+const ILLUSTRATOR_RUN_CMD_PATH = path.join(ILLUSTRATOR_AUTOM_DIR, "EJECUTAR-ILLUSTRATOR-SCRIPTE.cmd");
 try {
   fs.mkdirSync(PROPUESTAS_DIR, { recursive: true });
   fs.mkdirSync(LOGOS_DIR, { recursive: true });
+  fs.mkdirSync(SESIONES_DIR, { recursive: true });
+  fs.mkdirSync(APROBAR_DIR, { recursive: true });
+  fs.mkdirSync(APROBAR_LOGS_DIR, { recursive: true });
+  fs.mkdirSync(APROBAR_TMP_DIR, { recursive: true });
 } catch (_) {
   /* no bloquea */
 }
 app.use("/propuestas", express.static(PROPUESTAS_DIR));
 app.post("/api/generar-propuesta", handleGenerarPropuestaEndpoint);
+app.post("/propuestas/variantes", handleGenerarPropuestaVariantesEndpoint);
+app.get("/api/propuestas-bordadas/candidatas", handleListBordadaCandidatesEndpoint);
+app.post("/api/propuesta-bordada", handlePropuestaBordadaEndpoint);
+app.post("/api/propuesta", handlePropuestaSvgEndpoint);
+
+app.get("/api/producto-diseno/:sku", (req, res) => {
+  const sku = String(req.params.sku || "").toUpperCase();
+  const producto = productDesignDB.find(
+    (p) => String(p.sku || "").toUpperCase() === sku
+  );
+  if (!producto) {
+    return res.status(404).json({ error: "SKU no encontrado en base de diseño" });
+  }
+  return res.json(producto);
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`);
 });
 loadPendingPurchaseOrders();
+loadProductDesignDatabase();
 loadAllSuppliers();
 loadWhatsappTemplates();
 (async () => {
@@ -379,8 +459,9 @@ setInterval(async () => {
 
 function getOrCreateSession(sessionId) {
   if (!sessions.has(sessionId)) {
-    sessions.set(sessionId, {
-      history: [],
+    const fromDisk = readSessionFromDisk(sessionId);
+    sessions.set(sessionId, fromDisk || {
+      history: [{ role: "system", content: "Contexto de sesión inicial." }],
       pendingDelivery: null,
       pendingWrite: null,
       pendingModOc: null,
@@ -388,16 +469,124 @@ function getOrCreateSession(sessionId) {
       pendingSoConfirm: null,
       pendingDejarNota: null,
       pendingWhatsapp: null,
-      pendingPriceUpdate: null
+      pendingPriceUpdate: null,
+      contextCompressedFlag: false
     });
   }
   return sessions.get(sessionId);
 }
 
 function pushHistory(session, role, content) {
+  compressSessionHistoryIfNeeded(session);
   session.history.push({ role, content: String(content || "") });
-  if (session.history.length > 20) {
-    session.history = session.history.slice(-20);
+  trimSessionHistory(session);
+  persistSessionToDisk(getSessionIdByReference(session), session);
+}
+
+function getSessionIdByReference(sessionRef) {
+  for (const [sid, s] of sessions.entries()) {
+    if (s === sessionRef) return sid;
+  }
+  return "";
+}
+
+function buildConversationSummary(items) {
+  const lines = [];
+  for (const it of items || []) {
+    const txt = String(it?.content || "").replace(/\s+/g, " ").trim();
+    if (!txt) continue;
+    if (it.role === "assistant") {
+      if (/pago en borrador creado/i.test(txt)) {
+        lines.push("Se registró un pago en borrador.");
+      } else if (/recepcion registrada correctamente/i.test(txt)) {
+        lines.push("Se registró una recepción.");
+      } else if (/pendiente|confirm/i.test(txt)) {
+        lines.push("Quedó una confirmación pendiente.");
+      } else {
+        lines.push(`Asistente: ${txt.slice(0, 90)}`);
+      }
+    } else if (it.role === "user") {
+      lines.push(`Usuario: ${txt.slice(0, 90)}`);
+    }
+  }
+  return lines.slice(0, 10).join(" | ") || "Sin acciones relevantes.";
+}
+
+function compressSessionHistoryIfNeeded(session) {
+  const anchor = session.history[0]?.role === "system" ? session.history[0] : null;
+  const rest = anchor ? session.history.slice(1) : session.history.slice();
+  if (rest.length <= 15) return;
+  const chunk = rest.slice(0, 10);
+  const summary = buildConversationSummary(chunk);
+  const summaryMsg = {
+    role: "system",
+    content: `Resumen de conversación anterior: ${summary}`
+  };
+  const newRest = [summaryMsg, ...rest.slice(10)];
+  session.history = anchor ? [anchor, ...newRest] : newRest;
+  session.contextCompressedFlag = true;
+}
+
+function trimSessionHistory(session) {
+  const anchor = session.history[0]?.role === "system" ? session.history[0] : null;
+  let rest = anchor ? session.history.slice(1) : session.history.slice();
+  if (rest.length > 20) {
+    rest = rest.slice(-20);
+  }
+  session.history = anchor ? [anchor, ...rest] : rest;
+}
+
+function sessionFilePath(sessionId) {
+  const safe = String(sessionId || "").replace(/[<>:"/\\|?*\x00-\x1F]/g, "_").slice(0, 120);
+  if (!safe) return "";
+  return path.join(SESIONES_DIR, `${safe}.json`);
+}
+
+function readSessionFromDisk(sessionId) {
+  try {
+    const fp = sessionFilePath(sessionId);
+    if (!fp || !fs.existsSync(fp)) return null;
+    const raw = JSON.parse(fs.readFileSync(fp, "utf8"));
+    const ageMs = Date.now() - Number(raw?.savedAt || 0);
+    if (!Number.isFinite(ageMs) || ageMs > 24 * 60 * 60 * 1000) return null;
+    const history = Array.isArray(raw?.history) ? raw.history : [];
+    return {
+      history: history.length ? history : [{ role: "system", content: "Contexto de sesión inicial." }],
+      pendingDelivery: null,
+      pendingWrite: null,
+      pendingModOc: null,
+      creditAdjust: null,
+      pendingSoConfirm: null,
+      pendingDejarNota: null,
+      pendingWhatsapp: null,
+      pendingPriceUpdate: null,
+      contextCompressedFlag: false
+    };
+  } catch {
+    return null;
+  }
+}
+
+function persistSessionToDisk(sessionId, session) {
+  try {
+    const fp = sessionFilePath(sessionId);
+    if (!fp) return;
+    fs.mkdirSync(SESIONES_DIR, { recursive: true });
+    fs.writeFileSync(
+      fp,
+      JSON.stringify(
+        {
+          sessionId,
+          savedAt: Date.now(),
+          history: Array.isArray(session?.history) ? session.history : []
+        },
+        null,
+        2
+      ),
+      "utf8"
+    );
+  } catch (_) {
+    // no bloquea operación principal
   }
 }
 
@@ -425,6 +614,10 @@ function extractJsonObjectFromText(text) {
 
 function detectIntentModule(message) {
   const n = normalizeStr(String(message || ""));
+  const raw = String(message || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
   const has = (arr) => arr.some((k) => n.includes(k));
 
   // Selección directa desde clarification_form
@@ -457,6 +650,8 @@ function detectIntentModule(message) {
   const reportesKw = ["cuantomedebe", "cuentasacobrar", "cajadehoy", "pedidosenproduccion", "quefacture", "reporte", "estadistica"];
   const preciosKw = ["subioun", "aumentaron", "actualizaelcostode", "actualizarcosto", "costo"];
 
+  if (isEntroCobroClienteDePattern(raw)) return "PAGOS";
+  if (isLikelyPaymentMessage(raw)) return "PAGOS";
   if (has(pagosKw)) return "PAGOS";
   if (has(recepKw)) return "RECEPCIONES";
   if (has(ventasKw)) return "VENTAS";
@@ -464,6 +659,192 @@ function detectIntentModule(message) {
   if (has(reportesKw)) return "REPORTES";
   if (has(preciosKw)) return "PRECIOS";
   return "UNKNOWN";
+}
+
+function parseMoneyFlexible(value) {
+  const raw = String(value || "").trim().toLowerCase();
+  if (!raw) return 0;
+  const m = raw.match(/(\d+(?:[.,]\d+)?)(\s*[mk])?/i);
+  if (!m) return normalizeMoney(raw);
+  let n = Number(String(m[1]).replace(/\./g, "").replace(",", "."));
+  const suf = String(m[2] || "").trim().toLowerCase();
+  if (suf === "k") n *= 1000;
+  if (suf === "m") n *= 1000000;
+  return Number.isFinite(n) ? n : 0;
+}
+
+function inferJournalFromText(message) {
+  const s = normalizeStr(message || "");
+  if (s.includes("mercadopago") || s.includes("mercadop")) return "MercadoPago";
+  if (/(^|[^a-z0-9])mp([^a-z0-9]|$)/.test(s)) return "MercadoPago";
+  if (/(^|[^a-z0-9])ft([^a-z0-9]|$)/.test(s)) return "Cash";
+  if (s.includes("banco") || s.includes("transf") || s.includes("transferencia")) return "Banco Santander Milito";
+  if (s.includes("efectivo") || s.includes("cash") || s.includes("efec")) return "Cash";
+  return "MercadoPago";
+}
+
+/** "entró" + (plata|pago|transferencia) + "de" + nombre — siempre cobro de cliente, sin ambigüedad. */
+function isEntroCobroClienteDePattern(rawMsg) {
+  const t = String(rawMsg || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  if (!/(\d+(?:[.,]\d+)?\s*[km]?)/.test(t)) return false;
+  if (!/\bentro\s+(plata|pago|un\s+pago|transferencia)\s+de\s+/.test(t)) return false;
+  if (!/[a-záéíóúñ]{2,}/i.test(t.replace(/\d/g, " "))) return false;
+  return true;
+}
+
+function isLikelyPaymentMessage(rawMsg) {
+  const s = String(rawMsg || "").toLowerCase();
+  if (!s.trim()) return false;
+  const t = s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  if (isEntroCobroClienteDePattern(t)) {
+    return !!(/(\d+(?:[.,]\d+)?\s*[km]?)/i.test(s) && /[a-záéíóúñ]{3,}/i.test(s.replace(/\d+/g, " ")));
+  }
+  const hasAmount = /(\d+(?:[.,]\d+)?\s*[km]?)/i.test(s);
+  const hasPaymentVerb =
+    /(pagu[eé]\s+a|pague\s+a|le\s+pagu[eé]|le\s+pague|me\s+pago|me\s+pag[óo]|cobr[eéo]|cobro|entro\s+plata\s+de|entro\s+pago|entro\s+un\s+pago|entro\s+transferencia|entr[oó]\s*plata|entro\s*plata|deposit[oó]|mand[oó]|mande|transfer[ií]|transferencia|sal[ií]o\s*plata)/i.test(
+      t
+    );
+  const hasNameLike = /[a-záéíóúñ]{3,}/i.test(s.replace(/\d+/g, " "));
+  return !!(hasAmount && hasNameLike && hasPaymentVerb);
+}
+
+function mapPaymentChannelTokenToJournal(tok) {
+  const t = String(tok || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+  if (!t) return null;
+  if (t === "mp" || t.includes("mercadopago") || t.includes("mercadop")) return "MercadoPago";
+  if (t === "ft") return "Cash";
+  if (t.includes("banco") || t.includes("transf") || t === "santander") return "Banco Santander Milito";
+  if (t.includes("efect") || t === "cash") return "Cash";
+  return null;
+}
+
+/**
+ * Saca del final del nombre (o del mensaje) rastros del medio: "en ft", "por mp", "x banco", etc.
+ */
+function splitPaymentNameAndChannelHint(nameRaw, fullMessage) {
+  let name = String(nameRaw || "").trim();
+  let journal = null;
+  const stripSuffixes = (s) => {
+    const rows = [
+      { re: /\s+en\s+efectivo$/i, j: "Cash" },
+      { re: /\s+en\s+ft$/i, j: "Cash" },
+      { re: /\s+en\s+mp$/i, j: "MercadoPago" },
+      { re: /\s+en\s+banco$/i, j: "Banco Santander Milito" },
+      { re: /\s+por\s+efectivo$/i, j: "Cash" },
+      { re: /\s+por\s+mp$/i, j: "MercadoPago" },
+      { re: /\s+por\s+banco$/i, j: "Banco Santander Milito" },
+      { re: /\s+x\s+mp$/i, j: "MercadoPago" },
+      { re: /\s+x\s+banco$/i, j: "Banco Santander Milito" }
+    ];
+    let cur = s;
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const { re, j } of rows) {
+        const m = cur.match(re);
+        if (m) {
+          journal = j;
+          cur = cur.slice(0, m.index).trim();
+          changed = true;
+          break;
+        }
+      }
+    }
+    return cur;
+  };
+  const tryTail = (s) => {
+    const m = s.match(
+      /(?:\s+(?:en|por|v[ií]a|al|a|con|x)\s+)(mp|ft|banco|transferencia|transf|santander|efectivo|cash|mercadopago|mercadop)(?:\s*)$/i
+    );
+    if (!m) return s;
+    const jn = mapPaymentChannelTokenToJournal(m[1]);
+    if (!jn) return s;
+    if (!journal) journal = jn;
+    return s.slice(0, m.index).trim();
+  };
+  name = stripSuffixes(name);
+  name = tryTail(name);
+  const whole = String(fullMessage || "");
+  if (!journal) {
+    const m2 = whole.match(
+      /\b(?:en|por|x|v[ií]a|con)\s+(ft|mp|banco|efectivo|mercadopago|mercadop|transferencia|transf|santander|cash)(?:\b|$)/i
+    );
+    if (m2) {
+      const jn = mapPaymentChannelTokenToJournal(m2[1]);
+      if (jn) journal = jn;
+    }
+  }
+  return { name, journal };
+}
+
+function tryParseDirectPaymentCommand(message) {
+  const msg = String(message || "");
+  const s = msg
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  const journalName = inferJournalFromText(msg);
+  const mkRef = (name) => `pago ${String(name || "").trim()}`.trim();
+
+  const outbound = [
+    /le pague\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+a\s+([a-z0-9 .-]{2,60})/i,
+    /pague\s+a\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /pague\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+a\s+([a-z0-9 .-]{2,60})/i,
+    /mande\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+a\s+([a-z0-9 .-]{2,60})/i,
+    /transfer[io]\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+a\s+([a-z0-9 .-]{2,60})/i,
+    /salio plata para\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i
+  ];
+  for (const re of outbound) {
+    const m = s.match(re);
+    if (!m) continue;
+    const amount = parseMoneyFlexible(m[1].match(/\d/) ? m[1] : m[2]);
+    let supplierName = String(m[1].match(/\d/) ? m[2] : m[1]).trim();
+    if (supplierName && amount > 0) {
+      const split = splitPaymentNameAndChannelHint(supplierName, msg);
+      supplierName = split.name;
+      const jn = split.journal || journalName;
+      return { type: "supplier", data: { supplierName, amount, journalName: jn, ref: mkRef(supplierName) } };
+    }
+  }
+
+  const inbound = [
+    /entro plata de\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /entro pago de\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /entro un pago de\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /entro transferencia de\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /cobr[oae]?\s+a?\s*([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /cobr[oae]?\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+de\s+([a-z0-9 .-]{2,60})/i,
+    /me pago\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /([a-z0-9 .-]{2,60})\s+mand[oae]?\s+(?:transferencia\s+)?(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /entro\s+(\d+(?:[.,]\d+)?\s*[mk]?)\s+de\s+([a-z0-9 .-]{2,60})/i,
+    /([a-z0-9 .-]{2,60})\s+depos?it[oa]?\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /([a-z0-9 .-]{2,60})\s+tir[oóa]?\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /([a-z0-9 .-]{2,60})\s+abon[oóa]?\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /entr[oae]?\s+plata\s+de\s+([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)/i,
+    /^([a-z0-9 .-]{2,60})\s+(\d+(?:[.,]\d+)?\s*[mk]?)(?:\s+(mp|banco|efectivo|cash|ft|transferencia))?$/i
+  ];
+  for (const re of inbound) {
+    const m = s.match(re);
+    if (!m) continue;
+    const amount = parseMoneyFlexible(m[1].match(/\d/) ? m[1] : m[2]);
+    let clientName = String(m[1].match(/\d/) ? m[2] : m[1]).trim();
+    if (clientName && amount > 0) {
+      const split = splitPaymentNameAndChannelHint(clientName, msg);
+      clientName = split.name;
+      const jn = split.journal || journalName;
+      return { type: "customer", data: { clientName, amount, journalName: jn, ref: mkRef(clientName) } };
+    }
+  }
+  return null;
 }
 
 function buildModulePromptContext(moduleHint) {
@@ -585,11 +966,100 @@ VENTAS (createOv: conversación o futuro LLM, no toques recepción):
 
 PAGOS — PAGO_CLIENTE (el cliente me paga a mí; yo cobro):
   Verbos/ejemplos: "me pagó", "me pago", "me dio", "me transfirió", "me mandó", "cobré", "cobro", "me entró", "entro", "cobraste", "cobraste a".
+INTENCIÓN = registrar_pago_cliente
+Se activa cuando el mensaje contiene UN NOMBRE O EMPRESA
++ UN MONTO NUMÉRICO + opcionalmente un medio de pago.
+El medio de pago puede estar ausente (default: MercadoPago).
+
+Patrones que SIEMPRE son pago cliente:
+- "entró plata de [nombre] [monto]"
+- "entró plata de [nombre] [monto] por mp/banco/efectivo"
+- "[nombre] mandó transferencia por [monto]"
+- "[nombre] mandó [monto]"
+- "cobré a [nombre] [monto]"
+- "cobré [monto] de [nombre]"
+- "me pagó [nombre] [monto]"
+- "[nombre] pagó [monto]"
+- "[nombre] [monto] mp"
+- "[nombre] [monto] banco"
+- "[nombre] [monto] efectivo"
+- "[nombre] tiró [monto] por mp"
+- "[nombre] depositó [monto]"
+- "entró [monto] de [nombre]"
+- "[monto] de [nombre] a mp"
+- "[nombre] abonó [monto]"
+- "[nombre] [monto]" (solo nombre y monto = pago por mp)
+- "calzon quitao [monto] a mp"
+- "piers [monto] banco"
+
+REGLA CRÍTICA: si hay nombre + monto en el mismo mensaje,
+NUNCA caer en fallback. Siempre interpretar como pago.
+El nombre puede ser apodo, abreviatura o nombre parcial.
+Buscar el partner en ODOO por similitud, no exactitud.
+
+Medios de pago reconocidos:
+"mp" / "mercadopago" / "mercado pago" → MercadoPago
+"banco" / "transf" / "transferencia" → Banco Santander Milito
+"efectivo" / "cash" / "efec" → Efectivo
+Sin medio de pago especificado → MercadoPago (default)
+  Ejemplos argentinos informales (intención = registrar_pago_cliente):
+  - "entró plata de [nombre] [monto] por mp"
+  - "entró plata de [nombre] [monto] por banco"
+  - "entró plata de [nombre] [monto] en efectivo"
+  - "[nombre] mandó transferencia por [monto]"
+  - "cobré a [nombre] [monto] en efectivo"
+  - "cobré a [nombre] [monto] por mp"
+  - "me pagó [nombre] [monto] en banco"
+  - "me pagó [nombre] [monto] por mp"
+  - "[nombre] pagó [monto]"
+  - "entró [monto] de [nombre]"
+  - "[nombre] depositó [monto]"
+  - "[nombre] tiró [monto] por mp"
+  - "[nombre] mandó [monto]"
+  - "[nombre] [monto] mp"
+  - "[nombre] [monto] banco"
+  - "[nombre] [monto] efectivo"
 PAGOS — PAGO_PROVEEDOR (yo pago a proveedor):
+INTENCIÓN = registrar_pago_proveedor
+Se activa cuando el mensaje indica que YO (el usuario)
+pagué o mandé plata A alguien (proveedor).
+
+Patrones que SIEMPRE son pago proveedor:
+- "pagué a [proveedor] [monto]"
+- "le pagué a [proveedor] [monto]"
+- "mandé [monto] a [proveedor]"
+- "transferí [monto] a [proveedor]"
+- "salió plata para [proveedor] [monto]"
+- "pagué [monto] a [proveedor]"
+- "[proveedor] [monto] banco" (cuando proveedor conocido)
+- "[proveedor] [monto] mp" (cuando proveedor conocido)
+- "pago a [proveedor] [monto]"
+
+DIFERENCIADOR clave entre cliente y proveedor:
+- Pago CLIENTE: el dinero ENTRA ("entró", "mandó", "pagó",
+  "cobré", "depositó", "tiró")
+- Pago PROVEEDOR: el dinero SALE ("pagué", "mandé",
+  "transferí", "salió", "le pagué")
+- Si hay ambigüedad y el nombre es un proveedor conocido
+  en ODOO → pago proveedor
+- Si hay ambigüedad y el nombre es un cliente conocido
+  en ODOO → pago cliente
   Verbos: "le pagué", "le pague", "pagué a", "pague a", "le di", "le mandé a", "le transferí a", "le mande a".
+  Ejemplos argentinos informales (intención = registrar_pago_proveedor):
+  - "pagué a [proveedor] [monto] por mp"
+  - "pagué a [proveedor] [monto] en banco"
+  - "mandé [monto] a [proveedor]"
+  - "transferí [monto] a [proveedor]"
+  - "salió plata para [proveedor] [monto]"
+  - "pagué [monto] a [proveedor]"
+  - "le pagué a [proveedor] [monto]"
 AMBIGÜEDAD "pago"/"pagó" sin dejar claro el sujeto:
   No des error. Si podés, inferí del contexto; si no, options ["Cobro de cliente", "Pago a proveedor"] o explicá qué te falta.
   (En backend a veces se cruza con account.move y OC: si hay varias pistas, proponé las dos acciones; si no, preguntá con esas options.)
+- Regla general obligatoria para pagos:
+  Cualquier mensaje que contenga un nombre propio + un monto numérico + opcionalmente un medio de pago
+  (mp/banco/efectivo/transferencia) debe interpretarse como intención de pago (cliente o proveedor según verbo/contexto).
+  Nunca caer en fallback para estos casos.
 - Diarios permitidos: Cash, Banco Santander Milito, MercadoPago (al usuario: Efectivo, Santander, MercadoPago)
 
 RECEPCION (solo instrucciones LLM; el código de recepción no se toca):
@@ -632,11 +1102,52 @@ FORMATO — devolvé SOLO JSON, sin markdown ni texto extra:
 }
 
 const GROQ_JSON_FALLBACK_REPLY =
-  "No te entendí bien esa. ¿Me lo explicás de otra forma o querés hacer otra cosa?";
+  "Detecté parte del mensaje, pero necesito confirmar. ¿Querés registrar un pago, consultar algo o hacer otra operación?";
+
+function buildSmartFallbackFromMessage(message) {
+  const raw = String(message || "").trim();
+  const normalized = normalizeStr(raw);
+  const amountMatch = raw.match(/(\d+(?:[.,]\d+)?\s*[mk]?)/i);
+  const amountTxt = amountMatch ? amountMatch[1] : "";
+  const journal = inferJournalFromText(raw);
+  const names = raw
+    .replace(/(\d+(?:[.,]\d+)?\s*[mk]?)/gi, " ")
+    .split(/\s+/)
+    .filter((w) => w && w.length > 2 && /[a-záéíóúñ]/i.test(w));
+  const nameGuess = names.length ? names[0] : "";
+  if (nameGuess && amountTxt) {
+    const amountN = parseMoneyFlexible(amountTxt);
+    const amountFmt = Number.isFinite(amountN) && amountN > 0 ? `$${Math.round(amountN).toLocaleString("es-AR")}` : amountTxt;
+    return {
+      reply:
+        `Detecté: [${nameGuess}] + [${amountFmt}] + [${journal}]. ` +
+        `¿Querés que registre: a) Pago de cliente ${nameGuess} por ${amountFmt} en ${journal} b) Pago a proveedor ${nameGuess} por ${amountFmt} en ${journal} c) Otra cosa, contame mejor`,
+      options: [
+        `Cobro cliente ${nameGuess} ${amountFmt}`,
+        `Pago proveedor ${nameGuess} ${amountFmt}`,
+        "Otra cosa"
+      ]
+    };
+  }
+  if (normalized.includes("pago") || normalized.includes("cobr") || normalized.includes("deuda")) {
+    return {
+      reply: "Detecté una intención parcial de pagos. ¿Querés registrar un pago de cliente, un pago a proveedor o consultar deuda?",
+      options: ["Pago cliente", "Pago proveedor", "Consultar deuda"]
+    };
+  }
+  return {
+    reply: "¿Querés registrar un pago, consultar algo o hacer otra operación?",
+    options: ["Registrar pago", "Consultar", "Otra operación"]
+  };
+}
 
 async function runAgentWithHistory(session, moduleHint = "FULL") {
-  const fallback = { action: null, reply: GROQ_JSON_FALLBACK_REPLY, options: [] };
+  const lastUserMsg = [...(session.history || [])].reverse().find((h) => h.role === "user")?.content || "";
+  const smartFallback = buildSmartFallbackFromMessage(lastUserMsg);
+  const fallback = { action: null, reply: smartFallback.reply || GROQ_JSON_FALLBACK_REPLY, options: smartFallback.options || [] };
   let response;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
   try {
     response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -652,10 +1163,13 @@ async function runAgentWithHistory(session, moduleHint = "FULL") {
           { role: "system", content: buildAgentSystemPrompt(moduleHint) },
           ...session.history.slice(-20).map((h) => ({ role: h.role, content: h.content }))
         ]
-      })
+      }),
+      signal: controller.signal
     });
   } catch (e) {
     return fallback;
+  } finally {
+    clearTimeout(timeout);
   }
 
   let bodyText;
@@ -732,7 +1246,12 @@ function isAffirmative(text) {
 
 function isNegative(text) {
   const n = normalizeStr(text);
-  return ["no", "cancelar", "cancelo", "nocancelar"].some((k) => n === k || n.includes(k));
+  const negWords = ["no", "cancelar", "cancelo", "nope", "nel", "para", "stop"];
+  // "no sé …" / "nosequehacer" no son cancelación: no usar \s tras "no" (evita "no " al inicio).
+  return (
+    negWords.some((k) => n === k) ||
+    /^no[,.!]/.test(String(text || "").toLowerCase().trim())
+  );
 }
 
 function normalizeMoney(value) {
@@ -2473,6 +2992,9 @@ function resolvePendingOrderTriggers(message) {
   const n = normalizeStr(String(message));
   if (!n) return false;
   return (
+    n.includes("pedidosenproduccion") ||
+    n.includes("enproduccion") ||
+    n.includes("produccion") ||
     (n.includes("pendientes") && (n.includes("producc") || n.includes("entreg") || n.includes("pedido") || n.includes("mercader"))) ||
     n.includes("quemeentreg") ||
     n.includes("damelospedid") ||
@@ -2491,19 +3013,48 @@ function parsePendingReportFilters(msg) {
   const n = normalizeStr(s);
   const d = s.match(/(\d{1,2})\s*d[ií]as?/i);
   const withinDays = d ? Math.min(365, Math.max(1, parseInt(d[1], 10))) : null;
-  const partnerHint = s.match(
-    /(?:pedidos?|entregas?|de|por|proveedor)\s+de\s+([A-Za-zÁáÉéÍíÓóÚúÑñ0-9. ]+?)(?=\s*$|\s+venc)/i
+  const partnerA = s.match(
+    /(?:^|\s)(?:proveedor|de)\s+([A-Za-zÁáÉéÍíÓóÚúÑñ0-9][A-Za-zÁáÉéÍíÓóÚúÑñ0-9.\- ]{1,50})(?=\s|$|[,.])/i
   );
+  const partnerB = s.match(/(?:\boc\b|ocs|o\.?c\.?s?|pedidos?)\s+de(?:l|los)?\s+([A-Za-zÁáÉéÍíÓóÚúÑñ0-9][A-Za-zÁáÉéÍíÓóÚúÑñ0-9.\- ]{1,50})(?=\s|$)/i
+  );
+  const partnerC = s.match(
+    /(?:^|\s)(?:pedidos?|entregas?|de|por)\s+de\s+([A-Za-zÁáÉéÍíÓóÚúÑñ0-9][A-Za-zÁáÉéÍíÓóÚúÑñ0-9.\- ]{1,50})(?=\s*$|\s+venc|\s+con|\s+para)/i
+  );
+  const partnerHint = partnerA || partnerB || partnerC;
+  const pendingPartnerJunk = (t) => {
+    const k = normalizeStr(t);
+    if (k.length < 2) return true;
+    return (
+      k === "produccion" ||
+      k === "produ" ||
+      k === "entrega" ||
+      k === "entregas" ||
+      k === "mercader" ||
+      k === "mercaderia" ||
+      k === "producc" ||
+      k === "pend" ||
+      k === "pendiente" ||
+      k === "pendientes"
+    );
+  };
+  const partnerNameRaw = partnerHint ? partnerHint[1].trim() : "";
+  const partnerName = partnerNameRaw && !pendingPartnerJunk(partnerNameRaw) ? partnerNameRaw : "";
   const marca = s.match(/(?:cliente|marca|quedebe)\s+([A-Za-zÁáÉéÍíÓóÚúÑñ0-9. ]{2,})/i);
   const thisWeek = n.includes("estasemana");
   const vencidos = n.includes("vencidos");
-  return { withinDays, partner: partnerHint ? partnerHint[1].trim() : "", marca: marca ? marca[1].trim() : "", thisWeek, vencidos };
+  return { withinDays, partner: partnerName, marca: marca ? marca[1].trim() : "", thisWeek, vencidos };
 }
 
 function resolvePendingOrdersReport(message) {
   if (hasActionIntent(message)) return null;
   if (!resolvePendingOrderTriggers(message) && !normalizeStr(message).includes("quemedebe")) {
-    if (!normalizeStr(message).includes("producc") && !normalizeStr(message).includes("entreg") && !normalizeStr(message).includes("quedebe")) {
+    if (
+      !normalizeStr(message).includes("producc") &&
+      !normalizeStr(message).includes("produccion") &&
+      !normalizeStr(message).includes("entreg") &&
+      !normalizeStr(message).includes("quedebe")
+    ) {
       return null;
     }
   }
@@ -2520,7 +3071,9 @@ function buildPendingOrdersOtpFromMessage(message) {
   }
   const f = parsePendingReportFilters(message);
   const n = normalizeStr(message);
-  const groupByProvider = n.includes("divididoporproveed") || n.includes("porproveed");
+  const wantFlatTable =
+    n.includes("entabla") || n.includes("unatabla") || n.includes("listaplana") || n.includes("sinlineasproveed");
+  const groupByProvider = !wantFlatTable;
   const partnerSlice = f.partner;
   const marcaF = f.marca;
   const now = new Date();
@@ -2590,16 +3143,26 @@ function buildPendingOrdersOtpFromMessage(message) {
       if (!byP.has(r.prov)) byP.set(r.prov, []);
       byP.get(r.prov).push(r);
     }
-    let text = "Pedidos en producción (caché) — por proveedor\n\n";
+    const title = partnerSlice
+      ? `Pedidos en producción (caché) — proveedor: ${partnerSlice}\n\n`
+      : "Pedidos en producción (caché) — por proveedor\n\n";
+    let text = title;
     let grand = 0;
     for (const [prov, ar] of byP) {
       const subG = ar.reduce((a, b) => a + b.subtotal, 0);
       grand += subG;
-      text += `── ${String(prov).toUpperCase()} ─────────\n`;
-      for (const r of ar) {
-        text += `${r.po} | ${r.cli} | ${r.prod.slice(0, 40)} | pend ${r.pend} | p.u. $${r.unit.toFixed(2)} | $${r.subtotal.toFixed(2)} | ${r.d}\n`;
-      }
-      text += `Subtotal ${prov}: $${subG.toFixed(2)}\n\n`;
+      const h = ["OC", "CLIENTE", "PRODUCTO", "PEND", "PRECIO", "SUBTOTAL", "ENTREGA"];
+      const trows = ar.map((r) => [
+        r.po,
+        r.cli,
+        r.prod.slice(0, 36),
+        r.pend,
+        r.unit.toFixed(2),
+        r.subtotal.toFixed(2),
+        r.d
+      ]);
+      text += `── ${String(prov).toUpperCase()} (subtotal $${subG.toFixed(2)}) ──\n`;
+      text += buildTextTable(h, trows) + "\n\n";
     }
     text += `TOTAL GENERAL: $${grand.toFixed(2)}`;
     return { reply: text.trim(), options: [] };
@@ -3287,6 +3850,231 @@ function applyProposalDesignCambiosToNotas(notas, cambiosText) {
   return base;
 }
 
+function getDesignRecordBySku(skuLike) {
+  const sku = String(skuLike || "")
+    .trim()
+    .toUpperCase();
+  if (!sku || !Array.isArray(productDesignDB) || !productDesignDB.length) return null;
+  return (
+    productDesignDB.find((r) => String(r && r.sku ? r.sku : "").trim().toUpperCase() === sku) || null
+  );
+}
+
+function coercePositiveNumber(v) {
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+function normalizeColorLabel(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function mergeNotasWithDesignRecord(notas, designRecord) {
+  const base = notas && typeof notas === "object" ? { ...notas } : {};
+  if (!designRecord || typeof designRecord !== "object") return base;
+  if (typeof designRecord.texto_escrito === "string" && designRecord.texto_escrito.trim()) {
+    base.texto_escrito = designRecord.texto_escrito.trim();
+  }
+  if (typeof designRecord.tipografia === "string" && designRecord.tipografia.trim()) {
+    base.tipografia = designRecord.tipografia.trim();
+  }
+  const dbColors = Array.isArray(designRecord.colores)
+    ? designRecord.colores.map(normalizeColorLabel).filter(Boolean)
+    : [];
+  if (dbColors.length) {
+    base.colores = dbColors;
+    if (!base.fondoColor) base.fondoColor = dbColors[0];
+    if (!base.relieveColor && dbColors[1]) base.relieveColor = dbColors[1];
+    if (!base.relieveColor && dbColors[0]) base.relieveColor = dbColors[0] === "negro" ? "blanco" : "negro";
+  }
+  const anchoMm = coercePositiveNumber(designRecord?.tamano_mm?.ancho);
+  const altoMm = coercePositiveNumber(designRecord?.tamano_mm?.alto);
+  if (anchoMm || altoMm) {
+    base.medidas = {
+      ...(base.medidas && typeof base.medidas === "object" ? base.medidas : {}),
+      ancho: anchoMm || null,
+      alto: altoMm || null
+    };
+  }
+  return base;
+}
+
+function applyDesignRecordToSkuParsed(skuParsed, designRecord) {
+  const out = skuParsed && typeof skuParsed === "object" ? { ...skuParsed } : parseSKU("");
+  if (!designRecord || typeof designRecord !== "object") return out;
+  const anchoMm = coercePositiveNumber(designRecord?.tamano_mm?.ancho);
+  const altoMm = coercePositiveNumber(designRecord?.tamano_mm?.alto);
+  if (anchoMm) out.ancho = anchoMm;
+  if (altoMm) out.alto = altoMm;
+  const dbColors = Array.isArray(designRecord.colores)
+    ? designRecord.colores.map(normalizeColorLabel).filter(Boolean)
+    : [];
+  if (dbColors.length) out.colores = dbColors.length;
+  return out;
+}
+
+function proposalFontPickFromTypography(typoRaw) {
+  const typo = String(typoRaw || "").trim();
+  if (!typo) return null;
+  const low = normalizeStr(typo);
+  const pre =
+    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+  if (low.includes("oswald")) {
+    return {
+      family: "Oswald",
+      linkHref: `${pre}<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">`
+    };
+  }
+  if (low.includes("playfair")) {
+    return {
+      family: "Playfair Display",
+      linkHref: `${pre}<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">`
+    };
+  }
+  if (low.includes("raleway")) {
+    return {
+      family: "Raleway",
+      linkHref: `${pre}<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">`
+    };
+  }
+  if (low.includes("montserrat")) {
+    return {
+      family: "Montserrat",
+      linkHref: `${pre}<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">`
+    };
+  }
+  if (low.includes("arial")) return { family: "Arial", linkHref: "" };
+  if (low.includes("helvetica")) return { family: "Helvetica", linkHref: "" };
+  if (low.includes("times")) return { family: "'Times New Roman'", linkHref: "" };
+  return { family: typo, linkHref: "" };
+}
+
+async function loadProposalOrderContext(odoo, uid, orden_id) {
+  const orders = await odoo.executeKw(
+    uid,
+    "sale.order",
+    "search_read",
+    [[["name", "=", orden_id]]],
+    {
+      fields: ["id", "name", "partner_id", "date_order", "user_id", "order_line", "x_studio_marca"],
+      limit: 1
+    }
+  );
+  const order = orders && orders[0];
+  if (!order) return null;
+
+  const marca = String(order.x_studio_marca || "").trim();
+  const lineIds = order.order_line || [];
+  const lineRows = lineIds.length
+    ? await odoo.executeKw(uid, "sale.order.line", "read", [lineIds], {
+        fields: ["id", "name", "product_id", "product_uom_qty", "price_unit"]
+      })
+    : [];
+
+  let chatter = [];
+  try {
+    chatter = await odoo.executeKw(
+      uid,
+      "mail.message",
+      "search_read",
+      [
+        [
+          ["model", "=", "sale.order"],
+          ["res_id", "=", order.id],
+          ["message_type", "=", "comment"]
+        ]
+      ],
+      { fields: ["body", "date", "author_id"], limit: 120, order: "date asc" }
+    );
+  } catch (_) {
+    chatter = await odoo.executeKw(
+      uid,
+      "mail.message",
+      "search_read",
+      [[["model", "=", "sale.order"], ["res_id", "=", order.id]]],
+      { fields: ["body", "date", "author_id", "message_type"], limit: 120, order: "date asc" }
+    );
+    chatter = (chatter || []).filter((m) => (m.message_type || "comment") === "comment");
+  }
+
+  const partnerName = Array.isArray(order.partner_id) ? order.partner_id[1] : "Cliente";
+  const vendedor = Array.isArray(order.user_id) ? order.user_id[1] : "";
+  const partnerId = Array.isArray(order.partner_id) ? order.partner_id[0] : null;
+  const logoPath = partnerId ? path.join(LOGOS_DIR, `${partnerId}.png`) : "";
+
+  let notas = parseChatterNotes(chatter || []);
+  const chatterText = (chatter || []).map((c) => stripHtml(c.body)).join("\n");
+  notas = await enrichChatterNotesWithGroqIfNeeded(notas, chatterText);
+
+  let lineas = (lineRows || []).map((ln) => {
+    const sku = extractSkuCandidateFromLine(ln);
+    const skuParsed = parseSKU(sku);
+    return {
+      ...ln,
+      sku,
+      skuParsed,
+      qty: ln.product_uom_qty,
+      price_unit: ln.price_unit,
+      name: ln.name || sku
+    };
+  });
+  if (!lineas.length) {
+    lineas.push({
+      name: "Sin líneas",
+      qty: 0,
+      price_unit: 0,
+      sku: "",
+      skuParsed: parseSKU("")
+    });
+  }
+
+  let logoDataUri = null;
+  let visionData = { texts: [], colors: [] };
+  let logoAdjunto = null;
+  try {
+    const adjuntos = await odoo.executeKw(
+      uid,
+      "ir.attachment",
+      "search_read",
+      [
+        [
+          ["res_model", "=", "sale.order"],
+          ["res_id", "=", order.id],
+          ["mimetype", "ilike", "image/"]
+        ]
+      ],
+      { fields: ["id", "name", "datas", "mimetype"], limit: 5, order: "id asc" }
+    );
+    logoAdjunto = adjuntos && adjuntos.length ? adjuntos[0] : null;
+    if (logoAdjunto && logoAdjunto.datas) {
+      const mt = String(logoAdjunto.mimetype || "image/png").trim();
+      if (/^image\/[a-z0-9.+-]+$/i.test(mt)) {
+        logoDataUri = `data:${mt};base64,${String(logoAdjunto.datas).replace(/\s/g, "")}`;
+      }
+      visionData = await analyzeImageWithVision(
+        String(logoAdjunto.datas).replace(/\s/g, ""),
+        logoAdjunto.mimetype || "image/jpeg"
+      );
+    }
+  } catch (_) {
+    // no bloquear propuesta si falla el fetch de adjuntos/Vision
+  }
+
+  const proposalFontPick = proposalBordadaFontPickFromVision(visionData.texts || []);
+  return {
+    order,
+    marca,
+    partnerName,
+    vendedor,
+    lineas,
+    notas,
+    logoPath,
+    logoDataUri,
+    visionData,
+    proposalFontPick
+  };
+}
+
 async function executeModificarPropuestaFromAgent(data, userMessage) {
   const cambios = String((data && data.cambios) || "").trim();
   let orden_id = String((data && data.orden_id) || "").toUpperCase().replace(/\s+/g, "");
@@ -3316,98 +4104,15 @@ async function executeModificarPropuestaFromAgent(data, userMessage) {
   } catch (e) {
     return { reply: "No pude conectar con ODOO ahora. Probá de nuevo en un rato.", options: [] };
   }
-  const orders = await odoo.executeKw(
-    uid,
-    "sale.order",
-    "search_read",
-    [[["name", "=", orden_id]]],
-    { fields: ["id", "name", "partner_id", "date_order", "user_id", "order_line", "x_studio_marca"], limit: 1 }
-  );
-  const order = orders && orders[0];
-  if (!order) {
+  const proposalCtx = await loadProposalOrderContext(odoo, uid, orden_id);
+  if (!proposalCtx || !proposalCtx.order) {
     return { reply: `No encontré la OV ${orden_id}.`, options: [] };
   }
-  const lineIds = order.order_line || [];
-  const lineRows = lineIds.length
-    ? await odoo.executeKw(uid, "sale.order.line", "read", [lineIds], {
-        fields: ["id", "name", "product_id", "product_uom_qty", "price_unit"]
-      })
-    : [];
-  let chatter = [];
-  try {
-    chatter = await odoo.executeKw(
-      uid,
-      "mail.message",
-      "search_read",
-      [
-        [
-          ["model", "=", "sale.order"],
-          ["res_id", "=", order.id],
-          ["message_type", "=", "comment"]
-        ]
-      ],
-      { fields: ["body", "date", "author_id"], limit: 120, order: "date asc" }
-    );
-  } catch (e) {
-    chatter = await odoo.executeKw(
-      uid,
-      "mail.message",
-      "search_read",
-      [[["model", "=", "sale.order"], ["res_id", "=", order.id]]],
-      { fields: ["body", "date", "author_id", "message_type"], limit: 120, order: "date asc" }
-    );
-    chatter = (chatter || []).filter((m) => (m.message_type || "comment") === "comment");
-  }
-  const partnerName = Array.isArray(order.partner_id) ? order.partner_id[1] : "Cliente";
-  const partnerId = Array.isArray(order.partner_id) ? order.partner_id[0] : null;
-  const logoPath = partnerId ? path.join(LOGOS_DIR, `${partnerId}.png`) : "";
-  const marca = String(order.x_studio_marca || "").trim();
-  let notas = parseChatterNotes(chatter || []);
-  const chatterText = (chatter || []).map((c) => stripHtml(c.body)).join("\n");
-  notas = await enrichChatterNotesWithGroqIfNeeded(notas, chatterText);
+  const { marca, partnerName, vendedor, lineas, logoPath, logoDataUri, visionData, proposalFontPick } = proposalCtx;
+  let notas = proposalCtx.notas;
   if (cambios) {
     notas = applyProposalDesignCambiosToNotas(notas, cambios);
   }
-  let lineas = (lineRows || []).map((ln) => {
-    const sku = extractSkuCandidateFromLine(ln);
-    const skuParsed = parseSKU(sku);
-    return { ...ln, sku, skuParsed, qty: ln.product_uom_qty, price_unit: ln.price_unit, name: ln.name || sku };
-  });
-  if (!lineas.length) {
-    lineas.push({ name: "Sin líneas", qty: 0, price_unit: 0, sku: "", skuParsed: parseSKU("") });
-  }
-  let logoDataUri = null;
-  let visionData = { texts: [], colors: [] };
-  let logoAdjunto = null;
-  try {
-    const adjuntos = await odoo.executeKw(
-      uid,
-      "ir.attachment",
-      "search_read",
-      [
-        [
-          ["res_model", "=", "sale.order"],
-          ["res_id", "=", order.id],
-          ["mimetype", "ilike", "image/"]
-        ]
-      ],
-      { fields: ["id", "name", "datas", "mimetype"], limit: 5, order: "id asc" }
-    );
-    logoAdjunto = adjuntos && adjuntos.length ? adjuntos[0] : null;
-    if (logoAdjunto && logoAdjunto.datas) {
-      const mt = String(logoAdjunto.mimetype || "image/png").trim();
-      if (/^image\/[a-z0-9.+-]+$/i.test(mt)) {
-        logoDataUri = `data:${mt};base64,${String(logoAdjunto.datas).replace(/\s/g, "")}`;
-      }
-      visionData = await analyzeImageWithVision(
-        String(logoAdjunto.datas).replace(/\s/g, ""),
-        logoAdjunto.mimetype || "image/jpeg"
-      );
-    }
-  } catch (e) {
-    console.log("[agent] MODIFICAR_PROPUESTA adjuntos:", (e && e.message) || e);
-  }
-  const proposalFontPick = proposalBordadaFontPickFromVision(visionData.texts || []);
   const fileName = nextProposalFilename(orden_id);
   const outPath = path.join(PROPUESTAS_DIR, fileName);
   await generateProposalPDF(
@@ -3415,7 +4120,7 @@ async function executeModificarPropuestaFromAgent(data, userMessage) {
       orden_id,
       partner_name: partnerName,
       marca,
-      vendedor: Array.isArray(order.user_id) ? order.user_id[1] : "",
+      vendedor,
       lineas,
       notas,
       logoPath,
@@ -4651,7 +5356,8 @@ function normalizeStr(s) {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -4773,16 +5479,29 @@ function createOdooClient() {
   const odooUrl = process.env.ODOO_URL.replace(/\/$/, "");
 
   async function jsonRpc(service, method, args) {
-    const response = await fetch(`${odooUrl}/jsonrpc`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jsonrpc: "2.0",
-        method: "call",
-        params: { service, method, args },
-        id: Date.now()
-      })
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    let response;
+    try {
+      response = await fetch(`${odooUrl}/jsonrpc`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          method: "call",
+          params: { service, method, args },
+          id: Date.now()
+        }),
+        signal: controller.signal
+      });
+    } catch (e) {
+      if (e && (e.name === "AbortError" || e.code === "ABORT_ERR")) {
+        throw new Error("ODOO no respondió a tiempo. Probá de nuevo.");
+      }
+      throw e;
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!response.ok) {
       const text = await response.text();
@@ -5394,6 +6113,24 @@ async function loadPendingPurchaseOrders() {
     console.log("OCs pendientes cargadas:", pendingPurchaseOrders.length);
   } catch (error) {
     console.error("Error cargando OCs pendientes:", error.message);
+  }
+}
+
+function loadProductDesignDatabase() {
+  try {
+    const designPath = path.join(__dirname, "data", "productos-diseno-con-odoo.json");
+    if (!fs.existsSync(designPath)) {
+      productDesignDB = [];
+      console.log("Base de diseño: no hay archivo, lista vacía (ejecutar ingesta + enrich)");
+      return;
+    }
+    const raw = fs.readFileSync(designPath, "utf8");
+    const parsed = JSON.parse(raw);
+    productDesignDB = Array.isArray(parsed) ? parsed : [];
+    console.log("Base de diseño cargada:", productDesignDB.length, "registros");
+  } catch (error) {
+    console.error("Error cargando base de diseño:", error.message);
+    productDesignDB = [];
   }
 }
 
@@ -6725,7 +7462,8 @@ function buildBordadaSheetHtml(
   logoPath,
   logoDataUri,
   visionData,
-  proposalFontPick
+  proposalFontPick,
+  lineDesign
 ) {
   visionData = visionData || { texts: [], colors: [] };
   const fontPick = proposalFontPick || proposalBordadaFontPickFromVision(visionData.texts || []);
@@ -6816,10 +7554,14 @@ function buildBordadaSheetHtml(
     /\bcuello\b/.test(orientHint) ||
     /\bmas\s+alta\s+que\s+ancha\b/.test(orientHint);
   const forceHorizontal = /\bhorizontal\b/.test(orientHint) || /\bapaisad/.test(orientHint);
+  const isRollo33 = !!term.rollo && (Math.round(Number(anchoEtqMm || 0)) === 33 || /\b33\b/.test(String(skuParsed.ancho || "")));
 
   if (anchoEtqMm != null && largoEtqMm != null) {
-    // Default: horizontal (ancho >= alto), salvo indicación explícita en notas/chatter.
-    if (forceVertical && anchoEtqMm > largoEtqMm) {
+    // Regla fija bordada rollo 33mm: siempre vertical (alto > ancho).
+    if (isRollo33) {
+      anchoEtqMm = 33;
+      if (largoEtqMm <= anchoEtqMm) largoEtqMm = Math.max(Math.round(anchoEtqMm * 3.5), anchoEtqMm + 10);
+    } else if (forceVertical && anchoEtqMm > largoEtqMm) {
       const tmp = anchoEtqMm;
       anchoEtqMm = largoEtqMm;
       largoEtqMm = tmp;
@@ -6830,10 +7572,14 @@ function buildBordadaSheetHtml(
         largoEtqMm = tmp;
       }
     }
+  } else if (isRollo33) {
+    anchoEtqMm = 33;
+    if (largoEtqMm == null) largoEtqMm = Math.round(anchoEtqMm * 3.5);
   }
 
-  const ANCHO_PX = anchoEtqMm != null ? Math.round(anchoEtqMm * 3.5) : 200;
-  const ALTO_PX = largoEtqMm != null ? Math.round(largoEtqMm * 3.5) : 120;
+  const ESCALA = 3.78;
+  const ANCHO_PX = anchoEtqMm != null ? Math.round(anchoEtqMm * ESCALA) : 200;
+  const ALTO_PX = largoEtqMm != null ? Math.round(largoEtqMm * ESCALA) : 120;
 
   let bordadaTituloMm = "BORDADA";
   if (anchoEtqMm != null && largoEtqMm != null) {
@@ -6854,7 +7600,8 @@ function buildBordadaSheetHtml(
         : "—";
   const coloresSku = skuParsed.colores != null && skuParsed.colores !== "" ? String(skuParsed.colores) : "—";
 
-  const varr = (notas && notas.variantes) || [];
+  const coloresList = (notas && notas.colores) || [];
+  const varr = ((notas && notas.variantes) || coloresList || []).filter(Boolean);
   const visCols = visionData.colors || [];
   const hexD1 = visCols[0] && visCols[0].hex;
   const hexD2 = visCols[1] && visCols[1].hex;
@@ -6882,160 +7629,118 @@ function buildBordadaSheetHtml(
     String(marca || "").trim() ||
     String((line && line._partnerName) || "").trim() ||
     "MARCA";
-  const fontEtq = Math.max(10, Math.round(ANCHO_PX / 6));
-  const doblez = term.cde || term.cdm;
-  const dualVariantes = varr.length >= 2;
-  const cantVarTxt = (notas && notas.cantidad_variante_txt) || "";
+  const textoPrincipal = String((notas && notas.texto_escrito) || (lineDesign && lineDesign.texto_escrito) || marcaTxt).trim() || marcaTxt;
+  const fontEtq = Math.max(10, Math.round(ALTO_PX * 0.12));
 
   const hasRefLogo = logoDataUri && String(logoDataUri).startsWith("data:");
   const refLogoSrcEsc = hasRefLogo ? escapeHtmlProposal(logoDataUri) : "";
-  const refClienteBlock = hasRefLogo
-    ? `<div style="flex:0 0 auto;text-align:center;padding-left:12px;">
-  <img src="${refLogoSrcEsc}" alt="" style="max-height:80px;max-width:120px;object-fit:contain;border:1px solid #ddd;">
-  <div style="font-size:8px;color:#666;margin-top:4px;">Ref. cliente</div>
-</div>`
-    : "";
-
-  const coloresList = (notas && notas.colores) || [];
-  const brandTxtComb = escapeHtmlProposal(marcaTxt);
-  let combinacionesBlock = "";
-  if (coloresList.length) {
-    combinacionesBlock = `<div class="combinaciones" style="width:100%;margin-top:14px;">
-  <div class="combinaciones-titulo">Combinaciones de color</div>
-  <div class="combinaciones-grid">
-    ${coloresList
-      .map((c) => {
-        const st = proposalColorCssFromLabel(c);
-        const bd = st.border ? st.border : "1px solid #999";
-        return `<div class="color-muestra">
-    <div class="color-rect" style="background:${st.bg};color:${st.fg};border:${bd};">${brandTxtComb}</div>
-    <div style="font-size:9px;">${escapeHtmlProposal(c)}</div>
-  </div>`;
-      })
-      .join("")}
-  </div>
-</div>`;
+  const textLinesRaw = String(textoPrincipal || "")
+    .split(/\r?\n/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+  let mainLine = textLinesRaw[0] || "MARCA";
+  let subLine = textLinesRaw.slice(1).join(" ");
+  if (!subLine && /[-|]/.test(mainLine)) {
+    const parts = mainLine.split(/[-|]/).map((x) => x.trim()).filter(Boolean);
+    mainLine = parts[0] || mainLine;
+    subLine = parts.slice(1).join(" ");
   }
 
+  function colorCodeFromLabel(label) {
+    const s = String(label || "").trim();
+    const m = s.match(/(\d{2,4})\s*$/);
+    return m ? m[1] : "s/c";
+  }
+  function colorNameFromLabel(label) {
+    const s = String(label || "").trim();
+    return s.replace(/\d{2,4}\s*$/, "").trim() || s || "Color";
+  }
+  const variantValues = varr.length ? varr : [fondoRaw || coloresList[0] || hexD1 || "gris"];
   const tallesArr = (notas && notas.talles) || [];
   const mpt = (notas && notas.metros_por_talle) || {};
-  const miniW = 60;
-  const ratio = anchoEtqMm && largoEtqMm ? largoEtqMm / anchoEtqMm : ALTO_PX / Math.max(ANCHO_PX, 1);
-  const miniH = Math.max(24, Math.round(miniW * ratio));
   const tallePrincipal = tallesArr.length ? String(tallesArr[0]).trim() : "";
-  const marcaMiniPx = Math.max(6, Math.round(miniW / 10));
-  const talleMiniPx = Math.max(10, Math.round(miniW / 3.2));
-  const tallesBlock =
-    tallesArr.length > 0
-      ? `<div style="width:100%;margin-top:14px;">
-  <div style="font-weight:bold;font-size:10px;margin-bottom:6px;">Distribución por talle:</div>
-  <div style="display:grid;grid-template-columns:repeat(6,60px);gap:10px;width:100%;justify-content:start;">
-    ${tallesArr
-      .map((t) => {
-        const tk = String(t).trim();
-        const mts = mpt[tk] || mpt[tk.toUpperCase()] || mpt[tk.toLowerCase()];
-        const mtsLine =
-          mts != null && String(mts) !== ""
-            ? `<div style="font-size:8px;color:#444;margin-top:2px;">${escapeHtmlProposal(String(mts))}mts</div>`
-            : "";
-        return `<div style="text-align:center;width:${miniW}px;">
-      <div style="position:relative;width:${miniW}px;height:${miniH}px;border:2px solid #333;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${bgCss};color:${relieveCss};font-family:${fontFamilyCss};font-weight:bold;padding:4px;gap:2px;">
-      <span style="font-size:${marcaMiniPx}px;line-height:1;">${escapeHtmlProposal(marcaTxt)}</span>
-      <span style="font-size:${talleMiniPx}px;line-height:1;">${escapeHtmlProposal(tk)}</span>${
-        doblez
-          ? `<div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed #555;pointer-events:none;"></div>`
-          : ""
-      }</div>
-      ${mtsLine}
-    </div>`;
-      })
-      .join("")}
+  const marcaLabelPx = Math.max(10, Math.round(ANCHO_PX / 8));
+  const talleLabelPx = Math.max(16, Math.round(ALTO_PX * 0.24));
+  const variantLimited = variantValues.length >= 2 ? variantValues.slice(0, 4) : [variantValues[0]];
+  const colorSampleList = (coloresList.length ? coloresList : variantValues).slice(0, 8);
+
+  const zona2MuestrasColor = `<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+  ${colorSampleList
+    .map((c) => {
+      const bg = colorNameToCss(c);
+      const colorName = colorNameFromLabel(c);
+      const code = colorCodeFromLabel(c);
+      return `<div style="display:flex;flex-direction:column;align-items:flex-start;">
+  <div style="width:40px;height:20px;background:${bg};border:1px solid #888;"></div>
+  <div style="font-size:10px;">&gt; ${escapeHtmlProposal(colorName)} ${escapeHtmlProposal(code)}</div>
+</div>`;
+    })
+    .join("")}
+</div>`;
+
+  const zona1Etiquetas = variantLimited
+    .map((variantColor, idx) => {
+      const bgV = colorNameToCss(variantColor);
+      const fgV = relieveRaw ? relieveColorToCss(relieveRaw, bgV) : contrasteHexFromBgHex(bgV);
+      const tallesLabel = tallePrincipal || "COMPLETAR";
+      const logoOrFallback = hasRefLogo
+        ? `<img src="${refLogoSrcEsc}" alt="" style="max-width:80%;max-height:90%;object-fit:contain;">`
+        : `<span style="font-size:${Math.max(12, Math.round(ANCHO_PX / 7))}px;font-weight:700;color:${fgV};">${escapeHtmlProposal(
+            marcaTxt || "COMPLETAR"
+          )}</span>`;
+      const cotasPrimera =
+        idx === 0
+          ? `<div style="position:absolute;left:-20px;top:0;height:100%;border-left:2px dashed #cc0000;">
+    <span style="position:absolute;left:-32px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:10px;color:#cc0000;white-space:nowrap;">${escapeHtmlProposal(
+      String(largoEtqMm != null ? `${largoEtqMm}mm` : "COMPLETAR")
+    )}</span>
   </div>
-</div>`
-      : "";
+  <div style="position:absolute;left:0;bottom:-20px;width:100%;border-bottom:2px dashed #cc0000;">
+    <span style="position:absolute;left:50%;top:4px;transform:translateX(-50%);font-size:10px;color:#cc0000;white-space:nowrap;">${escapeHtmlProposal(
+      String(anchoEtqMm != null ? `${anchoEtqMm}mm` : "COMPLETAR")
+    )}</span>
+  </div>`
+          : "";
+      return `<div style="position:relative;padding-left:26px;padding-bottom:28px;">
+  <div style="position:relative;width:${ANCHO_PX}px;height:${ALTO_PX}px;background:${bgV};border:1px solid #333;color:${fgV};font-family:${fontFamilyCss};text-align:center;box-sizing:border-box;overflow:visible;">
+    <div style="position:absolute;left:0;right:0;top:50%;border-top:2px dashed #cc0000;"></div>
+    <div style="position:absolute;left:0;top:0;width:100%;height:50%;display:flex;align-items:center;justify-content:center;">${logoOrFallback}</div>
+    <div style="position:absolute;left:0;top:50%;width:100%;height:25%;display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:${marcaLabelPx}px;color:${fgV};font-family:${fontFamilyCss};font-weight:700;line-height:1.1;">${escapeHtmlProposal(
+        mainLine || "COMPLETAR"
+      )}</span>
+    </div>
+    <div style="position:absolute;left:0;bottom:0;width:100%;height:25%;display:flex;align-items:flex-end;justify-content:flex-end;padding-right:8px;padding-bottom:4px;box-sizing:border-box;">
+      <span style="font-size:${talleLabelPx}px;font-weight:700;color:${fgV};line-height:1;">${escapeHtmlProposal(tallesLabel)}</span>
+    </div>
+    ${cotasPrimera}
+  </div>
+</div>`;
+    })
+    .join("");
 
-  const txs = (visionData.texts || []).map((t) => String(t).trim()).filter((t) => t.length > 3);
-  const refDetected =
-    txs.find((s, i) => i > 0 && s.length < 180) ||
-    txs.find((s) => s.length >= 4 && s.length < 180) ||
-    "";
-  const visionInstrExtra =
-    refDetected !== ""
-      ? `\n\nTexto detectado en la referencia: ${refDetected}`
-      : "";
-  const instrRaw = ((notas && notas.instrucciones) || "") + visionInstrExtra;
-  const instrTrunc = truncInstruccionesProposal(instrRaw);
-  const instrBlock =
-    instrTrunc !== ""
-      ? `<div class="instrucciones" style="width:100%;margin-top:10px;font-size:9px;font-style:italic;color:#555;border-top:1px solid #eee;padding-top:6px;white-space:pre-line;">${escapeHtmlProposal(instrTrunc)}</div>`
-      : "";
+  const miniBaseBg = colorNameToCss(variantLimited[0] || bgCss);
+  const miniBaseFg = relieveRaw ? relieveColorToCss(relieveRaw, miniBaseBg) : contrasteHexFromBgHex(miniBaseBg);
+  const zona3MiniTalles = `<div style="display:flex;flex-direction:row;gap:8px;flex-wrap:wrap;width:100%;margin-top:16px;">
+  ${tallesArr
+    .map((t) => {
+      const tk = String(t).trim();
+      const mts = mpt[tk] || mpt[tk.toUpperCase()] || mpt[tk.toLowerCase()];
+      return `<div style="display:flex;flex-direction:column;align-items:center;">
+  <div style="width:60px;height:80px;background:${miniBaseBg};color:${miniBaseFg};display:flex;align-items:center;justify-content:center;border:1px solid #333;font-family:${fontFamilyCss};font-size:20px;font-weight:bold;">
+    ${escapeHtmlProposal(tk)}
+  </div>
+  <div style="font-size:10px;margin-top:4px;">${escapeHtmlProposal(String(mts != null && String(mts) !== "" ? `${mts} mts` : "— mts"))}</div>
+</div>`;
+    })
+    .join("")}
+</div>`;
 
-  const foldHtml = doblez
-    ? `<div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed #666;pointer-events:none;z-index:1;"></div>`
-    : "";
-
-  const marcaLabelPx = tallesArr.length ? Math.max(8, Math.round(fontEtq * 0.42)) : fontEtq;
-  const talleLabelPx = Math.max(10, Math.round(fontEtq * 1.15));
-  const innerMarcaTalle =
-    tallesArr.length > 0
-      ? `<span style="position:relative;z-index:2;font-size:${marcaLabelPx}px;line-height:1.1;">${escapeHtmlProposal(marcaTxt)}</span><span style="position:relative;z-index:2;font-size:${talleLabelPx}px;line-height:1;">${escapeHtmlProposal(tallePrincipal)}</span>`
-      : `<span style="position:relative;z-index:2;font-size:${fontEtq}px;line-height:1.15;">${escapeHtmlProposal(marcaTxt)}</span>`;
-
-  const cotaVHtml = (h) => `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:${h}px;width:22px;color:#cc0000;font-size:10px;font-weight:bold;margin-right:6px;flex-shrink:0;">
-          <span style="line-height:1;">▲</span>
-          <div style="flex:1;width:0;border-left:2px dashed #cc0000;margin:2px 0;"></div>
-          <div style="writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;line-height:1.1;">${escapeHtmlProposal(largoDisp)}</div>
-          <div style="flex:1;width:0;border-left:2px dashed #cc0000;margin:2px 0;"></div>
-          <span style="line-height:1;">▼</span>
-        </div>`;
-
-  const cotaHHtml = (wExtra) => `<div style="display:flex;align-items:center;justify-content:center;margin-top:6px;color:#cc0000;font-size:10px;font-weight:bold;width:${wExtra}px;">
-        <span style="line-height:1;">◀</span>
-        <div style="flex:1;height:0;border-bottom:2px dashed #cc0000;margin:0 6px;"></div>
-        <span>${escapeHtmlProposal(anchoDisp)}</span>
-        <div style="flex:1;height:0;border-bottom:2px dashed #cc0000;margin:0 6px;"></div>
-        <span style="line-height:1;">▶</span>
-      </div>`;
-
-  let vistaEtiquetaPrincipal = "";
-  if (dualVariantes) {
-    const cantVarRow =
-      cantVarTxt !== ""
-        ? `<div style="width:100%;text-align:center;margin-bottom:8px;font-size:10px;font-weight:bold;">${escapeHtmlProposal(cantVarTxt)}</div>`
-        : `<div style="width:100%;text-align:center;margin-bottom:4px;font-size:9px;color:#555;">Variantes de color</div>`;
-    const cols = [0, 1]
-      .map((i) => {
-        const bgV = colorNameToCss(varr[i]);
-        const fgV = relieveRaw ? relieveColorToCss(relieveRaw, bgV) : contrasteHexFromBgHex(bgV);
-        const innerVar =
-          tallesArr.length > 0
-            ? `<span style="position:relative;z-index:2;font-size:${marcaLabelPx}px;line-height:1.1;">${escapeHtmlProposal(marcaTxt)}</span><span style="position:relative;z-index:2;font-size:${talleLabelPx}px;line-height:1;">${escapeHtmlProposal(tallePrincipal)}</span>`
-            : `<span style="position:relative;z-index:2;font-size:${fontEtq}px;line-height:1.15;">${escapeHtmlProposal(marcaTxt)}</span>`;
-        return `<div style="display:flex;flex-direction:column;align-items:center;">
-      <div style="display:flex;flex-direction:row;align-items:flex-end;">
-        ${cotaVHtml(ALTO_PX)}
-        <div style="position:relative;border:2px solid #333;box-sizing:border-box;width:${ANCHO_PX}px;height:${ALTO_PX}px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${bgV};color:${fgV};font-weight:bold;text-align:center;padding:8px;gap:4px;overflow:hidden;font-family:${fontFamilyCss};">
-          ${foldHtml}
-          ${innerVar}
-        </div>
-      </div>
-      ${cotaHHtml(ANCHO_PX + 28)}
-    </div>`;
-      })
-      .join("");
-    vistaEtiquetaPrincipal = `${cantVarRow}<div style="display:flex;flex-direction:row;gap:16px;justify-content:center;align-items:flex-start;flex-wrap:wrap;width:100%;">${cols}</div>`;
-  } else {
-    vistaEtiquetaPrincipal = `<div style="display:flex;flex-direction:column;align-items:center;">
-    <div style="display:flex;flex-direction:row;align-items:flex-end;">
-        ${cotaVHtml(ALTO_PX)}
-        <div style="position:relative;border:2px solid #333;box-sizing:border-box;width:${ANCHO_PX}px;height:${ALTO_PX}px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${bgCss};color:${relieveCss};font-weight:bold;text-align:center;padding:8px;gap:4px;overflow:hidden;font-family:${fontFamilyCss};">
-          ${foldHtml}
-          ${innerMarcaTalle}
-        </div>
-      </div>
-      ${cotaHHtml(ANCHO_PX + 28)}
-    </div>`;
-  }
+  const headerVisual = `<div style="width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div style="font-size:10px;font-weight:600;">OV ${escapeHtmlProposal(orden_id)} - ${escapeHtmlProposal(marca || marcaTxt)}</div>
+    <div style="font-size:11px;font-weight:700;text-align:center;flex:1;">${escapeHtmlProposal(bordadaTituloMm)}</div>
+    <div style="width:140px;"></div>
+  </div>`;
 
   return `<div class="sheet">
 <div class="header">
@@ -7069,22 +7774,19 @@ function buildBordadaSheetHtml(
   </div>
 </div>
 <div class="seccion-disenio" style="align-items:stretch;">
-  <div style="font-weight:bold;font-size:11px;margin-bottom:10px;width:100%;">
-    ${escapeHtmlProposal(bordadaTituloMm)}
+  ${headerVisual}
+  <div style="display:flex;flex-direction:row;gap:18px;align-items:flex-start;width:100%;">
+    <div style="display:flex;flex-direction:column;min-width:170px;">${zona2MuestrasColor}</div>
+    <div style="display:flex;flex-direction:row;gap:20px;justify-content:center;align-items:flex-start;flex-wrap:nowrap;flex:1;">${zona1Etiquetas}</div>
+    <div style="min-width:120px;font-size:10px;color:#555;"></div>
   </div>
-  <div style="display:flex;flex-direction:row;align-items:flex-start;justify-content:center;width:100%;flex-wrap:wrap;">
-    ${vistaEtiquetaPrincipal}
-    ${refClienteBlock}
-  </div>
-  ${tallesBlock}
-  ${combinacionesBlock}
-  ${instrBlock}
+  ${zona3MiniTalles}
 </div>
 <div class="footer">AVÍOS TEXTILES</div>
 </div>`;
 }
 
-function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas, logoPath, logoDataUri) {
+function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas, logoPath, logoDataUri, lineDesign) {
   const nAn = Number(skuParsed.ancho);
   const nAl = Number(skuParsed.alto);
   const aw = Number.isFinite(nAn) && nAn > 0 ? nAn : null;
@@ -7097,7 +7799,7 @@ function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas
   let material = "Otro";
   if (subN.includes("pu") || String(skuParsed.raw || "").includes("PU")) material = "PU";
   else if (subN.includes("cuero")) material = "cuero";
-  const brandShow = String(marcaRect || "").trim() || "MARCA";
+  const brandShow = String((notas && notas.texto_escrito) || (lineDesign && lineDesign.texto_escrito) || marcaRect || "").trim() || "MARCA";
 
   const hasRefLogo = logoDataUri && String(logoDataUri).startsWith("data:");
   const refLogoSrcEsc = hasRefLogo ? escapeHtmlProposal(logoDataUri) : "";
@@ -7113,7 +7815,7 @@ function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas
     }
   }
 
-  const brandTxtComb = String(marcaRect || "").trim() || "MARCA";
+  const brandTxtComb = String((notas && notas.texto_escrito) || (lineDesign && lineDesign.texto_escrito) || marcaRect || "").trim() || "MARCA";
   const coloresList = (notas && notas.colores) || [];
   let combinacionesInner = "";
   if (!coloresList.length) {
@@ -7148,7 +7850,7 @@ function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas
 </div>
 <div class="ov-title">${buildOvTitleLineHtmlProposal(orden_id, marca)}</div>
 <div class="ficha">
-  <div class="ficha-row"><span class="ficha-label">Medidas (cm):</span> ${escapeHtmlProposal(awS)} × ${escapeHtmlProposal(ahS)}</div>
+  <div class="ficha-row"><span class="ficha-label">Medidas (mm):</span> ${escapeHtmlProposal(awS)} × ${escapeHtmlProposal(ahS)}</div>
   <div class="ficha-row"><span class="ficha-label">Cantidad:</span> ${escapeHtmlProposal(String(line.qty ?? ""))}</div>
   <div class="ficha-row"><span class="ficha-label">Material:</span> ${escapeHtmlProposal(material)}</div>
 </div>
@@ -7160,7 +7862,7 @@ function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas
       : ""
   }
   <div class="cota-vertical-container">
-    <div class="cota-vertical">${escapeHtmlProposal(ahS)} cm</div>
+  <div class="cota-vertical">${escapeHtmlProposal(ahS)} mm</div>
     <div class="linea-cota" style="height:${ALTO_PX}px;"></div>
     <div style="border:2px solid #8db43e;border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center;">
       <div style="border:2px solid #000;background:#fff;width:${ANCHO_PX}px;min-width:80px;height:${ALTO_PX}px;min-height:60px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:11px;text-align:center;color:#000;">
@@ -7168,7 +7870,7 @@ function buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas
       </div>
     </div>
   </div>
-  <div class="cota-horizontal">${escapeHtmlProposal(awS)} cm</div>
+  <div class="cota-horizontal">${escapeHtmlProposal(awS)} mm</div>
   <div class="combinaciones">
     <div class="combinaciones-titulo">Colores</div>
     <div class="combinaciones-grid">
@@ -7209,7 +7911,8 @@ function buildBolsaSvgHtml(skuParsed) {
 </svg>`;
 }
 
-function buildBolsaSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath) {
+function buildBolsaSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath, lineDesign) {
+  void lineDesign;
   const mc = skuParsed.materialChecks || {};
   const mats = ["PP", "OXI", "BIO", "Friselina"]
     .map((label) => {
@@ -7251,10 +7954,12 @@ function buildBolsaSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath) 
 </div>`;
 }
 
-function buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath) {
+function buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath, lineDesign) {
+  void lineDesign;
   const aw = skuParsed.ancho !== "" && skuParsed.ancho != null ? String(skuParsed.ancho) : "—";
   const ah = skuParsed.alto !== "" && skuParsed.alto != null ? String(skuParsed.alto) : "—";
   const cols = skuParsed.colores != null && skuParsed.colores !== "" ? String(skuParsed.colores) : "—";
+  const textoPrincipal = String((notas && notas.texto_escrito) || "").trim();
   return `<div class="sheet">
 <div class="header">
   ${proposalHeaderLeftHtml()}
@@ -7263,14 +7968,20 @@ function buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notas, logoPa
 </div>
 <div class="ov-title">${buildOvTitleLineHtmlProposal(orden_id, marca)}</div>
 <div class="ficha">
-  <div class="ficha-row"><span class="ficha-label">Medidas (cm):</span> ${escapeHtmlProposal(aw)} × ${escapeHtmlProposal(ah)}</div>
+  <div class="ficha-row"><span class="ficha-label">Medidas (mm):</span> ${escapeHtmlProposal(aw)} × ${escapeHtmlProposal(ah)}</div>
   <div class="ficha-row"><span class="ficha-label">Colores:</span> ${escapeHtmlProposal(cols)}</div>
   <div class="ficha-row"><span class="ficha-label">Cantidad:</span> ${escapeHtmlProposal(String(line.qty ?? ""))}</div>
 </div>
 <div class="seccion-disenio">
   <div style="font-weight:bold;font-size:12px;margin-bottom:10px;">Diseño</div>
   <div class="etiqueta-rect" style="width:320px;height:120px;border-radius:8px;">
-    ${aw !== "—" && ah !== "—" ? `${escapeHtmlProposal(aw)} cm × ${escapeHtmlProposal(ah)} cm` : "Medidas según SKU"}
+    ${
+      textoPrincipal
+        ? escapeHtmlProposal(textoPrincipal)
+        : aw !== "—" && ah !== "—"
+          ? `${escapeHtmlProposal(aw)} mm × ${escapeHtmlProposal(ah)} mm`
+          : "Medidas según SKU"
+    }
   </div>
   <div class="instrucciones" style="margin-top:16px;">${escapeHtmlProposal((notas && notas.instrucciones) || "")}</div>
 </div>
@@ -7278,7 +7989,10 @@ function buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notas, logoPa
 </div>`;
 }
 
-function buildGenericSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath) {
+function buildGenericSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath, lineDesign) {
+  void skuParsed;
+  void logoPath;
+  const textoPrincipal = String((notas && notas.texto_escrito) || (lineDesign && lineDesign.texto_escrito) || "").trim();
   return `<div class="sheet">
 <div class="header">
   ${proposalHeaderLeftHtml()}
@@ -7290,7 +8004,7 @@ function buildGenericSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath
   <thead><tr><th>Producto</th><th>Cantidad</th></tr></thead>
   <tbody>
     <tr>
-      <td>${escapeHtmlProposal(line.name || skuParsed.raw || "")}</td>
+      <td>${escapeHtmlProposal(textoPrincipal || line.name || "")}</td>
       <td>${escapeHtmlProposal(String(line.qty ?? ""))}</td>
     </tr>
   </tbody>
@@ -7311,12 +8025,402 @@ function proposalLayoutKey(skuParsed) {
   return "generico";
 }
 
-async function htmlToPdf(htmlContent, outputPath) {
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+function sanitizeFilenamePart(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, "_")
+    .replace(/\s+/g, "-")
+    .replace(/_+/g, "_")
+    .replace(/-+/g, "-")
+    .slice(0, 80) || "sin-dato";
+}
+
+function jsxEscape(value) {
+  return String(value || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\r?\n/g, " ");
+}
+
+function parseLogoDataUri(logoDataUri) {
+  const raw = String(logoDataUri || "");
+  const m = raw.match(/^data:(image\/[a-z0-9.+-]+);base64,([\s\S]+)$/i);
+  if (!m) return null;
+  return { mime: m[1].toLowerCase(), base64: m[2].replace(/\s/g, "") };
+}
+
+function hexToRgbObject(hex) {
+  const m = String(hex || "").trim().match(/^#([0-9a-f]{6})$/i);
+  if (!m) return null;
+  const int = parseInt(m[1], 16);
+  return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255 };
+}
+
+function colorToHex(colorLike) {
+  const c = normalizeColorLabel(colorLike);
+  if (/^#[0-9a-f]{6}$/i.test(c)) return c;
+  const map = {
+    negro: "#000000",
+    blanco: "#ffffff",
+    beige: "#c8b89a",
+    arena: "#c8b89a",
+    rojo: "#cc0000",
+    azul: "#003399",
+    gris: "#888888",
+    marron: "#5c3317",
+    "marrón": "#5c3317",
+    transparente: "#dddddd",
+    amarillo: "#f0c020",
+    dorado: "#c8a400",
+    plateado: "#aaaaaa",
+    fucsia: "#cc007a",
+    rosa: "#e87da8",
+    verde: "#2d7a2d",
+    naranja: "#d97706",
+    violeta: "#6d28d9",
+    bordo: "#6b0020"
+  };
+  return map[c] || "#dddddd";
+}
+
+function buildIllustratorBordadaPayload(data) {
+  const lineas = Array.isArray(data?.lineas) ? data.lineas : [];
+  let selected = null;
+  let selectedParsed = null;
+  let selectedDesign = null;
+  for (const line of lineas) {
+    const parsedRaw = line?.skuParsed || parseSKU(line?.sku || "");
+    const designRecord = getDesignRecordBySku(line?.sku || parsedRaw.raw || "");
+    const parsed = applyDesignRecordToSkuParsed(parsedRaw, designRecord);
+    if (proposalLayoutKey(parsed) === "bordada") {
+      selected = line;
+      selectedParsed = parsed;
+      selectedDesign = designRecord;
+      break;
+    }
+  }
+  if (!selected) return null;
+
+  const notasMerged = mergeNotasWithDesignRecord(data?.notas, selectedDesign);
+  const medidaAncho = coercePositiveNumber(selectedParsed?.ancho) || coercePositiveNumber(notasMerged?.medidas?.ancho);
+  const medidaAlto = coercePositiveNumber(selectedParsed?.alto) || coercePositiveNumber(notasMerged?.medidas?.alto);
+  const visionHexColors = Array.isArray(data?.visionData?.colors)
+    ? data.visionData.colors.map((c) => String(c?.hex || "")).filter((x) => /^#[0-9a-f]{6}$/i.test(x))
+    : [];
+  const designColors = Array.isArray(selectedDesign?.colores)
+    ? selectedDesign.colores.map(normalizeColorLabel).filter(Boolean)
+    : [];
+  const notasColors = Array.isArray(notasMerged?.colores) ? notasMerged.colores.map(normalizeColorLabel).filter(Boolean) : [];
+  const colors = designColors.length ? designColors : notasColors.length ? notasColors : visionHexColors;
+  const talles = Array.isArray(notasMerged?.talles) ? notasMerged.talles.map((t) => String(t || "").trim()).filter(Boolean) : [];
+  const metrosPorTalle =
+    notasMerged?.metros_por_talle && typeof notasMerged.metros_por_talle === "object" ? notasMerged.metros_por_talle : {};
+
+  return {
+    ov: String(data?.orden_id || "SIN-OV").trim() || "SIN-OV",
+    cliente: String(data?.partner_name || "COMPLETAR").trim() || "COMPLETAR",
+    marca: String(data?.marca || "").trim() || String(data?.partner_name || "").trim() || "COMPLETAR",
+    sku: String(selected?.sku || selectedParsed?.raw || "").trim() || "COMPLETAR",
+    qty: selected?.qty != null ? String(selected.qty) : "COMPLETAR",
+    anchoMm: medidaAncho || null,
+    altoMm: medidaAlto || null,
+    talles,
+    metrosPorTalle,
+    colors: colors.length ? colors : ["COMPLETAR COLOR"],
+    logoDataUri: String(data?.logoDataUri || ""),
+    textMain:
+      String(notasMerged?.texto_escrito || selectedDesign?.texto_escrito || data?.marca || data?.partner_name || "COMPLETAR").trim() ||
+      "COMPLETAR"
+  };
+}
+
+function buildIllustratorBordadaJsxContent(payload) {
+  const ov = jsxEscape(payload.ov);
+  const cliente = jsxEscape(payload.cliente || "COMPLETAR");
+  const marca = jsxEscape(payload.marca || "COMPLETAR");
+  const sku = jsxEscape(payload.sku || "COMPLETAR");
+  const textMain = jsxEscape(payload.textMain || "COMPLETAR");
+  const tallesArray = Array.isArray(payload.talles) && payload.talles.length ? payload.talles : ["COMPLETAR"];
+  const tallesJs = `[${tallesArray.map((x) => `"${jsxEscape(x)}"`).join(", ")}]`;
+  const colorArray = Array.isArray(payload.colors) && payload.colors.length ? payload.colors : ["COMPLETAR COLOR"];
+  const colorsJs = `[${colorArray.map((x) => `"${jsxEscape(x)}"`).join(", ")}]`;
+  const metrosMap = payload.metrosPorTalle && typeof payload.metrosPorTalle === "object" ? payload.metrosPorTalle : {};
+  const metrosJs = `{${Object.keys(metrosMap)
+    .map((k) => `"${jsxEscape(k)}":"${jsxEscape(metrosMap[k])}"`)
+    .join(",")}}`;
+  const logoPathJs = payload.logoFilePath ? `"${jsxEscape(payload.logoFilePath)}"` : `""`;
+  const aiPathJs = `"${jsxEscape(payload.aiPath)}"`;
+  const pdfPathJs = `"${jsxEscape(payload.pdfPath)}"`;
+  const anchoMm = payload.anchoMm != null ? Number(payload.anchoMm) : null;
+  const altoMm = payload.altoMm != null ? Number(payload.altoMm) : null;
+
+  return `/* Auto-generado por Asistente Facu: propuesta bordada Illustrator */
+function mm(v) { return v * 2.834645669291339; }
+function rgb(r,g,b){ var c=new RGBColor(); c.red=r; c.green=g; c.blue=b; return c; }
+function layer(doc,name){ var l=doc.layers.add(); l.name=name; return l; }
+function textAt(l,s,x,y,size,color){
+  var t=l.textFrames.add(); t.contents=s; t.left=x; t.top=y;
+  t.textRange.characterAttributes.size=size;
+  if(color) t.textRange.characterAttributes.fillColor=color;
+  return t;
+}
+function rect(l,x,y,w,h,fill,stroke){
+  var r=l.pathItems.rectangle(y,x,w,h);
+  r.filled=!!fill; r.stroked=!!stroke;
+  if(fill) r.fillColor=fill;
+  if(stroke){ r.strokeColor=stroke; r.strokeWidth=0.7; }
+  return r;
+}
+function line(l,x1,y1,x2,y2,c){
+  var p=l.pathItems.add();
+  p.setEntirePath([[x1,y1],[x2,y2]]);
+  p.stroked=true; p.filled=false; p.strokeColor=c; p.strokeWidth=0.7;
+  return p;
+}
+function dimH(l,x,y,w,label,red){
+  line(l,x,y,x+w,y,red);
+  line(l,x,y-mm(1.2),x,y+mm(1.2),red);
+  line(l,x+w,y-mm(1.2),x+w,y+mm(1.2),red);
+  textAt(l,label,x+(w/2)-mm(8),y+mm(3),7,red);
+}
+function dimV(l,x,yTop,h,label,red){
+  line(l,x,yTop,x,yTop-h,red);
+  line(l,x-mm(1.2),yTop,x+mm(1.2),yTop,red);
+  line(l,x-mm(1.2),yTop-h,x+mm(1.2),yTop-h,red);
+  textAt(l,label,x-mm(3.5),yTop-(h/2),7,red);
+}
+function parseHexColor(value){
+  var v=String(value||"").toLowerCase();
+  var map={negro:"#000000",blanco:"#ffffff",beige:"#c8b89a",arena:"#c8b89a",rojo:"#cc0000",azul:"#003399",gris:"#888888",marron:"#5c3317","marrón":"#5c3317",transparente:"#dddddd",amarillo:"#f0c020",dorado:"#c8a400",plateado:"#aaaaaa",fucsia:"#cc007a",rosa:"#e87da8",verde:"#2d7a2d",naranja:"#d97706",violeta:"#6d28d9",bordo:"#6b0020"};
+  if(v.charAt(0)==="#" && v.length===7) return v;
+  return map[v] || "#dddddd";
+}
+function rgbFromHex(hex){
+  var h=String(hex||"#dddddd");
+  var r=parseInt(h.substr(1,2),16), g=parseInt(h.substr(3,2),16), b=parseInt(h.substr(5,2),16);
+  return rgb(r,g,b);
+}
+function textContrast(hex){
+  var h=String(hex||"#dddddd");
+  var r=parseInt(h.substr(1,2),16), g=parseInt(h.substr(3,2),16), b=parseInt(h.substr(5,2),16);
+  var lum=(0.2126*r + 0.7152*g + 0.0722*b);
+  return lum < 150 ? rgb(245,245,245) : rgb(20,20,20);
+}
+function placeLogoOrPlaceholder(layerRef, logoPath, x, y, w, h, color){
+  if(logoPath){
+    try{
+      var f=new File(logoPath);
+      if(f.exists){
+        var placed=layerRef.placedItems.add();
+        placed.file=f;
+        var b=placed.visibleBounds;
+        var pw=Math.abs(b[2]-b[0]), ph=Math.abs(b[1]-b[3]);
+        if(pw>0 && ph>0){
+          var scale=Math.min((w*100)/pw, (h*100)/ph);
+          placed.resize(scale, scale);
+          var b2=placed.visibleBounds;
+          var nw=Math.abs(b2[2]-b2[0]), nh=Math.abs(b2[1]-b2[3]);
+          var tx=x + (w - nw)/2 - b2[0];
+          var ty=y - (h - nh)/2 - b2[1];
+          placed.translate(tx, ty);
+          return;
+        }
+      }
+    } catch(e){}
+  }
+  textAt(layerRef, "COMPLETAR LOGO", x + mm(2), y - (h/2) + mm(2), 8, color);
+}
+function run(){
+  var OV="${ov}", CLIENTE="${cliente}", MARCA="${marca}", SKU="${sku}";
+  var TEXT_MAIN="${textMain}";
+  var COLORS=${colorsJs};
+  var TALLES=${tallesJs};
+  var MPT=${metrosJs};
+  var logoPath=${logoPathJs};
+  var outAi=${aiPathJs};
+  var outPdf=${pdfPathJs};
+  var anchoMm=${anchoMm != null ? anchoMm : "null"};
+  var altoMm=${altoMm != null ? altoMm : "null"};
+  if(!anchoMm || anchoMm <= 0) anchoMm = 60;
+  if(!altoMm || altoMm <= 0) altoMm = 20;
+
+  var doc = app.documents.add(DocumentColorSpace.CMYK, mm(360), mm(220));
+  doc.rulerUnits = RulerUnits.Millimeters;
+  doc.name = OV + "-propuesta-bordada";
+
+  var lBase = layer(doc, "01_base");
+  var lColor = layer(doc, "02_colores");
+  var lCenter = layer(doc, "03_etiquetas");
+  var lTalles = layer(doc, "04_talles");
+  var lInfo = layer(doc, "99_info");
+  var red = rgb(204,0,0);
+  var dark = rgb(30,30,30);
+  var soft = rgb(110,110,110);
+
+  rect(lBase, mm(10), mm(208), mm(340), mm(20), rgb(248,248,248), rgb(215,215,215));
+  textAt(lBase, "PROPUESTA BORDADA - " + OV, mm(14), mm(201), 11, dark);
+  textAt(lBase, "Cliente: " + CLIENTE + " | SKU: " + SKU, mm(14), mm(194), 8, soft);
+
+  var colorX = mm(16), colorY = mm(165);
+  for(var i=0;i<COLORS.length;i++){
+    var raw = COLORS[i] || "COMPLETAR COLOR";
+    var hx = parseHexColor(raw);
+    rect(lColor, colorX, colorY - i*mm(18), mm(14), mm(7), rgbFromHex(hx), rgb(150,150,150));
+    textAt(lColor, "> " + raw, colorX + mm(16), colorY - mm(1) - i*mm(18), 7, dark);
+  }
+
+  var tagW = mm(anchoMm), tagH = mm(altoMm);
+  var centerX = mm(110), centerY = mm(158);
+  var gap = mm(12);
+  for(var c=0;c<COLORS.length && c<4;c++){
+    var colorHex = parseHexColor(COLORS[c]);
+    var bg = rgbFromHex(colorHex);
+    var fg = textContrast(colorHex);
+    var tx = centerX + c*(tagW + gap);
+    var ty = centerY;
+    rect(lCenter, tx, ty, tagW, tagH, bg, rgb(180,180,180));
+    line(lCenter, tx, ty - (tagH/2), tx + tagW, ty - (tagH/2), red);
+    dimV(lCenter, tx - mm(5), ty, tagH, String(altoMm) + " mm", red);
+    dimH(lCenter, tx, ty - tagH - mm(5), tagW, String(anchoMm) + " mm", red);
+    placeLogoOrPlaceholder(lCenter, logoPath, tx + mm(2), ty - mm(2), tagW - mm(4), tagH * 0.4, fg);
+    textAt(lCenter, TEXT_MAIN || "COMPLETAR", tx + mm(3), ty - (tagH*0.55), Math.max(8, altoMm*0.28), fg);
+    var talleMain = TALLES.length ? TALLES[0] : "COMPLETAR";
+    textAt(lCenter, talleMain, tx + (tagW*0.45), ty - tagH + mm(7), Math.max(11, altoMm*0.42), fg);
+  }
+
+  var tallesTop = mm(60);
+  var miniW = mm(60), miniH = mm(80), miniGap = mm(8), miniX = mm(20);
+  var miniHex = parseHexColor(COLORS.length ? COLORS[0] : "#dddddd");
+  var miniBg = rgbFromHex(miniHex);
+  var miniFg = textContrast(miniHex);
+  for(var t=0;t<TALLES.length;t++){
+    var tk = TALLES[t] || "COMPLETAR";
+    var x = miniX + t*(miniW + miniGap);
+    rect(lTalles, x, tallesTop, miniW, miniH, miniBg, rgb(150,150,150));
+    textAt(lTalles, tk, x + mm(24), tallesTop - mm(35), 18, miniFg);
+    var mts = MPT[tk] ? String(MPT[tk]) + " mts" : "COMPLETAR mts";
+    textAt(lTalles, mts, x + mm(10), tallesTop - miniH - mm(4), 7, dark);
+  }
+
+  textAt(lInfo, "Generado automaticamente por Asistente Facu", mm(12), mm(8), 7, soft);
+  var aiFile = new File(outAi);
+  doc.saveAs(aiFile);
+  var pdfFile = new File(outPdf);
+  var pdfOpts = new PDFSaveOptions();
+  doc.saveAs(pdfFile, pdfOpts);
+  alert("Listo: propuesta generada " + outPdf);
+}
+run();
+`;
+}
+
+async function runIllustratorScriptFromCmd(jsxPath) {
+  await new Promise((resolve, reject) => {
+    const proc = spawn("cmd.exe", ["/c", ILLUSTRATOR_RUN_CMD_PATH, jsxPath], {
+      windowsHide: true
+    });
+    let stdout = "";
+    let stderr = "";
+    const timeout = setTimeout(() => {
+      try {
+        proc.kill("SIGTERM");
+      } catch (_) {}
+      reject(new Error("Timeout ejecutando Illustrator (10m)"));
+    }, 10 * 60 * 1000);
+    proc.stdout.on("data", (d) => {
+      stdout += String(d || "");
+    });
+    proc.stderr.on("data", (d) => {
+      stderr += String(d || "");
+    });
+    proc.on("error", (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
+    proc.on("close", (code) => {
+      clearTimeout(timeout);
+      if (code !== 0) {
+        return reject(new Error(`EJECUTAR-ILLUSTRATOR-SCRIPTE.cmd exit ${code}. ${stderr || stdout}`));
+      }
+      return resolve({ stdout, stderr });
+    });
   });
+}
+
+function writeIllustratorFailureLog(ov, content) {
   try {
-    const page = await browser.newPage();
+    const safeOv = sanitizeFilenamePart(ov || "sin-ov");
+    const p = path.join(APROBAR_LOGS_DIR, `${safeOv}.log`);
+    fs.writeFileSync(p, String(content || ""), "utf8");
+    return p;
+  } catch (_) {
+    return "";
+  }
+}
+
+async function generateBordadaProposalWithIllustrator(data, outputPath) {
+  const payload = buildIllustratorBordadaPayload(data);
+  if (!payload) return false;
+  const safeOv = sanitizeFilenamePart(payload.ov);
+  const safeCliente = sanitizeFilenamePart(payload.cliente || "cliente");
+  const jsxPath = path.join(APROBAR_DIR, `${safeOv}-propuesta.jsx`);
+  const aiPath = path.join(APROBAR_DIR, `${safeOv}-${safeCliente}-propuesta.ai`);
+  const pdfPath = path.join(APROBAR_DIR, `${safeOv}-${safeCliente}-propuesta.pdf`);
+  const pdfPathSimple = path.join(APROBAR_DIR, `${safeOv}-propuesta.pdf`);
+  payload.aiPath = aiPath;
+  payload.pdfPath = pdfPath;
+
+  const logoInfo = parseLogoDataUri(payload.logoDataUri);
+  if (logoInfo && logoInfo.base64) {
+    const ext = logoInfo.mime.includes("png") ? "png" : logoInfo.mime.includes("jpeg") || logoInfo.mime.includes("jpg") ? "jpg" : "png";
+    const logoPath = path.join(APROBAR_TMP_DIR, `${safeOv}-logo.${ext}`);
+    fs.writeFileSync(logoPath, Buffer.from(logoInfo.base64, "base64"));
+    payload.logoFilePath = logoPath;
+  } else {
+    payload.logoFilePath = "";
+  }
+
+  const jsxContent = buildIllustratorBordadaJsxContent(payload);
+  fs.writeFileSync(jsxPath, jsxContent, "utf8");
+  try {
+    await runIllustratorScriptFromCmd(jsxPath);
+    if (!fs.existsSync(pdfPath)) {
+      throw new Error(`Illustrator no exportó el PDF esperado: ${pdfPath}`);
+    }
+    try {
+      fs.copyFileSync(pdfPath, pdfPathSimple);
+    } catch (_) {}
+    if (outputPath) {
+      fs.copyFileSync(pdfPath, outputPath);
+    }
+    data._illustratorOutput = {
+      jsxPath,
+      aiPath,
+      pdfPath,
+      pdfPathSimple
+    };
+    return true;
+  } catch (err) {
+    const logPath = writeIllustratorFailureLog(
+      payload.ov,
+      [
+        `OV: ${payload.ov}`,
+        `Cliente: ${payload.cliente}`,
+        `SKU: ${payload.sku}`,
+        `JSX: ${jsxPath}`,
+        `PDF esperado: ${pdfPath}`,
+        `Error: ${(err && err.message) || String(err)}`
+      ].join("\n")
+    );
+    const msg = `${(err && err.message) || String(err)}${logPath ? ` | log: ${logPath}` : ""}`;
+    throw new Error(msg);
+  }
+}
+
+async function htmlToPdf(htmlContent, outputPath) {
+  const browser = await getSharedProposalBrowser();
+  const page = await browser.newPage();
+  try {
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
     await page.pdf({
       path: outputPath,
@@ -7325,12 +8429,55 @@ async function htmlToPdf(htmlContent, outputPath) {
       margin: { top: "0", right: "0", bottom: "0", left: "0" }
     });
   } finally {
-    await browser.close();
+    await page.close().catch(() => {});
+  }
+}
+
+async function getSharedProposalBrowser() {
+  if (sharedProposalBrowser) return sharedProposalBrowser;
+  if (sharedProposalBrowserPromise) return sharedProposalBrowserPromise;
+  sharedProposalBrowserPromise = puppeteer
+    .launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    })
+    .then((browser) => {
+      sharedProposalBrowser = browser;
+      sharedProposalBrowserPromise = null;
+      browser.on("disconnected", () => {
+        sharedProposalBrowser = null;
+      });
+      return browser;
+    })
+    .catch((err) => {
+      sharedProposalBrowserPromise = null;
+      throw err;
+    });
+  return sharedProposalBrowserPromise;
+}
+
+async function closeSharedProposalBrowser() {
+  if (!sharedProposalBrowser) return;
+  try {
+    await sharedProposalBrowser.close();
+  } catch (_) {
+    // ignore
+  } finally {
+    sharedProposalBrowser = null;
   }
 }
 
 async function generateProposalPDF(data, outputPath) {
   const { orden_id, partner_name, lineas, notas } = data;
+  const hasBordadaLine = (lineas || []).some((line) => {
+    const skuParsedRaw = line?.skuParsed || parseSKU(line?.sku || "");
+    const designRecord = getDesignRecordBySku(line?.sku || skuParsedRaw.raw || "");
+    const skuParsed = applyDesignRecordToSkuParsed(skuParsedRaw, designRecord);
+    return proposalLayoutKey(skuParsed) === "bordada";
+  });
+  if (!data?.disableIllustratorBordada && hasBordadaLine) {
+    const used = await generateBordadaProposalWithIllustrator(data, outputPath);
+    if (used) return;
+  }
   const marca = String(data.marca || "").trim();
   const marcaRect = marca || "MARCA";
   const logoPath = data.logoPath || "";
@@ -7339,18 +8486,26 @@ async function generateProposalPDF(data, outputPath) {
   const proposalFontPick =
     data.proposalFontPick || proposalBordadaFontPickFromVision(visionData.texts || []);
   const sheets = [];
+  const headLinks = new Set();
+  if (proposalFontPick && proposalFontPick.linkHref) headLinks.add(proposalFontPick.linkHref);
   for (const line of lineas || []) {
     line._partnerName = partner_name;
     line._logoPath = logoPath;
-    const skuParsed = line.skuParsed || parseSKU(line.sku || "");
+    const skuParsedRaw = line.skuParsed || parseSKU(line.sku || "");
+    const designRecord = getDesignRecordBySku(line.sku || skuParsedRaw.raw || "");
+    const skuParsed = applyDesignRecordToSkuParsed(skuParsedRaw, designRecord);
+    const notasForLine = mergeNotasWithDesignRecord(notas, designRecord);
+    const fontFromDesign = proposalFontPickFromTypography(notasForLine.tipografia);
+    const lineFontPick = fontFromDesign || proposalFontPick;
+    if (lineFontPick && lineFontPick.linkHref) headLinks.add(lineFontPick.linkHref);
     const key = proposalLayoutKey(skuParsed);
     console.log("[propuesta] generando HTML para familia:", skuParsed.familia || key);
     if (key === "plastisol") {
-      sheets.push(buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath));
+      sheets.push(buildPlastisolSheetHtml(orden_id, marca, line, skuParsed, notasForLine, logoPath, designRecord));
     } else if (key === "bolsa") {
-      sheets.push(buildBolsaSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath));
+      sheets.push(buildBolsaSheetHtml(orden_id, marca, line, skuParsed, notasForLine, logoPath, designRecord));
     } else if (key === "badana") {
-      sheets.push(buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notas, logoPath, logoDataUri));
+      sheets.push(buildBadanaSheetHtml(orden_id, marca, marcaRect, line, skuParsed, notasForLine, logoPath, logoDataUri, designRecord));
     } else if (key === "bordada") {
       sheets.push(
         buildBordadaSheetHtml(
@@ -7359,18 +8514,19 @@ async function generateProposalPDF(data, outputPath) {
           marcaRect,
           line,
           skuParsed,
-          notas,
+          notasForLine,
           logoPath,
           logoDataUri,
           visionData,
-          proposalFontPick
+          lineFontPick,
+          designRecord
         )
       );
     } else {
-      sheets.push(buildGenericSheetHtml(orden_id, marca, line, skuParsed, notas, logoPath));
+      sheets.push(buildGenericSheetHtml(orden_id, marca, line, skuParsed, notasForLine, logoPath, designRecord));
     }
   }
-  const html = wrapProposalHtmlDocument(sheets.join("\n"), proposalFontPick.linkHref || "");
+  const html = wrapProposalHtmlDocument(sheets.join("\n"), Array.from(headLinks).join("\n"));
   await htmlToPdf(html, outputPath);
   console.log("[propuesta] PDF guardado en:", outputPath);
 }
@@ -7406,152 +8562,299 @@ async function handleGenerarPropuestaEndpoint(req, res) {
   }
   try {
     console.log("[propuesta] leyendo OV…", orden_id);
-    const orders = await odoo.executeKw(
-      uid,
-      "sale.order",
-      "search_read",
-      [[["name", "=", orden_id]]],
-      {
-        fields: ["id", "name", "partner_id", "date_order", "user_id", "order_line", "x_studio_marca"],
-        limit: 1
-      }
-    );
-    const order = orders && orders[0];
-    if (!order) {
+    const proposalCtx = await loadProposalOrderContext(odoo, uid, orden_id);
+    if (!proposalCtx || !proposalCtx.order) {
       return res.status(404).json({ success: false, error: `No encontré la OV ${orden_id}` });
     }
-    const marca = String(order.x_studio_marca || "").trim();
-    const lineIds = order.order_line || [];
-    console.log("[propuesta] leyendo líneas…", lineIds.length);
-    const lineRows = lineIds.length
-      ? await odoo.executeKw(uid, "sale.order.line", "read", [lineIds], {
-          fields: ["id", "name", "product_id", "product_uom_qty", "price_unit"]
-        })
-      : [];
-    console.log("[propuesta] leyendo chatter…");
-    let chatter = [];
-    try {
-      chatter = await odoo.executeKw(
-        uid,
-        "mail.message",
-        "search_read",
-        [
-          [
-            ["model", "=", "sale.order"],
-            ["res_id", "=", order.id],
-            ["message_type", "=", "comment"]
-          ]
-        ],
-        { fields: ["body", "date", "author_id"], limit: 120, order: "date asc" }
-      );
-    } catch (e) {
-      console.log("[propuesta] chatter sin filtro message_type, reintento…");
-      chatter = await odoo.executeKw(
-        uid,
-        "mail.message",
-        "search_read",
-        [[["model", "=", "sale.order"], ["res_id", "=", order.id]]],
-        { fields: ["body", "date", "author_id", "message_type"], limit: 120, order: "date asc" }
-      );
-      chatter = (chatter || []).filter((m) => (m.message_type || "comment") === "comment");
-    }
-    const partnerName = Array.isArray(order.partner_id) ? order.partner_id[1] : "Cliente";
-    const vendedor = Array.isArray(order.user_id) ? order.user_id[1] : "";
-    const date = order.date_order
-      ? String(order.date_order).slice(0, 10)
-      : new Date().toISOString().slice(0, 10);
-    const partnerId = Array.isArray(order.partner_id) ? order.partner_id[0] : null;
-    const logoPath = partnerId ? path.join(LOGOS_DIR, `${partnerId}.png`) : "";
-
-    let notas = parseChatterNotes(chatter || []);
-    const chatterText = (chatter || []).map((c) => stripHtml(c.body)).join("\n");
-    notas = await enrichChatterNotesWithGroqIfNeeded(notas, chatterText);
-
-    let lineas = (lineRows || []).map((ln) => {
-      const sku = extractSkuCandidateFromLine(ln);
-      const skuParsed = parseSKU(sku);
-      return {
-        ...ln,
-        sku,
-        skuParsed,
-        qty: ln.product_uom_qty,
-        price_unit: ln.price_unit,
-        name: ln.name || sku
-      };
-    });
-    if (!lineas.length) {
-      lineas.push({
-        name: "Sin líneas",
-        qty: 0,
-        price_unit: 0,
-        sku: "",
-        skuParsed: parseSKU("")
-      });
-    }
-    let logoDataUri = null;
-    let visionData = { texts: [], colors: [] };
-    let logoAdjunto = null;
-    try {
-      const adjuntos = await odoo.executeKw(
-        uid,
-        "ir.attachment",
-        "search_read",
-        [
-          [
-            ["res_model", "=", "sale.order"],
-            ["res_id", "=", order.id],
-            ["mimetype", "ilike", "image/"]
-          ]
-        ],
-        { fields: ["id", "name", "datas", "mimetype"], limit: 5, order: "id asc" }
-      );
-      logoAdjunto = adjuntos && adjuntos.length ? adjuntos[0] : null;
-      if (logoAdjunto && logoAdjunto.datas) {
-        const mt = String(logoAdjunto.mimetype || "image/png").trim();
-        if (/^image\/[a-z0-9.+-]+$/i.test(mt)) {
-          logoDataUri = `data:${mt};base64,${String(logoAdjunto.datas).replace(/\s/g, "")}`;
-        }
-        console.log("[propuesta] analizando imagen con Google Vision...");
-        visionData = await analyzeImageWithVision(
-          String(logoAdjunto.datas).replace(/\s/g, ""),
-          logoAdjunto.mimetype || "image/jpeg"
-        );
-      }
-    } catch (e) {
-      console.log("[propuesta] adjuntos imagen:", (e && e.message) || e);
-    }
-
-    const proposalFontPick = proposalBordadaFontPickFromVision(visionData.texts || []);
-    if (logoAdjunto && logoAdjunto.datas) {
-      console.log("[vision] tipografía seleccionada:", proposalFontPick.family);
-      const visTop = (visionData.colors || [])[0];
-      if (visTop && visTop.hex) {
-        console.log("[vision] fondo detectado:", visTop.hex);
-      }
-    }
+    const { marca, partnerName, vendedor, lineas, notas, logoPath, logoDataUri, visionData, proposalFontPick } = proposalCtx;
 
     const fileName = nextProposalFilename(orden_id);
     const outPath = path.join(PROPUESTAS_DIR, fileName);
     console.log("[propuesta] generando PDF…", fileName);
-    await generateProposalPDF(
-      {
-        orden_id,
-        partner_name: partnerName,
-        marca,
-        vendedor,
-        lineas,
-        notas,
-        logoPath,
-        logoDataUri,
-        visionData,
-        proposalFontPick
-      },
-      outPath
-    );
+    const pdfData = {
+      orden_id,
+      partner_name: partnerName,
+      marca,
+      vendedor,
+      lineas,
+      notas,
+      logoPath,
+      logoDataUri,
+      visionData,
+      proposalFontPick
+    };
+    await generateProposalPDF(pdfData, outPath);
     console.log("[propuesta] listo:", fileName);
-    return res.json({ success: true, pdf_url: `/propuestas/${fileName}`, orden_id });
+    return res.json({
+      success: true,
+      pdf_url: `/propuestas/${fileName}`,
+      orden_id,
+      illustrator: pdfData._illustratorOutput || null
+    });
   } catch (e) {
     console.error("[propuesta] error:", e);
     return res.status(500).json({ success: false, error: (e && e.message) || String(e) });
   }
 }
+
+async function createZipFromPdfFiles(outZipPath, files) {
+  await new Promise((resolve, reject) => {
+    const output = fs.createWriteStream(outZipPath);
+    const archive = archiver("zip", { zlib: { level: 9 } });
+    output.on("close", resolve);
+    output.on("error", reject);
+    archive.on("error", reject);
+    archive.pipe(output);
+    for (const fp of files) {
+      archive.file(fp, { name: path.basename(fp) });
+    }
+    archive.finalize();
+  });
+}
+
+async function handleGenerarPropuestaVariantesEndpoint(req, res) {
+  const sku = String(req.body?.sku || "")
+    .trim()
+    .toUpperCase();
+  const ovId = String(req.body?.ovId || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "");
+  if (!sku) return res.status(400).json({ success: false, error: "sku requerido" });
+  if (!ovId || !/^S0\d+/i.test(ovId)) {
+    return res.status(400).json({ success: false, error: "ovId inválido (ej: S02281)" });
+  }
+
+  const design = getDesignRecordBySku(sku);
+  if (!design) {
+    return res.status(404).json({ success: false, error: `No hay registro en productDesignDB para SKU ${sku}` });
+  }
+  const colorVariants = Array.isArray(design.colores)
+    ? [...new Set(design.colores.map(normalizeColorLabel).filter(Boolean))]
+    : [];
+  if (!colorVariants.length) {
+    return res.status(404).json({ success: false, error: `SKU ${sku} sin variantes de color registradas` });
+  }
+
+  try {
+    validateEnv();
+    const odoo = createOdooClient();
+    const uid = await odoo.authenticate();
+    const proposalCtx = await loadProposalOrderContext(odoo, uid, ovId);
+    if (!proposalCtx || !proposalCtx.order) {
+      return res.status(404).json({ success: false, error: `No encontré la OV ${ovId}` });
+    }
+    const lines = proposalCtx.lineas || [];
+    const touched = lines.some((ln) => {
+      const lnSku = String(ln.sku || ln?.skuParsed?.raw || "")
+        .trim()
+        .toUpperCase();
+      return lnSku === sku;
+    });
+    if (!touched) {
+      return res.status(404).json({
+        success: false,
+        error: `La OV ${ovId} no contiene el SKU ${sku} en sus líneas`
+      });
+    }
+
+    const tempDir = fs.mkdtempSync(path.join(PROPUESTAS_DIR, `${ovId}-${sku}-tmp-`));
+    const createdPdfs = [];
+    try {
+      for (const color of colorVariants) {
+        const fileName = `${ovId}-${sku}-variante-${color.replace(/[^a-z0-9_-]/gi, "_")}.pdf`;
+        const outPath = path.join(tempDir, fileName);
+        const notasVar = {
+          ...(proposalCtx.notas && typeof proposalCtx.notas === "object" ? proposalCtx.notas : {}),
+          colores: [color],
+          fondoColor: color,
+          texto_escrito: proposalCtx.notas?.texto_escrito || design.texto_escrito || ""
+        };
+        await generateProposalPDF(
+          {
+            orden_id: ovId,
+            partner_name: proposalCtx.partnerName,
+            marca: proposalCtx.marca,
+            vendedor: proposalCtx.vendedor,
+            lineas: proposalCtx.lineas,
+            notas: notasVar,
+            logoPath: proposalCtx.logoPath,
+            logoDataUri: proposalCtx.logoDataUri,
+            visionData: proposalCtx.visionData,
+            proposalFontPick: proposalCtx.proposalFontPick,
+            disableIllustratorBordada: true
+          },
+          outPath
+        );
+        createdPdfs.push(outPath);
+      }
+
+      const zipName = `${ovId}-${sku}-variantes.zip`;
+      const zipPath = path.join(tempDir, zipName);
+      await createZipFromPdfFiles(zipPath, createdPdfs);
+      res.setHeader("Content-Type", "application/zip");
+      res.setHeader("Content-Disposition", `attachment; filename="${zipName}"`);
+      const stream = fs.createReadStream(zipPath);
+      stream.on("error", () => {
+        if (!res.headersSent) res.status(500).json({ success: false, error: "Error leyendo ZIP" });
+      });
+      stream.on("close", () => {
+        for (const fp of createdPdfs) {
+          try {
+            fs.unlinkSync(fp);
+          } catch (_) {}
+        }
+        try {
+          fs.unlinkSync(zipPath);
+        } catch (_) {}
+        try {
+          fs.rmdirSync(tempDir);
+        } catch (_) {}
+      });
+      return stream.pipe(res);
+    } catch (e) {
+      for (const fp of createdPdfs) {
+        try {
+          fs.unlinkSync(fp);
+        } catch (_) {}
+      }
+      try {
+        fs.rmdirSync(tempDir, { recursive: true });
+      } catch (_) {}
+      throw e;
+    }
+  } catch (e) {
+    return res.status(500).json({ success: false, error: (e && e.message) || String(e) });
+  }
+}
+
+async function handleListBordadaCandidatesEndpoint(req, res) {
+  const limitRaw = Number(req.query?.limit);
+  const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(Math.round(limitRaw), 60) : 20;
+  try {
+    validateEnv();
+    const odoo = createOdooClient();
+    const uid = await odoo.authenticate();
+    const orders = await odoo.executeKw(
+      uid,
+      "sale.order",
+      "search_read",
+      [[["name", "ilike", "S0"]]],
+      {
+        fields: ["id", "name", "partner_id", "date_order", "order_line"],
+        order: "date_order desc",
+        limit: 260
+      }
+    );
+    const allLineIds = Array.from(new Set((orders || []).flatMap((o) => (Array.isArray(o.order_line) ? o.order_line : []))));
+    const lines = allLineIds.length
+      ? await odoo.executeKw(uid, "sale.order.line", "read", [allLineIds], {
+          fields: ["id", "name", "product_id"]
+        })
+      : [];
+    const lineById = new Map((lines || []).map((ln) => [ln.id, ln]));
+    const candidates = [];
+    for (const order of orders || []) {
+      const ids = Array.isArray(order.order_line) ? order.order_line : [];
+      let pickedSku = "";
+      for (const lid of ids) {
+        const ln = lineById.get(lid);
+        if (!ln) continue;
+        const sku = extractSkuCandidateFromLine(ln);
+        const parsedRaw = parseSKU(sku);
+        const design = getDesignRecordBySku(sku || parsedRaw.raw || "");
+        const parsed = applyDesignRecordToSkuParsed(parsedRaw, design);
+        if (proposalLayoutKey(parsed) !== "bordada") continue;
+        if (!design) continue;
+        pickedSku = String(sku || "").trim().toUpperCase();
+        break;
+      }
+      if (!pickedSku) continue;
+      candidates.push({
+        ov: String(order.name || "").trim().toUpperCase(),
+        cliente: Array.isArray(order.partner_id) ? String(order.partner_id[1] || "") : "",
+        sku: pickedSku,
+        date_order: order.date_order || ""
+      });
+    }
+    const uniqueByOv = [];
+    const seenOv = new Set();
+    for (const c of candidates) {
+      if (!c.ov || seenOv.has(c.ov)) continue;
+      seenOv.add(c.ov);
+      uniqueByOv.push(c);
+    }
+    const prioritized = [];
+    const usedClients = new Set();
+    for (const c of uniqueByOv) {
+      const key = normalizeStr(c.cliente || "");
+      if (!key) continue;
+      if (usedClients.has(key)) continue;
+      usedClients.add(key);
+      prioritized.push(c);
+      if (prioritized.length >= limit) break;
+    }
+    if (prioritized.length < limit) {
+      for (const c of uniqueByOv) {
+        if (prioritized.length >= limit) break;
+        if (prioritized.some((x) => x.ov === c.ov)) continue;
+        prioritized.push(c);
+      }
+    }
+    return res.json({ success: true, total: prioritized.length, items: prioritized.slice(0, limit) });
+  } catch (e) {
+    return res.status(500).json({ success: false, error: (e && e.message) || String(e) });
+  }
+}
+
+async function handlePropuestaBordadaEndpoint(req, res) {
+  const ovId = Number(req.body?.ovId);
+  if (!Number.isFinite(ovId) || ovId <= 0) {
+    return res.status(400).json({ ok: false, error: "ovId inválido (number requerido)" });
+  }
+  try {
+    const result = await generarPropuestaBordada(ovId, {
+      env: process.env,
+      baseDir: __dirname,
+      parseSKU,
+      analyzeImageWithVision
+    });
+    return res.json({ ok: true, pdfPath: result.pdfPath, warnings: result.warnings || [] });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: (e && e.message) || String(e) });
+  }
+}
+
+async function handlePropuestaSvgEndpoint(req, res) {
+  const ovIdRaw = req.body?.ovId ?? req.body?.ov_id ?? req.body?.orden_id;
+  if (ovIdRaw == null || String(ovIdRaw).trim() === "") {
+    return res.status(400).json({ ok: false, error: "ovId requerido" });
+  }
+  try {
+    const result = await generarPropuesta(ovIdRaw, {
+      createOdooClient,
+      parseSKU,
+      analyzeImageWithVision,
+      productDesignDB,
+      desktopDir: APROBAR_DIR
+    });
+    return res.json({
+      ok: true,
+      pdfPath: result.pdfPath,
+      svgPath: result.svgPath,
+      warnings: result.warnings || []
+    });
+  } catch (e) {
+    return res.status(500).json({
+      ok: false,
+      error: (e && e.message) || String(e)
+    });
+  }
+}
+
+process.once("SIGINT", () => {
+  closeSharedProposalBrowser().finally(() => process.exit(0));
+});
+process.once("SIGTERM", () => {
+  closeSharedProposalBrowser().finally(() => process.exit(0));
+});

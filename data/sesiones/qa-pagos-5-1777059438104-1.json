@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5-1777059438104-1",
+  "savedAt": 1777059440402,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "Kusaw mandó 230000"
+    },
+    {
+      "role": "assistant",
+      "content": "Pago en borrador creado correctamente.\nTipo: Cobro de cliente\nContacto: Kusaw\nMonto: $230000.00\nDiario: MercadoPago\nID de pago ODOO: 2164"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "timestamp": "2026-04-24T14:34:06.968Z",
+  "desktop": "C:\\Users\\COMPU\\Desktop\\aprobar",
+  "items": [
+    {
+      "ovId": 2301,
+      "ovName": "S02301",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02301-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "sin logo_base64 en ir.attachment",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2300,
+      "ovName": "S02300",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02300-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "sin logo_base64 en ir.attachment",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2299,
+      "ovName": "S02299",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02299-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "sin logo_base64 en ir.attachment",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2298,
+      "ovName": "S02298",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02298-propuesta.pdf",
+      "warnings": [
+        "sin logo_base64 en ir.attachment",
+        "colores faltantes -> COMPLETAR",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2292,
+      "ovName": "S02292",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02292-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "sin logo_base64 en ir.attachment",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2291,
+      "ovName": "S02291",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02291-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2290,
+      "ovName": "S02290",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02290-propuesta.pdf",
+      "warnings": [
+        "sin match en productDesignDB",
+        "colores por fallback Vision",
+        "talles faltantes en notas OV",
+        "ancho_mm faltante",
+        "alto_mm faltante",
+        "ancho_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2288,
+      "ovName": "S02288",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02288-propuesta.pdf",
+      "warnings": [
+        "match parcial por familia SKU",
+        "sin logo_base64 en ir.attachment",
+        "colores faltantes -> COMPLETAR",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2286,
+      "ovName": "S02286",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02286-propuesta.pdf",
+      "warnings": [
+        "sin logo_base64 en ir.attachment",
+        "colores faltantes -> COMPLETAR",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    },
+    {
+      "ovId": 2285,
+      "ovName": "S02285",
+      "status": "OK",
+      "motivo": "",
+      "pdfPath": "C:\\Users\\COMPU\\Desktop\\aprobar\\S02285-propuesta.pdf",
+      "warnings": [
+        "sin logo_base64 en ir.attachment",
+        "colores faltantes -> COMPLETAR",
+        "talles faltantes en notas OV",
+        "alto_mm faltante",
+        "alto_mm faltante"
+      ]
+    }
+  ]
+}

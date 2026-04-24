@@ -1,0 +1,96 @@
+{
+  "used": [
+    {
+      "n": 1,
+      "sku": "BoCu.Pl-17mm",
+      "ov": "S01142"
+    },
+    {
+      "n": 2,
+      "sku": "EBAT40CDM1",
+      "ov": "S01680"
+    },
+    {
+      "n": 3,
+      "sku": "EBAT20R1",
+      "ov": "S01716"
+    },
+    {
+      "n": 4,
+      "sku": "EBAT33R1",
+      "ov": "S01784"
+    },
+    {
+      "n": 5,
+      "sku": "EBAD33CS2",
+      "ov": "S01779"
+    },
+    {
+      "n": 6,
+      "sku": "EBAD33CDM1",
+      "ov": "S01892"
+    },
+    {
+      "n": 7,
+      "sku": "EBAD50CDM2",
+      "ov": "S01895"
+    },
+    {
+      "n": 8,
+      "sku": "EBAD20R3",
+      "ov": "S01880"
+    },
+    {
+      "n": 9,
+      "sku": "EBAD14CS1",
+      "ov": "S01889"
+    },
+    {
+      "n": 10,
+      "sku": "EBAD10CDE1",
+      "ov": "S01916"
+    }
+  ],
+  "errors": [
+    {
+      "n": 3,
+      "sku": "EBAT20R1",
+      "ov": "S01716",
+      "status": 500,
+      "error": "Illustrator no exportó el PDF esperado: C:\\Users\\COMPU\\Desktop\\aprobar\\S01716-Punta-Mogote-North-Raw-propuesta.pdf | log: C:\\Users\\COMPU\\Desktop\\aprobar\\logs\\S01716.log"
+    },
+    {
+      "n": 5,
+      "sku": "EBAD33CS2",
+      "ov": "S01779",
+      "status": 500,
+      "error": "Illustrator no exportó el PDF esperado: C:\\Users\\COMPU\\Desktop\\aprobar\\S01779-Punta-Mogote-Rip-Blanthi-propuesta.pdf | log: C:\\Users\\COMPU\\Desktop\\aprobar\\logs\\S01779.log"
+    },
+    {
+      "n": 7,
+      "sku": "EBAD50CDM2",
+      "ov": "S01895",
+      "error": "fetch failed"
+    },
+    {
+      "n": 8,
+      "sku": "EBAD20R3",
+      "ov": "S01880",
+      "status": 500,
+      "error": "Illustrator no exportó el PDF esperado: C:\\Users\\COMPU\\Desktop\\aprobar\\S01880-Galería-Punta-Mogote-Alejandro-Denim-propuesta.pdf | log: C:\\Users\\COMPU\\Desktop\\aprobar\\logs\\S01880.log"
+    },
+    {
+      "n": 9,
+      "sku": "EBAD14CS1",
+      "ov": "S01889",
+      "status": 500,
+      "error": "Illustrator no exportó el PDF esperado: C:\\Users\\COMPU\\Desktop\\aprobar\\S01889-Galería-Punta-Mogote-Urus-propuesta.pdf | log: C:\\Users\\COMPU\\Desktop\\aprobar\\logs\\S01889.log"
+    },
+    {
+      "n": 10,
+      "sku": "EBAD10CDE1",
+      "ov": "S01916",
+      "error": "fetch failed"
+    }
+  ]
+}

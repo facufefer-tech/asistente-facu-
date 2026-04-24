@@ -1,0 +1,110 @@
+{
+  "mercaderia": {
+    "total": 370,
+    "topAuthors": [
+      [
+        "Facu",
+        207
+      ],
+      [
+        "Mati Tuscherr",
+        78
+      ],
+      [
+        "Producto Avios Textiles",
+        34
+      ],
+      [
+        "Mile Diseño",
+        23
+      ],
+      [
+        "Guido Avios",
+        13
+      ],
+      [
+        "Achu",
+        12
+      ],
+      [
+        "Mercaderia",
+        2
+      ],
+      [
+        "Avios Textiles Ventas",
+        1
+      ]
+    ]
+  },
+  "pagos": {
+    "total": 832,
+    "topAuthors": [
+      [
+        "Facu",
+        370
+      ],
+      [
+        "Avios Textiles Ventas",
+        292
+      ],
+      [
+        "Guido Avios",
+        107
+      ],
+      [
+        "Ele",
+        42
+      ],
+      [
+        "Mati Tuscherr",
+        18
+      ],
+      [
+        "Pagos",
+        3
+      ]
+    ]
+  },
+  "movimientos": {
+    "total": 368,
+    "topAuthors": [
+      [
+        "Facu",
+        189
+      ],
+      [
+        "Guido Avios",
+        153
+      ],
+      [
+        "Achu",
+        18
+      ],
+      [
+        "Mati Tuscherr",
+        6
+      ],
+      [
+        "Movimientos diarios",
+        2
+      ]
+    ]
+  },
+  "qa_manual": {
+    "target": 1000,
+    "available": 1570,
+    "covered": 1000,
+    "coverage_pct": 64
+  },
+  "keywords": {
+    "pago": 409,
+    "transfer": 37,
+    "efectivo": 134,
+    "seña": 107,
+    "remito": 23,
+    "factura": 19,
+    "entrega": 30,
+    "ok_diseno": 25,
+    "adjunto": 0
+  }
+}

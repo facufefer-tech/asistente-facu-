@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5c-1777059655909-0",
+  "savedAt": 1777059658496,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "entró plata de Gary 85000 por mp"
+    },
+    {
+      "role": "assistant",
+      "content": "Pago en borrador creado correctamente.\nTipo: Cobro de cliente\nContacto: Gary\nMonto: $85000.00\nDiario: MercadoPago\nID de pago ODOO: 2170"
+    }
+  ]
+}

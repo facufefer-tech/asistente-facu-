@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5-1777059440425-2",
+  "savedAt": 1777059441794,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "pagué a Carvi 500000 banco"
+    },
+    {
+      "role": "assistant",
+      "content": "Pago en borrador creado correctamente.\nTipo: Pago a proveedor\nContacto: (NO USAR) Carvi\nMonto: $500000.00\nDiario: Banco Santander Milito\nID de pago ODOO: 2165"
+    }
+  ]
+}

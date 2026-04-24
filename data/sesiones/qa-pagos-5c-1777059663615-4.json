@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5c-1777059663615-4",
+  "savedAt": 1777059665241,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "le pague 100k a carvi en ft"
+    },
+    {
+      "role": "assistant",
+      "content": "Pago en borrador creado correctamente.\nTipo: Pago a proveedor\nContacto: (NO USAR) Carvi\nMonto: $100000.00\nDiario: Cash\nID de pago ODOO: 2174"
+    }
+  ]
+}

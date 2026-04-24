@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5b-1777059625128-4",
+  "savedAt": 1777059625845,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "le pague 100k a carvi en ft"
+    },
+    {
+      "role": "assistant",
+      "content": "No pude completar el movimiento. No se encontró el contacto \"carvi en ft\" en ODOO."
+    }
+  ]
+}

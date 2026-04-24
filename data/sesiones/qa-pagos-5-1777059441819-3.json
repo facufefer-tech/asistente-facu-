@@ -1,0 +1,18 @@
+{
+  "sessionId": "qa-pagos-5-1777059441819-3",
+  "savedAt": 1777059443206,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "mandé 200000 a Arslanian"
+    },
+    {
+      "role": "assistant",
+      "content": "Pago en borrador creado correctamente.\nTipo: Pago a proveedor\nContacto: Arslanian\nMonto: $200000.00\nDiario: MercadoPago\nID de pago ODOO: 2166"
+    }
+  ]
+}

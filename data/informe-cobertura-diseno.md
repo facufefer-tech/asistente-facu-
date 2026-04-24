@@ -1,0 +1,210 @@
+# Informe de cobertura — base diseño (PDFs + Odoo)
+
+- **Total de PDFs procesados:** 289
+- **Productos únicos extraídos (1 por PDF):** 289
+- **Matchearon con Odoo (product.template.default_code):** 132
+- **Sin match en Odoo (sin_sku o sin default_code):** 157
+
+## SKUs con confianza baja (revisión manual)
+- EP3x3T1
+- EP3x3T1
+- Bopo----
+- 00000014-MOSCU ecommerce PP.pdf
+- 00000018-Cadaruve bordada  AMARILLO PP.pdf
+- 00000019-Cadaruve bordada  BLANCO PP.pdf
+- 00000021-TBR Camiseta grande PP.pdf
+- 00000022-TBR Camiseta chica PP.pdf
+- 00000023-Producto Fondo PP.pdf
+- 00000025-Cadaruve PP PP.pdf
+- 00000026-Inverso bordada PP.pdf
+- 00000028-INVERSO pp PP.pdf
+- 00000029-INVERSO fondo PP.pdf
+- 00000032-Producto terminado fondo Braian PP.pdf
+- 00000033-TBR Bolsas BRAIAN pp.pdf
+- 00000035-Beyond hangtag OK.pdf
+- 00000036-Cadaruve PP PP corregida.pdf
+- C
+- 00000040-Oveizaga pb PP.pdf
+- 00000042-Vosser bordada PP.pdf
+- 00000045-IKE fondo PP.pdf
+- BoPoFo60x100/60ImCoBl
+- 00000049-ZANGO bordada PP.pdf
+- 00000050-ZANGO rinÌƒon PP.pdf
+- 00000051-ZANGO salada PP.pdf
+- 00000052-ZANGO camiseta PP.pdf
+- BoPoCa60x80/60ImCoBl
+- 00000054-UNLIMITED bordada PP.pdf
+- Ma-----
+- 00000057-OXFORD PP PP.pdf
+- 00000058-Wil sport FONDO PP.pdf
+- 00000059-Wil sport CAMISETA PP.pdf
+- 00000061-Wil sport rinÌƒon PP.pdf
+- HaSi-
+- EP3x3R1
+- EP3x3R1
+- 00000066-FURSTEN pp PP.pdf
+- 00000067-FURSTEN  e commerce blanco PP.pdf
+- 00000068-FURSTEN  e commerce negra PP.pdf
+- 00000069-PLIEGO MONTADO.pdf
+- 00000075-PIERRS bordada PP.pdf
+- 00000085-PIERRS bordada PP.pdf
+- HaMo-
+- EP2.5x2.5T1
+- 00000106-PIERRS camiseta pp.pdf
+- BoPoCa60x80/60ImCoBl
+- 00000108-PLIEGO AGOSTO AVTX.pdf
+- 00000111-RIP BLANTHI camisa PP.pdf
+- 00000112-RIP BLANTHI pp pp.pdf
+- 00000113-PIERRS camiseta pp.pdf
+- 00000115-DALIDA fondoPP.pdf
+- 00000116-DALIDA camiseta PP.pdf
+- 00000126-DRAVIN fondo PP.pdf
+- 00000127-DRAVIN camiseta PP.pdf
+- 00000131-GODWEAR BORDADA SOLDADA PP.pdf
+- 00000132-GODWEAR BORDADA CHICA PP.pdf
+- 00000133-GODWEAR BORDADA GRANDE PP.pdf
+- 00000182-LEIVA bordada PP.pdf
+- 00000187-Matius bordada PP.pdf
+- Bopo----
+- 00000196-Rey tris bolsa PP.pdf
+- 00000197-Matius camel PP.pdf
+- 00000199-CADARUVE bordada gris PP.pdf
+- 00000200-CADARUVE bordada amarillo PP.pdf
+- 00000201-MICHEE bolsa PP.pdf
+- 00000207-IRISA funda PP.pdf
+- Bopo----
+- 00000209-Nina RinÌƒon PP.pdf
+- BPERV30x40150
+- 00000212-Oveizaga pb PP.pdf
+- 00000214-Cadaruve bordada 2 pp.pdf
+- 00000215-Cadaruve bordada 1 pp.pdf
+- 00000219-CERRO RICO fondo PP.pdf
+- 00000220-CADARUVE rinÌƒon PP.pdf
+- 00000221-CADARUVE fondo PP.pdf
+- 00000222-CADARUVE camisa PP.pdf
+- 00000223-CADARUVE camiseta PP.pdf
+- 00000227-Cadaruve bordada 2 pp.pdf
+- 00000228-Cadaruve bordada 1 pp.pdf
+- 00000229-CADARUVE bordada gris PP.pdf
+- 00000230-CADARUVE bordada amarillo PP.pdf
+- 00000233-OXFORD PP PP.pdf
+- BoPoriIm-40x50/60
+- 00000256-NEWSKIN rinÌƒon PP.pdf
+- 00000277-MICHEE bolsa PP.pdf
+- HaMo-
+- 00000288-Michee grande PP.pdf
+- 00000289-TANIA camiseta PP.pdf
+- 00000302-Michee grande PP.pdf
+- 00000303-MICHEE bolsa PP.pdf
+- 00000304-SHIT bordada PP.pdf
+- 00000308-CADARUVE bordada pp.pdf
+- 00000310-NORTHRAW bordada negraPP.pdf
+- 00000311-NORTHRAW bordada beige PP.pdf
+- 00000317-KLEER bordada PP.pdf
+- 00000318-NEWSKIN rinÌƒon PP.pdf
+- 00000319-BENBRANS bordada NP.pdf
+- 00000322-EXPRESS bordada PP.pdf
+- 00000325-WIL fondo pp.pdf
+- 00000326-CADARUVE BORDADA PP (2).pdf
+- 00000328-ANEXO bordada PP.pdf
+- EP2x4T3
+- 00000331-MYS FENIX bordada PP.pdf
+- 00000332-NORTHRAW bordada negraPP.pdf
+- 00000333-NORTHRAW bordada beige PP.pdf
+- BoPocoIm-30x40/50
+- 00000337-MOY pp PP.pdf
+- 00000341-Fingers bolsa pp (2).pdf
+- BoPPcoIm-30x40/60
+- 00000344-CAROZO bordada PP.pdf
+- 00000348-Rip Blanthi bordada PP.pdf
+- 00000350-Matius bordada doblada PP.pdf
+- 00000351-Matius bordada negra PP.pdf
+- BoPocoIm-35x45/50.
+- 00000353-LEAF bolsa PP.pdf
+- EP2x5R1
+- 00000356-Fursten bordada PP.pdf
+- 00000358-Fursten bordada PP.pdf
+- 00000360-DCA bordada PP.pdf
+- 00000362-Alejandro dobladas pp.pdf
+- 00000363- Alejandro texturapp.pdf
+- 00000367-URUS bordada PP.pdf
+- 00000368-Matius bordada negra PP_1.pdf
+- 00000369-Matius bordada tostado pp.pdf
+- 00000370-Los dukes bordada PP.pdf
+- 00000372-Fatto bordada Pp.pdf
+- 00000374-Dafne bordada PP.pdf
+- 00000376-Express bordada chica PP.pdf
+- 00000377-Express bordada grande pp.pdf
+- BoFrMaIm-
+50x40
+- 00000379-Euphoria friselina pp.pdf
+- TiPlTi1 -1x3
+- TiPlTi1 -1x3
+- 00000383-KABUL bordada PP.pdf
+- 00000390-Alison bordada pp.pdf
+- 00000395-DCA bordada PP.pdf
+- 00000417-Juanitas bordada pp.pdf
+- 00000419-TITTO BORDADA PP.pdf
+- 00000421-Nina bordada PP.pdf
+- P
+- MaPl----
+- 00000428-calzon bordada nueva pp.pdf
+- 00000429-CALZON bordada rep pp.pdf
+- 00000431-asturias bordada pp.pdf
+- 00000434-princess bordada pp.pdf
+- 00000450-lorzaid bordada pp.pdf
+- BPU3x6
+- BPU3x6
+- 00000460-recreate bordada pp.pdf
+- 00000462-vivi bordada doblada pp.pdf
+- 00000463-vivi bordada soldada pp.pdf
+- 00000466-jhonkey bordada pp.pdf
+- 00000467-jhonkey bordada pp.pdf
+- 00000469-HOLSTER bordada pp.pdf
+- 00000470-TENDENCIA BORDADA PP.pdf
+- 00000472-delrey bordada pp.pdf
+- 00000475-valentino bordada pp.pdf
+- 00000484-TENDENCIA BORDADA PP.pdf
+- 00000487-ALEJANDRO BORDADA 2 PP.pdf
+- 00000488-ALEJANDRO BORDADA 1 PP.pdf
+- 00000504-uniformes bordada pp.pdf
+- 00000506-massive bordada pp.pdf
+- 00000508-versao bordada pp.pdf
+- 00000510-UNLIMITED bordada PP.pdf
+- 00000512-alejandro badanas ok.pdf
+- B
+- 00000514-HAZZE BORDADA PP.pdf
+- 00000516-PIERRS bordada PP.pdf
+- 00000520-massive pp ok.pdf
+- 00000521-massive e commerce ok.pdf
+- 00000523-TITTO BORDADA PP.pdf
+- P
+- 00000526-laurent ecommerce np.pdf
+- MaPl----
+- 00000535-DCA BORDADA PP.pdf
+- HaSi-
+- 00000538-Auguri bordada pp.pdf
+- 00000539-evolution bordada pp.pdf
+- 00000541-Nina bordada PP.pdf
+- 00000542-noguez bordada pp.pdf
+- 00000543-princess bordada pp.pdf
+- 00000544-princess bordada pp.pdf
+- 00000545-VITTSO BORDADA PP.pdf
+- 00000549-TENDENCIA BORDADA PP.pdf
+- 00000550-JHONKEY BORDADA pp.pdf
+
+## Top 10 tipografías más usadas
+_Sin datos_
+
+## Top 10 colores más frecuentes
+- negro: 7
+- blanco: 5
+- plata: 4
+- amarillo: 3
+- azul: 3
+- beige: 3
+- oro: 2
+- rojo: 2
+
+---
+Generado por scripts/enrich-design-odoo.mjs

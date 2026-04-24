@@ -1,0 +1,802 @@
+[30/9/25, 9:39:40 a. m.] Mercaderia: ‎Creaste el grupo "Mercaderia".
+[30/9/25, 9:39:40 a. m.] Mercaderia: ‎Los mensajes y las llamadas están cifrados de extremo a extremo. Solo las personas en este chat pueden leerlos, escucharlos o compartirlos.
+[30/9/25, 9:40:08 a. m.] Facu: Buen dia!
+Este tiene que ser un grupo informativo para todos los integrantes de la empresa.
+[30/9/25, 9:43:00 a. m.] Achu: ‎Añadiste a Achu.
+[30/9/25, 9:43:28 a. m.] Avios Textiles Ventas: ‎Añadiste a Avios Textiles Ventas.
+[30/9/25, 9:44:23 a. m.] Facu: Protocolo:
+-Llega un pedido @⁨Mati Tuscherr⁩ envia foto SOLO del producto que entro. 
+-@⁨Mile Diseño⁩ confirma que este ok la producción segun lo pedido. 
+-@⁨Guido Avios⁩ despues de todo esto y haber recibido de mati el remito de entrega del prov. 
+Envia el remito y/o factura de entrega. Con el saldo del cliente
+(Achu y Guido coordinan quien se contacta con el cliente)
+-Segun la info del cliente (tipo de entrega) @⁨Mati Tuscherr⁩ coordina la entrega correspondiente con logística y Guido (si el cliente coordina con Achu, este le informa a Guido)
+-Una vez confirmado el entrego o despacho avisa Mati por este grupo que el pedido se entrego o se despacho y pasa el comprobante de seguimiento
+[30/9/25, 9:44:47 a. m.] Facu: ‎ENCUESTA:
+Entendi
+‎OPCIÓN: Si (3 votos)
+‎OPCIÓN: Quiero repasar algo (1 voto)
+[30/9/25, 9:46:05 a. m.] Facu: Bien Mati!
+[30/9/25, 9:46:09 a. m.] Mati Tuscherr: No paso mas por logistica el comprobante de seguimiento y cuando se entrego?
+[30/9/25, 9:46:16 a. m.] Mati Tuscherr: Osea el grupo de logistica
+[30/9/25, 9:47:50 a. m.] Facu: Nopp todo por aca
+[30/9/25, 9:48:09 a. m.] Facu: Logisitica usemoslo solo para pedidos especiales
+Muestras y cosas NO vinculadas a productos vendidos
+[30/9/25, 9:48:26 a. m.] Facu: O para avisar lo que haya que buscsr en proveedores
+O cuando algo ya se pueda entregar
+[30/9/25, 9:48:38 a. m.] Facu: Aca solo:
+Fotos
+Comprobantes 
+Avisos
+[30/9/25, 9:49:03 a. m.] Facu: La idea es usar bien este protocolo hasta fin de año e intentar automatizarlo lo máximo posible con el sistema a partir de febrero
+[30/9/25, 9:59:48 a. m.] Guido Avios: Consulta, vamos a tener que confirmar y dar el ok por acá ? O como sería esa parte
+[30/9/25, 10:02:25 a. m.] Facu: Sobre que cosa?
+[30/9/25, 10:02:32 a. m.] Facu: No se entiende la pregunta
+[30/9/25, 10:05:56 a. m.] Guido Avios: por ejemplo para yo envíar el remito/factura (que hace mati) tengo que esperar a la confirmación de mile, esa confirmació la hace por el grupo ?
+[30/9/25, 10:11:00 a. m.] Facu: Siii muy biennn
+[30/9/25, 10:11:01 a. m.] Facu: Ejemplo
+‎[30/9/25, 10:11:25 a. m.] Facu: Mati:
+Entro carton de blue jeans ‎<adjunto: 00000021-PHOTO-2025-09-30-10-11-24.jpg>
+[30/9/25, 10:11:35 a. m.] Facu: Mile:
+Esta aprobado segun la orden de producción
+[30/9/25, 10:12:06 a. m.] Facu: Guido:
+Envio remito y factura de cartones de blue jeans
+Tiene una deuda de $2
+[30/9/25, 10:13:10 a. m.] Facu: (En el interin)
+Guido/achu/facu coordinan con el cliente segun lo preacordado 
+Si tiene que pagar y se envia
+O si se envia directo. 
+Guido coordina esto con Mati para que se ejecute la entrega del cliente
+[30/9/25, 10:13:21 a. m.] Facu: Mati:
+Ya salio el flete con los tags de blue jeans
+[30/9/25, 10:13:29 a. m.] Facu: Mati:
+Se entrego blue jeans
+[30/9/25, 10:14:59 a. m.] Mati Tuscherr: Osea, en logistica se avisa cuando ya la mercaderia de x cliente esta para enviarse y en este grupo se avisa cuando es retirado y entregado o se pasa la orden de seguimiento?
+[30/9/25, 10:15:37 a. m.] Facu: Exacto!!
+Por ejemplo
+En logistica Achu avisa que, el pedido de blue jeans esta listo para ser entregado segun lo que dice en odoo 
+Y ahi vos te ocupas
+‎[1/10/25, 1:50:55 p. m.] Mati Tuscherr: ya llegaron los llaveros de plastis de hellmans ‎<adjunto: 00000029-PHOTO-2025-10-01-13-50-55.jpg>
+[1/10/25, 1:51:40 p. m.] Mile Diseño: estan okkkkk
+[1/10/25, 2:59:12 p. m.] Mati Tuscherr:
+‎[1/10/25, 2:59:13 p. m.] Mati Tuscherr: ‎<adjunto: 00000032-PHOTO-2025-10-01-14-59-13.jpg>
+‎[1/10/25, 2:59:13 p. m.] Mati Tuscherr: ‎<adjunto: 00000033-PHOTO-2025-10-01-14-59-13.jpg>
+‎[1/10/25, 2:59:13 p. m.] Mati Tuscherr: ‎<adjunto: 00000034-PHOTO-2025-10-01-14-59-13.jpg>
+‎[1/10/25, 2:59:13 p. m.] Mati Tuscherr: ‎<adjunto: 00000035-PHOTO-2025-10-01-14-59-13.jpg>
+[1/10/25, 3:09:52 p. m.] Mile Diseño: estan ok las 4
+‎[1/10/25, 3:43:56 p. m.] Mati Tuscherr: ‎<adjunto: 00000037-PHOTO-2025-10-01-15-43-56.jpg>
+[1/10/25, 4:00:29 p. m.] Facu: Confirme pedido de buenos hijos. Habria que mandar el viernes 1 caja de las que estan aca. 
+Ya esta aprobado hasta el paso de la confirmación de Mile
+‎[3/10/25, 9:19:35 a. m.] Guido Avios: 0001_2025_00676.pdf • ‎1 página ‎<adjunto: 00000039-0001_2025_00676.pdf>
+[3/10/25, 9:19:36 a. m.] Guido Avios: Envío el remito de las bolsas de Wassa tiene un saldo de $1.322.505,40
+‎[3/10/25, 9:21:55 a. m.] Guido Avios: 0001_2025_00677.pdf • ‎1 página ‎<adjunto: 00000041-0001_2025_00677.pdf>
+[3/10/25, 9:21:55 a. m.] Guido Avios: Envío el remito de las bolsas de Jala Tova tiene un saldo de $652.453,61
+‎[3/10/25, 11:39:36 a. m.] Guido Avios: 0001_2025_00679.pdf • ‎1 página ‎<adjunto: 00000043-0001_2025_00679.pdf>
+‎[3/10/25, 11:58:57 a. m.] Mati Tuscherr: ‎<adjunto: 00000044-PHOTO-2025-10-03-11-58-57.jpg>
+‎[3/10/25, 12:12:12 p. m.] Mile Diseño: está mal la canaleta de odinhood ‎<adjunto: 00000045-PHOTO-2025-10-03-12-12-12.jpg>
+[3/10/25, 12:12:16 p. m.] Mile Diseño: la hicieron negra
+[3/10/25, 12:13:54 p. m.] Facu: Chanfleeesss
+‎[3/10/25, 1:25:35 p. m.] Guido Avios: 0001_2025_00681.pdf • ‎1 página ‎<adjunto: 00000048-0001_2025_00681.pdf>
+‎[6/10/25, 2:29:01 p. m.] Guido Avios: 0001_2025_00678 (1).pdf • ‎1 página ‎<adjunto: 00000049-0001_2025_00678 (1).pdf>
+‎[6/10/25, 2:41:53 p. m.] Mati Tuscherr: ‎<adjunto: 00000050-PHOTO-2025-10-06-14-41-53.jpg>
+‎[7/10/25, 12:43:25 p. m.] Mati Tuscherr: ‎<adjunto: 00000051-PHOTO-2025-10-07-12-43-25.jpg>
+[8/10/25, 9:30:48 a. m.] Mile Diseño: Okkk
+[8/10/25, 10:00:55 a. m.] Mile Diseño: la de arleo tiene 1cm mas de alto que en la np estoy viendo q onda
+[8/10/25, 12:38:58 p. m.] Mati Tuscherr:
+‎[8/10/25, 12:39:00 p. m.] Mati Tuscherr: ‎<adjunto: 00000055-PHOTO-2025-10-08-12-39-00.jpg>
+‎[8/10/25, 12:39:00 p. m.] Mati Tuscherr: ‎<adjunto: 00000056-PHOTO-2025-10-08-12-39-00.jpg>
+‎[8/10/25, 12:41:37 p. m.] Mile Diseño: Saten Arleo PP (1).pdf • ‎1 página ‎<adjunto: 00000057-Saten Arleo PP (1).pdf>
+[8/10/25, 12:45:35 p. m.] Mile Diseño: la chica esta ok la grande esta mal la distancia del borde all logo
+‎[8/10/25, 12:45:41 p. m.] Mile Diseño: ‎<adjunto: 00000059-PHOTO-2025-10-08-12-45-41.jpg>
+‎[8/10/25, 12:46:07 p. m.] Mile Diseño: ‎<adjunto: 00000060-PHOTO-2025-10-08-12-46-07.jpg>
+‎[8/10/25, 1:51:14 p. m.] Guido Avios: 0001_2025_00684.pdf • ‎1 página ‎<adjunto: 00000061-0001_2025_00684.pdf>
+‎[9/10/25, 12:22:05 p. m.] Mati Tuscherr: ‎<adjunto: 00000062-PHOTO-2025-10-09-12-22-05.jpg>
+[9/10/25, 12:23:28 p. m.] Mile Diseño: ok
+‎[9/10/25, 4:38:42 p. m.] Mati Tuscherr: ‎<adjunto: 00000064-PHOTO-2025-10-09-16-38-42.jpg>
+[13/10/25, 9:43:24 a. m.] Mile Diseño: estan todas ok
+‎[13/10/25, 10:56:02 a. m.] Guido Avios: 33718580329_001_00001_00000170.pdf • ‎3 páginas ‎<adjunto: 00000066-33718580329_001_00001_00000170.pdf>
+‎[13/10/25, 11:08:32 a. m.] Guido Avios: 0001_2025_00688 (1).pdf • ‎1 página ‎<adjunto: 00000067-0001_2025_00688 (1).pdf>
+[13/10/25, 4:44:08 p. m.] Mati Tuscherr: Arleo bordadas y saten retirado por cliente
+‎[14/10/25, 9:40:15 a. m.] Guido Avios: 33718580329_006_00001_00000006.pdf • ‎3 páginas ‎<adjunto: 00000069-33718580329_006_00001_00000006.pdf>
+‎[15/10/25, 12:58:24 p. m.] Mati Tuscherr: ‎<adjunto: 00000070-PHOTO-2025-10-15-12-58-24.jpg>
+[15/10/25, 1:15:23 p. m.] Mile Diseño: perf, (los talles son de tif)
+‎[15/10/25, 3:12:00 p. m.] Guido Avios: 0001_2025_00690.pdf • ‎1 página ‎<adjunto: 00000072-0001_2025_00690.pdf>
+‎[15/10/25, 3:14:43 p. m.] Guido Avios: 0001_2025_00692.pdf • ‎1 página ‎<adjunto: 00000073-0001_2025_00692.pdf>
+‎[16/10/25, 3:32:57 p. m.] Mati Tuscherr: ‎<adjunto: 00000074-PHOTO-2025-10-16-15-32-57.jpg>
+[16/10/25, 3:36:36 p. m.] Mile Diseño: estan ok ambas
+‎[16/10/25, 3:46:01 p. m.] Guido Avios: 0001_2025_00693.pdf • ‎2 páginas ‎<adjunto: 00000076-0001_2025_00693.pdf>
+‎[16/10/25, 3:52:53 p. m.] Guido Avios: 0001_2025_00694.pdf • ‎1 página ‎<adjunto: 00000077-0001_2025_00694.pdf>
+‎[20/10/25, 9:16:41 a. m.] Mati Tuscherr: ‎<adjunto: 00000078-PHOTO-2025-10-20-09-16-41.jpg>
+[20/10/25, 9:30:17 a. m.] Mile Diseño: Okkk
+‎[20/10/25, 11:30:50 a. m.] Guido Avios: 0001_2025_00695.pdf • ‎1 página ‎<adjunto: 00000080-0001_2025_00695.pdf>
+[20/10/25, 2:00:47 p. m.] Facu: @⁨Achu⁩ quien de los dos habia hablado asi le piden el pago??
+[20/10/25, 2:00:54 p. m.] Facu: Yo se lo mande
+Pero habia hablado con ustedds
+[20/10/25, 2:04:11 p. m.] Achu: Yo hablé, ahi le pido
+[21/10/25, 3:09:06 p. m.] Mati Tuscherr:
+‎[21/10/25, 3:09:06 p. m.] Mati Tuscherr: ‎<adjunto: 00000085-PHOTO-2025-10-21-15-09-06.jpg>
+‎[21/10/25, 3:09:06 p. m.] Mati Tuscherr: ‎<adjunto: 00000086-PHOTO-2025-10-21-15-09-06.jpg>
+‎[21/10/25, 3:09:07 p. m.] Mati Tuscherr: ‎<adjunto: 00000087-PHOTO-2025-10-21-15-09-07.jpg>
+‎[21/10/25, 3:09:07 p. m.] Mati Tuscherr: ‎<adjunto: 00000088-PHOTO-2025-10-21-15-09-07.jpg>
+‎[21/10/25, 3:09:07 p. m.] Mati Tuscherr: ‎<adjunto: 00000089-PHOTO-2025-10-21-15-09-07.jpg>
+‎[21/10/25, 3:09:07 p. m.] Mati Tuscherr: ‎<adjunto: 00000090-PHOTO-2025-10-21-15-09-07.jpg>
+‎[21/10/25, 3:09:08 p. m.] Mati Tuscherr: ‎<adjunto: 00000091-PHOTO-2025-10-21-15-09-08.jpg>
+‎[21/10/25, 4:51:38 p. m.] Mati Tuscherr: ‎<adjunto: 00000092-PHOTO-2025-10-21-16-51-38.jpg>
+‎[22/10/25, 9:19:41 a. m.] Mile Diseño: Las de zango nose xq tienen una línea de un solo costado, las de unlimited no. ‎<adjunto: 00000093-PHOTO-2025-10-22-09-19-41.jpg>
+[22/10/25, 9:20:07 a. m.] Mile Diseño: Oveizaga está ok desp tenemos q ver el micronaje para confirmar otros pedidos
+[22/10/25, 9:20:59 a. m.] Mile Diseño: Oxford tienen 2cm más de alto
+[22/10/25, 9:22:23 a. m.] Facu: Me da mati una ya??
+[22/10/25, 9:23:07 a. m.] Facu: Es como falla de telar
+El cliente no va a decir nada (pues salada)
+Pero hacete la boluda con carla como que te llama la atencion, ella te va a decir esto de la marca del telar 
+Pero ella aviso sirve para que se hagan el ejercicio de revisarlo
+[22/10/25, 9:23:24 a. m.] Facu: Me mandas foto superponiendola a la meustra de las que haciamos antes?
+[22/10/25, 9:23:56 a. m.] Mile Diseño: Ahí le tiré
+[22/10/25, 9:23:58 a. m.] Mile Diseño: Dale
+[22/10/25, 9:24:11 a. m.] Mile Diseño: Si ahí le pido a Mati y te pasoo
+[22/10/25, 9:37:29 a. m.] Mile Diseño: todo lo demas ok ahora vemos oxford
+‎[22/10/25, 9:41:22 a. m.] Mile Diseño: El color también es otro ‎<adjunto: 00000103-PHOTO-2025-10-22-09-41-22.jpg>
+‎[22/10/25, 9:43:56 a. m.] Mile Diseño: De medidas está ok la vieja tampoco coincidía con la ficha ‎<adjunto: 00000104-PHOTO-2025-10-22-09-43-56.jpg>
+‎[22/10/25, 10:01:31 a. m.] Guido Avios: 0001_2025_00696.pdf • ‎1 página ‎<adjunto: 00000105-0001_2025_00696.pdf>
+‎[22/10/25, 10:04:54 a. m.] Guido Avios: 0001_2025_00697.pdf • ‎2 páginas ‎<adjunto: 00000106-0001_2025_00697.pdf>
+‎[22/10/25, 11:45:27 a. m.] Guido Avios: 0001_2025_00698.pdf • ‎1 página ‎documento omitido
+[22/10/25, 11:45:27 a. m.] Guido Avios: Envío el remito de las bolsas de oveizaga tiene un saldo de $338.500
+‎[22/10/25, 3:04:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000109-PHOTO-2025-10-22-15-04-26.jpg>
+[23/10/25, 9:06:47 a. m.] Facu: Buenndiaaa!
+Zango se entrega jueves de la sem que viene @⁨Guido Avios⁩ confirma direc x las dudas. Paga en efectivo en sobre cerrado
+@⁨Mile Diseño⁩ podemos ver si estaria el modelo de bolsas que falta y el de will a ver si mandamos todo junto
+[23/10/25, 9:07:30 a. m.] Mile Diseño: Bueen día dale ahí los pido
+[23/10/25, 12:08:35 p. m.] Mati Tuscherr:
+‎[23/10/25, 12:08:35 p. m.] Mati Tuscherr: ‎<adjunto: 00000113-PHOTO-2025-10-23-12-08-35.jpg>
+‎[23/10/25, 12:08:35 p. m.] Mati Tuscherr: ‎<adjunto: 00000114-PHOTO-2025-10-23-12-08-35.jpg>
+‎[23/10/25, 12:08:36 p. m.] Mati Tuscherr: ‎<adjunto: 00000115-PHOTO-2025-10-23-12-08-36.jpg>
+[23/10/25, 12:36:24 p. m.] Mile Diseño: Están okkkkk
+‎[24/10/25, 10:31:41 a. m.] Guido Avios: 0001_2025_00701.pdf • ‎1 página ‎<adjunto: 00000117-0001_2025_00701.pdf>
+‎[24/10/25, 11:12:56 a. m.] Mati Tuscherr: ‎<adjunto: 00000118-PHOTO-2025-10-24-11-12-56.jpg>
+‎[24/10/25, 11:33:55 a. m.] Guido Avios: 0001_2025_00702.pdf • ‎1 página ‎<adjunto: 00000119-0001_2025_00702.pdf>
+‎[24/10/25, 11:46:15 a. m.] Guido Avios: 0001_2025_00703.pdf • ‎1 página ‎<adjunto: 00000120-0001_2025_00703.pdf>
+‎[24/10/25, 11:49:51 a. m.] Guido Avios: 0001_2025_00704 (1).pdf • ‎1 página ‎<adjunto: 00000121-0001_2025_00704 (1).pdf>
+[24/10/25, 11:58:58 a. m.] Facu: Le mandas??
+[24/10/25, 11:59:03 a. m.] Facu: Ya salieron tofos los pedidos??
+[24/10/25, 12:08:02 p. m.] Guido Avios: le mando
+[24/10/25, 12:08:05 p. m.] Guido Avios: si
+[24/10/25, 12:13:11 p. m.] Facu: perf
+[28/10/25, 2:39:48 p. m.] Mati Tuscherr:
+‎[28/10/25, 2:39:48 p. m.] Mati Tuscherr: ‎<adjunto: 00000128-PHOTO-2025-10-28-14-39-48.jpg>
+‎[28/10/25, 2:39:48 p. m.] Mati Tuscherr: ‎<adjunto: 00000129-PHOTO-2025-10-28-14-39-48.jpg>
+[28/10/25, 2:40:22 p. m.] Facu: Porfa finger si esta ok que se entregue directo
+[28/10/25, 3:08:28 p. m.] Mile Diseño: Okkkkk
+‎[28/10/25, 3:44:55 p. m.] Guido Avios: 33718580329_001_00001_00000174.pdf • ‎3 páginas ‎<adjunto: 00000132-33718580329_001_00001_00000174.pdf>
+‎[29/10/25, 11:36:54 a. m.] Guido Avios: 33718580329_001_00001_00000175.pdf • ‎3 páginas ‎documento omitido
+‎[31/10/25, 1:20:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000134-PHOTO-2025-10-31-13-20-26.jpg>
+[31/10/25, 1:56:02 p. m.] Mile Diseño: Okkkk
+[3/11/25, 8:37:21 a. m.] Facu: Buen dia! Esto ya lo entregue
+Me gustaria poder recibir el remito con el saldo
+‎[3/11/25, 9:21:28 a. m.] Guido Avios: 0001_2025_00709.pdf • ‎1 página ‎<adjunto: 00000137-0001_2025_00709.pdf>
+[3/11/25, 9:36:20 a. m.] Facu: Gracias
+[4/11/25, 10:31:55 a. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+[4/11/25, 10:33:27 a. m.] Facu: de inberso no hay tambien bordadas?
+[4/11/25, 10:33:31 a. m.] Facu: no esta vibra??
+[4/11/25, 10:33:34 a. m.] Mati Tuscherr: sip
+[4/11/25, 10:33:45 a. m.] Facu: o veizaga bolsa no esta tambien???
+[4/11/25, 10:33:51 a. m.] Facu: revisa devuelta
+[4/11/25, 10:33:58 a. m.] Mati Tuscherr: Ahi vaa
+‎[4/11/25, 10:38:52 a. m.] Mati Tuscherr: Mercaderia en el depo ‎<adjunto: 00000146-PHOTO-2025-11-04-10-38-52.jpg>
+‎[4/11/25, 11:10:18 a. m.] Guido Avios: 0001_2025_00708 (1).pdf • ‎1 página ‎<adjunto: 00000147-0001_2025_00708 (1).pdf>
+‎[4/11/25, 11:48:16 a. m.] Facu: Pedidos en producción.pdf • ‎3 páginas ‎<adjunto: 00000148-Pedidos en producción.pdf>
+‎[4/11/25, 11:48:16 a. m.] Facu: Entregados parciales.pdf • ‎1 página ‎<adjunto: 00000149-Entregados parciales.pdf>
+‎[4/11/25, 11:48:16 a. m.] Facu: Vtas en producción.pdf • ‎5 páginas ‎<adjunto: 00000150-Vtas en producción.pdf>
+[4/11/25, 12:08:33 p. m.] Guido Avios: Oxford hay que entregarlo 
+Ft lo mismo
+[4/11/25, 12:12:43 p. m.] Mati Tuscherr: Cadaruve-inverso falta bolsas de pp bajo y botones
+Irisa falta duplicado de apliques
+‎[5/11/25, 9:13:34 a. m.] Mati Tuscherr: ‎<adjunto: 00000153-PHOTO-2025-11-05-09-13-34.jpg>
+[5/11/25, 9:49:42 a. m.] Mile Diseño: de vista le faltan unos cm pero se los puso al fuelle👌🏻, falta la camiseta grande no?
+[5/11/25, 9:49:57 a. m.] Mati Tuscherr: asi es
+[5/11/25, 10:07:37 a. m.] Producto Avios Textiles: ‎Mile Diseño añadió a Producto Avios Textiles.
+‎[5/11/25, 1:33:15 p. m.] Guido Avios: 0001_2025_00710.pdf • ‎1 página ‎<adjunto: 00000157-0001_2025_00710.pdf>
+[6/11/25, 2:02:01 p. m.] Mati Tuscherr:
+‎[6/11/25, 2:02:01 p. m.] Mati Tuscherr: ‎<adjunto: 00000159-PHOTO-2025-11-06-14-02-01.jpg>
+‎[6/11/25, 2:02:02 p. m.] Mati Tuscherr: ‎<adjunto: 00000160-PHOTO-2025-11-06-14-02-02.jpg>
+[6/11/25, 2:05:56 p. m.] Producto Avios Textiles: estan ok
+[7/11/25, 9:10:19 a. m.] Facu: Buenasss
+[7/11/25, 9:10:26 a. m.] Facu: Esta la factura de esto?
+[7/11/25, 9:10:38 a. m.] Facu: Ayer deje nina
+Habria que sacar muestra y remitarrr
+[7/11/25, 9:10:43 a. m.] Facu: Lo entrega achu al medidoia
+[7/11/25, 9:16:13 a. m.] Mati Tuscherr: Okeyy, mandenme foto de las cantidades de lo de carvi asi lo valido cuando este ok
+‎[7/11/25, 9:46:49 a. m.] Guido Avios: ‎<adjunto: 00000167-PHOTO-2025-11-07-09-46-49.jpg>
+‎[7/11/25, 9:46:53 a. m.] Guido Avios: ‎<adjunto: 00000168-PHOTO-2025-11-07-09-46-53.jpg>
+‎[7/11/25, 9:47:36 a. m.] Guido Avios: ‎<adjunto: 00000169-PHOTO-2025-11-07-09-47-36.jpg>
+[7/11/25, 9:56:00 a. m.] Producto Avios Textiles: ok las tress
+[7/11/25, 10:08:37 a. m.] Guido Avios: ‎Se eliminó este mensaje.
+‎[7/11/25, 10:24:24 a. m.] Guido Avios: 33718580329_001_00001_00000177.pdf • ‎3 páginas ‎<adjunto: 00000172-33718580329_001_00001_00000177.pdf>
+‎[7/11/25, 10:24:25 a. m.] Guido Avios: 0001_2025_00714.pdf • ‎1 página ‎<adjunto: 00000173-0001_2025_00714.pdf>
+‎[7/11/25, 11:25:23 a. m.] Guido Avios: 0001_2025_00715.pdf • ‎1 página ‎<adjunto: 00000174-0001_2025_00715.pdf>
+‎[7/11/25, 12:31:57 p. m.] Guido Avios: 0001_2025_00716.pdf • ‎1 página ‎<adjunto: 00000175-0001_2025_00716.pdf>
+[7/11/25, 12:37:32 p. m.] Facu: Ta mal esto??
+[7/11/25, 12:38:08 p. m.] Guido Avios: si
+‎[11/11/25, 10:18:47 a. m.] Guido Avios: 0001_2025_00718.pdf • ‎1 página ‎<adjunto: 00000178-0001_2025_00718.pdf>
+[11/11/25, 10:20:40 a. m.] Facu: Gracias
+‎[11/11/25, 1:51:43 p. m.] Mati Tuscherr: ‎<adjunto: 00000180-PHOTO-2025-11-11-13-51-43.jpg>
+[11/11/25, 1:58:49 p. m.] Producto Avios Textiles: ta okkk
+‎[13/11/25, 3:07:34 p. m.] Mati Tuscherr: ‎<adjunto: 00000182-PHOTO-2025-11-13-15-07-34.jpg>
+‎[13/11/25, 3:08:29 p. m.] Mati Tuscherr: ‎<adjunto: 00000183-PHOTO-2025-11-13-15-08-29.jpg>
+[13/11/25, 3:15:40 p. m.] Producto Avios Textiles: irisa ok
+‎[13/11/25, 3:18:50 p. m.] Producto Avios Textiles: ‎<adjunto: 00000185-PHOTO-2025-11-13-15-18-50.jpg>
+‎[13/11/25, 3:20:15 p. m.] Producto Avios Textiles: ‎<adjunto: 00000186-PHOTO-2025-11-13-15-20-15.jpg>
+[13/11/25, 3:22:10 p. m.] Producto Avios Textiles: Lidase hay variación de color y sancler tienen varias una línea ahí marcada. Oveizaga y dukes ok
+‎[13/11/25, 4:25:37 p. m.] Guido Avios: 0001_2025_00721.pdf • ‎1 página ‎<adjunto: 00000188-0001_2025_00721.pdf>
+‎[13/11/25, 4:30:00 p. m.] Guido Avios: 0001_2025_00722.pdf • ‎1 página ‎<adjunto: 00000189-0001_2025_00722.pdf>
+[13/11/25, 4:33:41 p. m.] Facu: No tiene satanping el de dukes??
+[13/11/25, 4:33:58 p. m.] Mati Tuscherr: si tienee
+[13/11/25, 4:34:02 p. m.] Producto Avios Textiles: sisi no se ve en la foto
+[13/11/25, 4:34:16 p. m.] Facu: Perff
+[13/11/25, 4:34:27 p. m.] Facu: Le comentas a gustavoo??
+[13/11/25, 4:34:44 p. m.] Producto Avios Textiles: daleee
+‎[13/11/25, 4:38:15 p. m.] Guido Avios: 0001_2025_00723.pdf • ‎1 página ‎<adjunto: 00000196-0001_2025_00723.pdf>
+‎[13/11/25, 4:47:27 p. m.] Producto Avios Textiles: ‎<adjunto: 00000197-PHOTO-2025-11-13-16-47-27.jpg>
+[13/11/25, 4:47:53 p. m.] Facu: Me kmagineee
+[13/11/25, 4:47:59 p. m.] Facu: @⁨Achu⁩ atento x si jose dice algoo
+‎[14/11/25, 9:49:24 a. m.] Guido Avios: 0001_2025_00724.pdf • ‎1 página ‎<adjunto: 00000200-0001_2025_00724.pdf>
+‎[17/11/25, 11:42:34 a. m.] Mati Tuscherr: ‎<adjunto: 00000201-PHOTO-2025-11-17-11-42-34.jpg>
+[17/11/25, 11:43:51 a. m.] Producto Avios Textiles: ‎Se eliminó este mensaje.
+[17/11/25, 11:45:26 a. m.] Producto Avios Textiles: ‎Se eliminó este mensaje.
+[17/11/25, 11:45:53 a. m.] Producto Avios Textiles: ‎Se eliminó este mensaje.
+[17/11/25, 12:06:23 p. m.] Producto Avios Textiles: ‎Se eliminó este mensaje.
+[17/11/25, 12:07:59 p. m.] Producto Avios Textiles: okkk
+‎[19/11/25, 2:48:18 p. m.] Guido Avios: 0001_2025_00725.pdf • ‎1 página ‎<adjunto: 00000207-0001_2025_00725.pdf>
+‎[19/11/25, 2:53:26 p. m.] Guido Avios: 0001_2025_00726.pdf • ‎1 página ‎<adjunto: 00000208-0001_2025_00726.pdf>
+‎[19/11/25, 2:57:32 p. m.] Guido Avios: 0001_2025_00727.pdf • ‎1 página ‎<adjunto: 00000209-0001_2025_00727.pdf>
+‎[19/11/25, 3:52:56 p. m.] Guido Avios: 0001_2025_00728.pdf • ‎1 página ‎<adjunto: 00000210-0001_2025_00728.pdf>
+[19/11/25, 4:12:25 p. m.] Mati Tuscherr:
+‎[19/11/25, 4:12:25 p. m.] Mati Tuscherr: ‎<adjunto: 00000212-PHOTO-2025-11-19-16-12-25.jpg>
+‎[19/11/25, 4:12:25 p. m.] Mati Tuscherr: ‎<adjunto: 00000213-PHOTO-2025-11-19-16-12-25.jpg>
+‎[19/11/25, 4:12:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000214-PHOTO-2025-11-19-16-12-26.jpg>
+‎[19/11/25, 4:12:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000215-PHOTO-2025-11-19-16-12-26.jpg>
+‎[19/11/25, 4:12:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000216-PHOTO-2025-11-19-16-12-26.jpg>
+‎[19/11/25, 4:12:26 p. m.] Mati Tuscherr: ‎<adjunto: 00000217-PHOTO-2025-11-19-16-12-26.jpg>
+‎[19/11/25, 4:12:27 p. m.] Mati Tuscherr: ‎<adjunto: 00000218-PHOTO-2025-11-19-16-12-27.jpg>
+‎[19/11/25, 4:33:52 p. m.] Guido Avios: 0001_2025_00729.pdf • ‎2 páginas ‎<adjunto: 00000219-0001_2025_00729.pdf>
+[19/11/25, 4:42:57 p. m.] Guido Avios: envío el remito de las bolsas de inverso este rmito tiene un saldo de $253.800,00, sumado a lo anterior tiene un saldo de $929.492,7
+‎[19/11/25, 4:43:21 p. m.] Guido Avios: 0001_2025_00730 (1).pdf • ‎1 página ‎<adjunto: 00000221-0001_2025_00730 (1).pdf>
+[20/11/25, 9:07:04 a. m.] Facu: @⁨Achu⁩ ma daste
+[20/11/25, 9:19:41 a. m.] Achu: Sisi
+‎[20/11/25, 5:06:37 p. m.] Mati Tuscherr: ‎<adjunto: 00000224-PHOTO-2025-11-20-17-06-37.jpg>
+‎[21/11/25, 2:15:15 p. m.] Mati Tuscherr: ‎<adjunto: 00000225-PHOTO-2025-11-21-14-15-15.jpg>
+‎[21/11/25, 3:49:56 p. m.] Mati Tuscherr: 0001_2025_00733.pdf • ‎1 página ‎<adjunto: 00000226-0001_2025_00733.pdf>
+‎[21/11/25, 3:50:35 p. m.] Mati Tuscherr: 0001_2025_00736.pdf • ‎1 página ‎<adjunto: 00000227-0001_2025_00736.pdf>
+[21/11/25, 3:50:35 p. m.] Mati Tuscherr: Hang tags Los Dukes, debe 370.500
+‎[21/11/25, 3:51:08 p. m.] Mati Tuscherr: 0001_2025_00738.pdf • ‎1 página ‎<adjunto: 00000229-0001_2025_00738.pdf>
+‎[21/11/25, 3:51:36 p. m.] Mati Tuscherr: 0001_2025_00737.pdf • ‎1 página ‎<adjunto: 00000230-0001_2025_00737.pdf>
+[21/11/25, 3:51:36 p. m.] Mati Tuscherr: Hang tags lidase, debe 995.000
+‎[21/11/25, 3:51:59 p. m.] Mati Tuscherr: 0001_2025_00739 (1).pdf • ‎1 página ‎<adjunto: 00000232-0001_2025_00739 (1).pdf>
+[21/11/25, 3:51:59 p. m.] Mati Tuscherr: Hang tags batata y queso, debe 238.500
+‎[21/11/25, 3:52:55 p. m.] Mati Tuscherr: 0001_2025_00740.pdf • ‎1 página ‎<adjunto: 00000234-0001_2025_00740.pdf>
+[21/11/25, 3:52:55 p. m.] Mati Tuscherr: Parcial anterior de Sancler, tiene una deuda de $315.500,00
+‎[21/11/25, 3:53:08 p. m.] Mati Tuscherr: 0001_2025_00742.pdf • ‎1 página ‎<adjunto: 00000236-0001_2025_00742.pdf>
+[21/11/25, 4:04:50 p. m.] Facu: Saldo total??
+[21/11/25, 4:05:04 p. m.] Facu: @⁨Achu⁩ mandas y coordinas?
+[21/11/25, 4:05:12 p. m.] Facu: @⁨Achu⁩ idm
+‎[21/11/25, 4:16:05 p. m.] Mati Tuscherr: 0001_2025_00747.pdf • ‎1 página ‎<adjunto: 00000240-0001_2025_00747.pdf>
+‎[21/11/25, 4:18:22 p. m.] Mati Tuscherr: 0001_2025_00750.pdf • ‎1 página ‎<adjunto: 00000241-0001_2025_00750.pdf>
+[21/11/25, 4:18:43 p. m.] Facu: @⁨Guido Avios⁩ 
+Esto va facturado
+Lo vemos el martes
+‎[21/11/25, 4:53:39 p. m.] Mati Tuscherr: 0001_2025_00732.pdf • ‎1 página ‎<adjunto: 00000243-0001_2025_00732.pdf>
+[21/11/25, 4:53:40 p. m.] Mati Tuscherr: Hang tags la guardia, debe 837,990
+[21/11/25, 4:54:41 p. m.] Facu: Faltan entregar! Estos iban con hilo y alfilerr
+‎[21/11/25, 4:54:49 p. m.] Mati Tuscherr: 0001_2025_00731.pdf • ‎1 página ‎<adjunto: 00000246-0001_2025_00731.pdf>
+‎[21/11/25, 4:57:02 p. m.] Mati Tuscherr: 0001_2025_00748.pdf • ‎1 página ‎<adjunto: 00000247-0001_2025_00748.pdf>
+‎[25/11/25, 11:16:40 a. m.] Mati Tuscherr: ‎<adjunto: 00000248-PHOTO-2025-11-25-11-16-40.jpg>
+‎[25/11/25, 11:26:36 a. m.] Guido Avios: 33718580329_001_00001_00000182.pdf • ‎3 páginas ‎<adjunto: 00000249-33718580329_001_00001_00000182.pdf>
+[25/11/25, 11:26:45 a. m.] Guido Avios: envío la factura de juanitas tiene un saldo de 413.820,00
+‎[25/11/25, 12:20:22 p. m.] Mati Tuscherr: 0001_2025_00753.pdf • ‎1 página ‎<adjunto: 00000251-0001_2025_00753.pdf>
+‎[25/11/25, 12:24:36 p. m.] Mati Tuscherr: 0001_2025_00718.pdf • ‎1 página ‎<adjunto: 00000252-0001_2025_00718.pdf>
+[25/11/25, 12:24:36 p. m.] Mati Tuscherr: Bordada rollo tafeta matius, debe 1.157.534
+[25/11/25, 12:50:39 p. m.] Facu: Esta yendo a retirar franco de sancler
+[25/11/25, 1:12:39 p. m.] Facu: Llego
+[25/11/25, 1:12:47 p. m.] Mati Tuscherr: Bajo
+‎[25/11/25, 3:16:10 p. m.] Guido Avios: 0001_2025_00754.pdf • ‎1 página ‎<adjunto: 00000257-0001_2025_00754.pdf>
+[25/11/25, 3:34:24 p. m.] Facu: Faltan precintos en el remito
+[25/11/25, 4:38:41 p. m.] Mati Tuscherr: estan todas ok las bolsas de natalfilm que llegaron el miercoles!
+‎[26/11/25, 4:12:45 p. m.] Mati Tuscherr: ‎<adjunto: 00000260-PHOTO-2025-11-26-16-12-45.jpg>
+[27/11/25, 9:15:52 a. m.] Mati Tuscherr: Estan ok
+[27/11/25, 10:03:26 a. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+[27/11/25, 10:03:26 a. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[27/11/25, 10:14:34 a. m.] Mati Tuscherr: 0001_2025_00747 (1).pdf • ‎1 página ‎<adjunto: 00000264-0001_2025_00747 (1).pdf>
+[27/11/25, 10:14:34 a. m.] Mati Tuscherr: Remito de hang tag de manki, tiene una deuda de 482.885
+‎[27/11/25, 10:14:49 a. m.] Mati Tuscherr: 33718580329_001_00001_00000183.pdf • ‎3 páginas ‎<adjunto: 00000266-33718580329_001_00001_00000183.pdf>
+[27/11/25, 10:14:50 a. m.] Mati Tuscherr: Factura triplicada de manki
+[27/11/25, 10:15:30 a. m.] Facu: No iba con precintoo?
+‎[27/11/25, 3:36:18 p. m.] Facu: ‎<adjunto: 00000269-PHOTO-2025-11-27-15-36-17.jpg>
+‎[27/11/25, 3:36:18 p. m.] Facu: ‎<adjunto: 00000270-PHOTO-2025-11-27-15-36-17.jpg>
+[27/11/25, 3:36:18 p. m.] Facu: Entrego Carvi
+‎[28/11/25, 1:43:33 p. m.] Mati Tuscherr: ‎<adjunto: 00000272-PHOTO-2025-11-28-13-43-33.jpg>
+‎[28/11/25, 1:57:34 p. m.] Mati Tuscherr: 0001_2025_00761.pdf • ‎1 página ‎<adjunto: 00000273-0001_2025_00761.pdf>
+‎[28/11/25, 2:15:32 p. m.] Mati Tuscherr: 0001_2025_00762.pdf • ‎1 página ‎<adjunto: 00000274-0001_2025_00762.pdf>
+‎[28/11/25, 2:21:08 p. m.] Mati Tuscherr: 0001_2025_00763.pdf • ‎1 página ‎<adjunto: 00000275-0001_2025_00763.pdf>
+[28/11/25, 2:24:47 p. m.] Facu: Es $128 c/u quiza me equivoque yo
+Lo cambian porfa?
+[28/11/25, 2:25:11 p. m.] Mati Tuscherr: Ahi va
+[28/11/25, 2:25:17 p. m.] Facu: Graxx
+‎[28/11/25, 2:34:30 p. m.] Mati Tuscherr: 0001_2025_00761.pdf • ‎1 página ‎<adjunto: 00000279-0001_2025_00761.pdf>
+[28/11/25, 3:00:54 p. m.] Facu: Joyaaa
+‎[1/12/25, 11:52:21 a. m.] Mati Tuscherr: Stock de mercaderia que tenemos en el depo ‎<adjunto: 00000281-PHOTO-2025-12-01-11-52-21.jpg>
+[2/12/25, 9:42:37 a. m.] Facu: @⁨Mati Tuscherr⁩ remito de bomer con saldo? Urgente
+[2/12/25, 9:43:03 a. m.] Mati Tuscherr: Ahi mando
+‎[2/12/25, 9:44:10 a. m.] Mati Tuscherr: 0001_2025_00744.pdf • ‎1 página ‎<adjunto: 00000284-0001_2025_00744.pdf>
+[2/12/25, 9:45:10 a. m.] Mati Tuscherr: Remito de bomer con seña incluida de 223.000 e impuesto iva
+[2/12/25, 9:46:18 a. m.] Facu: Si tiene iva hay que hacer fca
+Pasame foto del remito oficial mati por favor
+[2/12/25, 9:50:01 a. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[2/12/25, 9:51:46 a. m.] Mati Tuscherr: ‎<adjunto: 00000288-PHOTO-2025-12-02-09-51-46.jpg>
+[2/12/25, 9:54:06 a. m.] Facu: Graxx
+‎[2/12/25, 11:51:44 a. m.] Mati Tuscherr: ‎<adjunto: 00000290-PHOTO-2025-12-02-11-51-44.jpg>
+[2/12/25, 12:14:33 p. m.] Mati Tuscherr: Esta ok
+‎[2/12/25, 12:20:47 p. m.] Mati Tuscherr: 0001_2025_00767.pdf • ‎1 página ‎<adjunto: 00000292-0001_2025_00767.pdf>
+‎[3/12/25, 2:31:28 p. m.] Mati Tuscherr: ‎<adjunto: 00000293-PHOTO-2025-12-03-14-31-28.jpg>
+‎[3/12/25, 3:17:38 p. m.] Mati Tuscherr: 0001_2025_00769.pdf • ‎1 página ‎<adjunto: 00000294-0001_2025_00769.pdf>
+‎[3/12/25, 3:24:33 p. m.] Mati Tuscherr: 0001_2025_00770.pdf • ‎1 página ‎<adjunto: 00000295-0001_2025_00770.pdf>
+‎[3/12/25, 3:26:04 p. m.] Mati Tuscherr: remito original de wayfarer ‎<adjunto: 00000296-PHOTO-2025-12-03-15-26-04.jpg>
+[3/12/25, 4:36:49 p. m.] Mati Tuscherr: Bolsas dravin fondo y camiseta, debe 1.448.993,90 ‎<Se editó este mensaje.>
+‎[3/12/25, 4:36:50 p. m.] Mati Tuscherr: 0001_2025_00768.pdf • ‎1 página ‎<adjunto: 00000298-0001_2025_00768.pdf>
+[4/12/25, 9:32:10 a. m.] Facu: Es con iva mati, me mandas el remito oficial??
+[4/12/25, 9:32:29 a. m.] Mati Tuscherr: ahi mandoo
+‎[4/12/25, 9:36:11 a. m.] Mati Tuscherr: remito original de lordzaid ‎<adjunto: 00000301-PHOTO-2025-12-04-09-36-11.jpg>
+[4/12/25, 9:37:42 a. m.] Facu: Gracias
+‎[4/12/25, 9:48:53 a. m.] Achu: 33718580329_001_00001_00000186.pdf • ‎3 páginas ‎<adjunto: 00000303-33718580329_001_00001_00000186.pdf>
+‎[4/12/25, 9:48:55 a. m.] Achu: 33718580329_001_00001_00000185.pdf • ‎3 páginas ‎<adjunto: 00000304-33718580329_001_00001_00000185.pdf>
+‎[4/12/25, 9:48:55 a. m.] Achu: 33718580329_001_00001_00000184.pdf • ‎3 páginas ‎<adjunto: 00000305-33718580329_001_00001_00000184.pdf>
+[4/12/25, 10:08:52 a. m.] Achu: Braian entrega 3.120u de la medida que falta de TBR
+‎[4/12/25, 1:27:52 p. m.] Mati Tuscherr: ‎<adjunto: 00000307-PHOTO-2025-12-04-13-27-52.jpg>
+‎[4/12/25, 3:47:49 p. m.] Mati Tuscherr: ‎<adjunto: 00000308-PHOTO-2025-12-04-15-47-49.jpg>
+‎[4/12/25, 3:59:38 p. m.] Mati Tuscherr: 0001_2025_00772.pdf • ‎1 página ‎<adjunto: 00000309-0001_2025_00772.pdf>
+‎[4/12/25, 4:10:12 p. m.] Mati Tuscherr: 0001_2025_00763.pdf • ‎1 página ‎<adjunto: 00000310-0001_2025_00763.pdf>
+[4/12/25, 4:58:06 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[5/12/25, 2:38:36 p. m.] Achu: Entrega Natalfilm ‎<adjunto: 00000312-PHOTO-2025-12-05-14-38-36.jpg>
+[9/12/25, 9:43:45 a. m.] Mati Tuscherr:
+‎[9/12/25, 9:43:45 a. m.] Mati Tuscherr: ‎<adjunto: 00000314-PHOTO-2025-12-09-09-43-45.jpg>
+‎[9/12/25, 9:43:45 a. m.] Mati Tuscherr: ‎<adjunto: 00000315-PHOTO-2025-12-09-09-43-45.jpg>
+‎[9/12/25, 9:43:45 a. m.] Mati Tuscherr: ‎<adjunto: 00000316-PHOTO-2025-12-09-09-43-45.jpg>
+[9/12/25, 1:14:31 p. m.] Facu: Buenas!
+[9/12/25, 1:14:35 p. m.] Facu: Esta aprobado y los remitos??
+‎[9/12/25, 1:32:32 p. m.] Mati Tuscherr: 0001_2025_00779.pdf • ‎1 página ‎<adjunto: 00000319-0001_2025_00779.pdf>
+‎[9/12/25, 1:32:32 p. m.] Mati Tuscherr: 0001_2025_00778.pdf • ‎1 página ‎<adjunto: 00000320-0001_2025_00778.pdf>
+‎[9/12/25, 1:32:33 p. m.] Mati Tuscherr: 0001_2025_00777.pdf • ‎1 página ‎<adjunto: 00000321-0001_2025_00777.pdf>
+[9/12/25, 1:32:50 p. m.] Mati Tuscherr: Bolsas pp de cadaruve, debe 683.680
+[9/12/25, 1:32:59 p. m.] Mati Tuscherr: Pp rip blanthi, debe 450.600
+[9/12/25, 1:33:13 p. m.] Mati Tuscherr: Bolsa fondo cerro rico, debe 1.313.501,80
+[9/12/25, 3:03:57 p. m.] Facu: Recordta @⁨Mati Tuscherr⁩ que si es mas iva va con remito oficial
+‎[9/12/25, 3:13:04 p. m.] Mati Tuscherr: ‎<adjunto: 00000326-PHOTO-2025-12-09-15-13-04.jpg>
+[10/12/25, 9:22:26 a. m.] Facu: Remito de benbrans??
+‎[10/12/25, 9:56:54 a. m.] Facu: ‎<adjunto: 00000328-PHOTO-2025-12-10-09-56-53.jpg>
+[10/12/25, 9:56:54 a. m.] Facu: Carvi benbrans
+‎[10/12/25, 9:58:22 a. m.] Mati Tuscherr: 0001_2025_00780.pdf • ‎1 página ‎<adjunto: 00000330-0001_2025_00780.pdf>
+[10/12/25, 1:38:20 p. m.] Mati Tuscherr:
+‎[10/12/25, 1:38:20 p. m.] Mati Tuscherr: ‎<adjunto: 00000332-PHOTO-2025-12-10-13-38-20.jpg>
+‎[10/12/25, 1:38:20 p. m.] Mati Tuscherr: ‎<adjunto: 00000333-PHOTO-2025-12-10-13-38-20.jpg>
+‎[10/12/25, 1:38:20 p. m.] Mati Tuscherr: ‎<adjunto: 00000334-PHOTO-2025-12-10-13-38-20.jpg>
+‎[10/12/25, 1:38:21 p. m.] Mati Tuscherr: ‎<adjunto: 00000335-PHOTO-2025-12-10-13-38-21.jpg>
+‎[10/12/25, 1:38:21 p. m.] Mati Tuscherr: ‎<adjunto: 00000336-PHOTO-2025-12-10-13-38-21.jpg>
+[10/12/25, 1:43:53 p. m.] Facu: ‎Eliminaste este mensaje.
+[10/12/25, 1:43:53 p. m.] Facu: ‎Eliminaste este mensaje.
+‎[10/12/25, 2:03:50 p. m.] Mati Tuscherr: 0001_2025_00781.pdf • ‎1 página ‎<adjunto: 00000339-0001_2025_00781.pdf>
+‎[10/12/25, 2:07:03 p. m.] Mati Tuscherr: 0001_2025_00782.pdf • ‎1 página ‎<adjunto: 00000340-0001_2025_00782.pdf>
+‎[10/12/25, 2:14:36 p. m.] Mati Tuscherr: 0001_2025_00784.pdf • ‎1 página ‎<adjunto: 00000341-0001_2025_00784.pdf>
+‎[10/12/25, 2:18:09 p. m.] Mati Tuscherr: 0001_2025_00785.pdf • ‎1 página ‎<adjunto: 00000342-0001_2025_00785.pdf>
+[10/12/25, 2:25:31 p. m.] Facu: Matiii mira la cta corrientee
+‎[10/12/25, 2:30:25 p. m.] Mati Tuscherr: 0001_2025_00786.pdf • ‎1 página ‎<adjunto: 00000344-0001_2025_00786.pdf>
+‎[10/12/25, 4:08:18 p. m.] Facu: Presupuesto - 2025-12-01T094210.399.pdf • ‎1 página ‎<adjunto: 00000345-Presupuesto - 2025-12-01T094210.399.pdf>
+‎[10/12/25, 4:08:18 p. m.] Facu: Presupuesto - 2025-12-04T122619.129.pdf • ‎1 página ‎<adjunto: 00000346-Presupuesto - 2025-12-04T122619.129.pdf>
+[10/12/25, 4:08:18 p. m.] Facu: Entregas mañana printmax
+Sumar miche al saldo de bolsas
+‎[11/12/25, 2:05:54 p. m.] Facu: ‎<adjunto: 00000348-PHOTO-2025-12-11-14-05-53.jpg>
+‎[11/12/25, 2:05:54 p. m.] Facu: ‎<adjunto: 00000349-PHOTO-2025-12-11-14-05-53.jpg>
+‎[11/12/25, 2:05:54 p. m.] Facu: ‎<adjunto: 00000350-PHOTO-2025-12-11-14-05-53.jpg>
+‎[11/12/25, 2:05:54 p. m.] Facu: ‎<adjunto: 00000351-PHOTO-2025-12-11-14-05-53.jpg>
+[11/12/25, 2:05:54 p. m.] Facu: Esto entrega carvi
+Kleer si lo puede entregar achu genial
+Shit happens idem
+North raw me llevo yo mañana
+[11/12/25, 2:23:17 p. m.] Producto Avios Textiles: north raw se cobro como alta def?
+[11/12/25, 2:23:24 p. m.] Facu: Seep
+[11/12/25, 2:23:30 p. m.] Facu: Aparece ahi en el remito mas cara
+[11/12/25, 2:42:37 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[11/12/25, 2:47:06 p. m.] Mati Tuscherr: 0001_2025_00789.pdf • ‎1 página ‎<adjunto: 00000357-0001_2025_00789.pdf>
+‎[11/12/25, 2:54:01 p. m.] Mati Tuscherr: 0001_2025_00790.pdf • ‎1 página ‎<adjunto: 00000358-0001_2025_00790.pdf>
+[11/12/25, 2:55:22 p. m.] Facu: 👌👌
+‎[11/12/25, 3:54:03 p. m.] Mati Tuscherr: 0001_2025_00791.pdf • ‎1 página ‎<adjunto: 00000360-0001_2025_00791.pdf>
+‎[12/12/25, 1:14:06 p. m.] Achu: Entrega Natalfilm ‎<adjunto: 00000361-PHOTO-2025-12-12-13-14-06.jpg>
+[12/12/25, 1:19:07 p. m.] Facu: Achu sacas muestra?
+Asi mati remita y entregamos dalida hoy
+‎[12/12/25, 1:25:44 p. m.] Mati Tuscherr: 0001_2025_00792.pdf • ‎1 página ‎<adjunto: 00000363-0001_2025_00792.pdf>
+[12/12/25, 1:50:59 p. m.] Facu: Y cadaruve mati no te olvides de fijarte el saldo
+[12/12/25, 1:51:07 p. m.] Facu: Hay foto?
+‎[12/12/25, 2:16:30 p. m.] Mati Tuscherr: 0001_2025_00793.pdf • ‎1 página ‎<adjunto: 00000366-0001_2025_00793.pdf>
+[12/12/25, 2:16:30 p. m.] Mati Tuscherr: Bolsas fondo cadaruve, el importe es de 708.700 y debe saldo de 2.239.740,75
+‎[15/12/25, 11:26:19 a. m.] Mati Tuscherr: 0001_2025_00794.pdf • ‎1 página ‎<adjunto: 00000368-0001_2025_00794.pdf>
+‎[15/12/25, 11:26:37 a. m.] Mati Tuscherr: ‎<adjunto: 00000369-PHOTO-2025-12-15-11-26-37.jpg>
+‎[15/12/25, 1:12:05 p. m.] Mati Tuscherr: ‎<adjunto: 00000370-PHOTO-2025-12-15-13-12-05.jpg>
+[15/12/25, 1:41:12 p. m.] Facu: El 2.239 es total mati??
+[15/12/25, 1:41:34 p. m.] Mati Tuscherr: saldo total si
+‎[15/12/25, 2:16:32 p. m.] Mati Tuscherr: 0001_2025_00795.pdf • ‎1 página ‎<adjunto: 00000373-0001_2025_00795.pdf>
+‎[15/12/25, 2:40:11 p. m.] Mati Tuscherr: ‎<adjunto: 00000374-PHOTO-2025-12-15-14-40-11.jpg>
+[15/12/25, 4:53:02 p. m.] Facu: @⁨Achu⁩ lo entregas mañanaaaa
+‎[16/12/25, 1:38:22 p. m.] Mati Tuscherr: ‎<adjunto: 00000376-PHOTO-2025-12-16-13-38-22.jpg>
+‎[16/12/25, 1:44:38 p. m.] Mati Tuscherr: 0001_2025_00799.pdf • ‎1 página ‎<adjunto: 00000377-0001_2025_00799.pdf>
+[16/12/25, 1:44:52 p. m.] Facu: Como pago?
+[16/12/25, 1:44:56 p. m.] Facu: Es fca de afip
+[16/12/25, 1:44:59 p. m.] Facu: No esta pago
+‎[16/12/25, 2:09:32 p. m.] Achu: 33718580329_001_00001_00000188.pdf • ‎3 páginas ‎<adjunto: 00000381-33718580329_001_00001_00000188.pdf>
+[16/12/25, 2:10:19 p. m.] Facu: Falta fca
+‎[16/12/25, 2:21:03 p. m.] Achu: 33718580329_001_00001_00000189.pdf • ‎3 páginas ‎<adjunto: 00000383-33718580329_001_00001_00000189.pdf>
+‎[16/12/25, 2:27:18 p. m.] Achu: 33718580329_001_00001_00000190.pdf • ‎3 páginas ‎<adjunto: 00000384-33718580329_001_00001_00000190.pdf>
+‎[16/12/25, 2:34:34 p. m.] Achu: 33718580329_001_00001_00000191.pdf • ‎3 páginas ‎<adjunto: 00000385-33718580329_001_00001_00000191.pdf>
+‎[17/12/25, 3:49:02 p. m.] Facu: ‎<adjunto: 00000386-PHOTO-2025-12-17-15-49-02.jpg>
+[17/12/25, 3:49:02 p. m.] Facu: Entrega carvi
+[17/12/25, 3:49:16 p. m.] Facu: Mati me mandas el remito de benbrans completo y con saldo final
+[17/12/25, 3:49:27 p. m.] Mati Tuscherr: ahi va
+‎[17/12/25, 3:54:40 p. m.] Mati Tuscherr: 0001_2025_00796.pdf • ‎1 página ‎<adjunto: 00000390-0001_2025_00796.pdf>
+[17/12/25, 3:57:02 p. m.] Facu: Gracias
+[17/12/25, 3:57:41 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+[17/12/25, 3:57:51 p. m.] Facu: Esta malll
+[17/12/25, 3:57:54 p. m.] Facu: Tiene que deber mas
+[17/12/25, 3:57:57 p. m.] Facu: Fijate la cta corriente
+‎[17/12/25, 4:03:12 p. m.] Mati Tuscherr: 0001_2025_00797.pdf • ‎1 página ‎<adjunto: 00000396-0001_2025_00797.pdf>
+[18/12/25, 9:24:34 a. m.] Facu: Esta mal mati
+[18/12/25, 9:24:38 a. m.] Facu: No puede deber 864
+[18/12/25, 9:24:43 a. m.] Facu: Deberia deber mas de 2 millones
+‎[18/12/25, 9:41:20 a. m.] Facu: ‎<adjunto: 00000400-PHOTO-2025-12-18-09-41-20.jpg>
+‎[18/12/25, 9:50:30 a. m.] Mati Tuscherr: 0001_2025_00797.pdf • ‎1 página ‎<adjunto: 00000401-0001_2025_00797.pdf>
+[18/12/25, 9:55:55 a. m.] Facu: Bien Mati
+[18/12/25, 11:35:29 a. m.] Facu: Esta yendo a entregar pablo bordadas lo de unilimited forced. 
+Preparemoslo
+En bolsa negra asi lo llevamos mañana
+‎[18/12/25, 12:20:58 p. m.] Mati Tuscherr: ‎<adjunto: 00000404-PHOTO-2025-12-18-12-20-58.jpg>
+‎[18/12/25, 2:58:15 p. m.] Mati Tuscherr: ‎<adjunto: 00000405-PHOTO-2025-12-18-14-58-15.jpg>
+‎[18/12/25, 3:01:17 p. m.] Mati Tuscherr: ‎<adjunto: 00000406-PHOTO-2025-12-18-15-01-17.jpg>
+‎[18/12/25, 3:05:00 p. m.] Mati Tuscherr: 0001_2025_00801.pdf • ‎1 página ‎<adjunto: 00000407-0001_2025_00801.pdf>
+‎[19/12/25, 1:41:39 p. m.] Mati Tuscherr: ‎<adjunto: 00000408-PHOTO-2025-12-19-13-41-39.jpg>
+‎[5/1/26, 3:08:05 p. m.] Mati Tuscherr: ‎<adjunto: 00000409-PHOTO-2026-01-05-15-08-05.jpg>
+[5/1/26, 3:18:37 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[5/1/26, 3:33:03 p. m.] Mati Tuscherr: 0001_2026_00001.pdf • ‎1 página ‎<adjunto: 00000411-0001_2026_00001.pdf>
+[6/1/26, 9:37:39 a. m.] Facu: Mati no corregiste esto
+‎[7/1/26, 4:08:16 p. m.] Facu: FA-A-0002-00013853.pdf • ‎1 página ‎<adjunto: 00000413-FA-A-0002-00013853.pdf>
+‎[7/1/26, 4:08:25 p. m.] Facu: FA-A-0002-00013846.pdf • ‎1 página ‎<adjunto: 00000414-FA-A-0002-00013846.pdf>
+[7/1/26, 4:08:36 p. m.] Facu: Mande joram y finger de diego
+[7/1/26, 4:08:42 p. m.] Facu: @⁨Mati Tuscherr⁩ hay que facturarlo
+‎[7/1/26, 4:20:19 p. m.] Facu: ‎<adjunto: 00000417-PHOTO-2026-01-07-16-20-19.jpg>
+[7/1/26, 4:20:25 p. m.] Facu: Carvi para hacer remitos
+‎[7/1/26, 4:33:32 p. m.] Mati Tuscherr: 0001_2026_00002.pdf • ‎1 página ‎<adjunto: 00000419-0001_2026_00002.pdf>
+‎[7/1/26, 4:36:34 p. m.] Mati Tuscherr: 0001_2026_00003.pdf • ‎1 página ‎<adjunto: 00000420-0001_2026_00003.pdf>
+[7/1/26, 4:43:40 p. m.] Mati Tuscherr: factura arca triplicada de bolsas de finger
+‎[7/1/26, 4:43:40 p. m.] Mati Tuscherr: 33718580329_001_00001_00000193 (1).pdf • ‎3 páginas ‎<adjunto: 00000422-33718580329_001_00001_00000193 (1).pdf>
+‎[7/1/26, 4:47:13 p. m.] Mati Tuscherr: 0001_2026_00004.pdf • ‎1 página ‎<adjunto: 00000423-0001_2026_00004.pdf>
+‎[7/1/26, 4:48:49 p. m.] Mati Tuscherr: 0001_2026_00005.pdf • ‎1 página ‎<adjunto: 00000424-0001_2026_00005.pdf>
+‎[7/1/26, 4:51:16 p. m.] Mati Tuscherr: 0001_2026_00006.pdf • ‎1 página ‎<adjunto: 00000425-0001_2026_00006.pdf>
+‎[7/1/26, 4:52:58 p. m.] Mati Tuscherr: 0001_2026_00007.pdf • ‎1 página ‎<adjunto: 00000426-0001_2026_00007.pdf>
+‎[7/1/26, 4:56:36 p. m.] Mati Tuscherr: 0001_2026_00008.pdf • ‎1 página ‎<adjunto: 00000427-0001_2026_00008.pdf>
+‎[7/1/26, 5:05:00 p. m.] Mati Tuscherr: 0001_2026_00003.pdf • ‎1 página ‎<adjunto: 00000428-0001_2026_00003.pdf>
+‎[7/1/26, 5:10:07 p. m.] Mati Tuscherr: 33718580329_001_00001_00000194.pdf • ‎3 páginas ‎<adjunto: 00000429-33718580329_001_00001_00000194.pdf>
+‎[8/1/26, 10:35:00 a. m.] Mati Tuscherr: ‎<adjunto: 00000430-PHOTO-2026-01-08-10-35-00.jpg>
+‎[8/1/26, 10:42:34 a. m.] Mati Tuscherr: 0001_2026_00009.pdf • ‎1 página ‎<adjunto: 00000431-0001_2026_00009.pdf>
+[8/1/26, 3:19:47 p. m.] Facu: Aca
+‎[8/1/26, 4:35:03 p. m.] Mati Tuscherr: ‎<adjunto: 00000433-PHOTO-2026-01-08-16-35-03.jpg>
+[8/1/26, 5:22:27 p. m.] Facu: Falto remitar la guardia!
+[8/1/26, 5:23:11 p. m.] Mati Tuscherr: le pedi las cantidades a la chica xq en la caja no viene las cantidades
+‎[9/1/26, 9:22:51 a. m.] Mati Tuscherr: 0001_2026_00010.pdf • ‎1 página ‎<adjunto: 00000436-0001_2026_00010.pdf>
+[9/1/26, 9:40:31 a. m.] Facu: @⁨Mile Diseño⁩ sabemos cuando esta el resto??
+[9/1/26, 9:42:50 a. m.] Producto Avios Textiles: Ahí averiguoo pero supongo una sem
+[9/1/26, 9:59:38 a. m.] Facu: Va el de moy a retirar
+[9/1/26, 9:59:47 a. m.] Facu: Denle el remito impreso con el saldo🙏🏻
+[9/1/26, 10:07:45 a. m.] Mati Tuscherr: Ok
+[9/1/26, 2:47:18 p. m.] Producto Avios Textiles: Calcula para el martes
+‎[9/1/26, 3:17:32 p. m.] Facu: Escaneo0019.pdf • ‎1 página ‎<adjunto: 00000443-Escaneo0019.pdf>
+[9/1/26, 3:17:32 p. m.] Facu: Mercaderia proveedor. Cerro rico bolsas
+‎[9/1/26, 3:22:13 p. m.] Mati Tuscherr: 0001_2026_00012.pdf • ‎1 página ‎<adjunto: 00000445-0001_2026_00012.pdf>
+[9/1/26, 3:54:59 p. m.] Facu: Mati tenes a mano el de las otras bolsas?
+[9/1/26, 3:56:41 p. m.] Mati Tuscherr: las bolsas fondo?? ahi lo busco
+‎[9/1/26, 3:58:22 p. m.] Mati Tuscherr: 0001_2025_00777.pdf • ‎1 página ‎<adjunto: 00000448-0001_2025_00777.pdf>
+[12/1/26, 9:12:23 a. m.] Facu: Buen dia matii
+[12/1/26, 9:12:28 a. m.] Facu: Cuanto debe cerro rico en total?
+[12/1/26, 9:13:59 a. m.] Mati Tuscherr: Buen diaa
+[12/1/26, 9:14:06 a. m.] Mati Tuscherr: Cerro rico debe $ 7.098.381,80
+[13/1/26, 8:45:58 a. m.] Facu: Buen dia!!
+Mati para mañana necesito llevarme impreso:
+Los remitos de entrega de cerro rico
++ el resumen de cta corriente🙏🏻
+‎[14/1/26, 3:43:09 p. m.] Mati Tuscherr: ‎<adjunto: 00000454-PHOTO-2026-01-14-15-43-09.jpg>
+[15/1/26, 10:51:03 a. m.] Facu: Levarle a Benbrans el lunes muestra de la guardia en oro y plata (blancos) mas el de oveizaga blanco con sectorizado para que defina
+[16/1/26, 10:39:29 a. m.] Achu:
+‎[16/1/26, 10:39:29 a. m.] Achu: ‎<adjunto: 00000457-PHOTO-2026-01-16-10-39-29.jpg>
+‎[16/1/26, 10:39:47 a. m.] Achu: ‎<adjunto: 00000458-PHOTO-2026-01-16-10-39-47.jpg>
+‎[16/1/26, 10:39:48 a. m.] Achu: ‎<adjunto: 00000459-PHOTO-2026-01-16-10-39-48.jpg>
+‎[16/1/26, 10:39:48 a. m.] Achu: ‎<adjunto: 00000460-PHOTO-2026-01-16-10-39-48.jpg>
+‎[16/1/26, 10:39:48 a. m.] Achu: ‎<adjunto: 00000461-PHOTO-2026-01-16-10-39-48.jpg>
+‎[16/1/26, 10:39:49 a. m.] Achu: ‎<adjunto: 00000462-PHOTO-2026-01-16-10-39-49.jpg>
+‎[16/1/26, 10:39:49 a. m.] Achu: ‎<adjunto: 00000463-PHOTO-2026-01-16-10-39-49.jpg>
+‎[16/1/26, 10:39:50 a. m.] Achu: ‎<adjunto: 00000464-PHOTO-2026-01-16-10-39-50.jpg>
+‎[16/1/26, 10:39:50 a. m.] Achu: ‎<adjunto: 00000465-PHOTO-2026-01-16-10-39-50.jpg>
+‎[16/1/26, 10:50:26 a. m.] Facu: ‎<adjunto: 00000466-PHOTO-2026-01-16-10-50-26.jpg>
+[16/1/26, 10:50:27 a. m.] Facu: para chequear cuenta de carvi
+mati porfa metele a los remitos a ver si achu coordina mas entregas para el lunes
+[16/1/26, 10:51:32 a. m.] Mati Tuscherr: ahi los hago, estaba volviendo de imprimir presupuestos
+‎[16/1/26, 10:58:58 a. m.] Mati Tuscherr: 0001_2026_00014.pdf • ‎1 página ‎<adjunto: 00000469-0001_2026_00014.pdf>
+‎[16/1/26, 11:02:47 a. m.] Mati Tuscherr: 0001_2026_00015.pdf • ‎1 página ‎<adjunto: 00000470-0001_2026_00015.pdf>
+‎[16/1/26, 11:04:48 a. m.] Mati Tuscherr: 0001_2026_00016.pdf • ‎1 página ‎<adjunto: 00000471-0001_2026_00016.pdf>
+‎[16/1/26, 11:07:15 a. m.] Mati Tuscherr: 0001_2026_00017.pdf • ‎1 página ‎<adjunto: 00000472-0001_2026_00017.pdf>
+‎[16/1/26, 11:10:19 a. m.] Mati Tuscherr: 0001_2026_00018.pdf • ‎1 página ‎<adjunto: 00000473-0001_2026_00018.pdf>
+[16/1/26, 11:11:44 a. m.] Facu: Nono es con el iva incluido es enum mati
+‎[16/1/26, 11:12:04 a. m.] Facu: Seria $1.133.858. Mas iva ‎<adjunto: 00000475-PHOTO-2026-01-16-11-12-03.jpg>
+[16/1/26, 11:13:16 a. m.] Mati Tuscherr: oka
+[16/1/26, 11:13:34 a. m.] Mati Tuscherr: DA no me aparece, puede ser que sea otro nombre?
+‎[16/1/26, 11:15:35 a. m.] Mati Tuscherr: 0001_2026_00019.pdf • ‎1 página ‎<adjunto: 00000478-0001_2026_00019.pdf>
+[16/1/26, 11:24:54 a. m.] Achu: 5.542.
+Unidades de La Guardia, prioridad porfi para el remito
+‎[16/1/26, 11:27:39 a. m.] Mati Tuscherr: 0001_2026_00020.pdf • ‎1 página ‎<adjunto: 00000480-0001_2026_00020.pdf>
+[16/1/26, 12:16:48 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+[16/1/26, 12:26:14 p. m.] Facu: Mati fijate que es viejo
+[16/1/26, 12:26:17 p. m.] Facu: Ya esta enteegado eso
+[16/1/26, 12:26:21 p. m.] Facu: La fecha es de mitad de diciembre
+‎[16/1/26, 12:27:30 p. m.] Mati Tuscherr: ‎<adjunto: 00000485-STICKER-2026-01-16-12-27-30.webp>
+[16/1/26, 3:42:04 p. m.] Facu: Matii pudiste facturar esto??
+[16/1/26, 3:42:32 p. m.] Mati Tuscherr: No me aparecen los datos del cliente en odoo
+[16/1/26, 3:56:45 p. m.] Facu: Okas
+‎[16/1/26, 4:12:07 p. m.] Mati Tuscherr: ‎<adjunto: 00000489-PHOTO-2026-01-16-16-12-07.jpg>
+‎[16/1/26, 4:16:03 p. m.] Mati Tuscherr: 0001_2026_00022.pdf • ‎1 página ‎<adjunto: 00000490-0001_2026_00022.pdf>
+[17/1/26, 11:42:34 a. m.] Facu: https://maps.app.goo.gl/C5cD8qFMYQT8WWiR6?g_st=aw
+[17/1/26, 11:42:34 a. m.] Facu: Direc de wil sport ‎<Se editó este mensaje.>
+‎[19/1/26, 9:57:12 a. m.] Mati Tuscherr: 33718580329_001_00001_00000195.pdf • ‎3 páginas ‎<adjunto: 00000493-33718580329_001_00001_00000195.pdf>
+[19/1/26, 9:57:34 a. m.] Facu: Factua*
+[19/1/26, 9:57:40 a. m.] Facu: Cuanto debe??
+[19/1/26, 9:58:40 a. m.] Mati Tuscherr: 865.470,24
+[20/1/26, 8:19:04 a. m.] Facu: Buen dia!! esta el remito de plastisoles de ftl por algun lado??
+‎[20/1/26, 9:01:19 a. m.] Mati Tuscherr: 0001_2025_00798.pdf • ‎1 página ‎<adjunto: 00000498-0001_2025_00798.pdf>
+[20/1/26, 9:01:33 a. m.] Mati Tuscherr: Remito de ftl
+[20/1/26, 9:07:02 a. m.] Facu: Graxxx
+‎[20/1/26, 9:10:53 a. m.] Facu: FA-A-0002-00013960.pdf • ‎1 página ‎<adjunto: 00000501-FA-A-0002-00013960.pdf>
+‎[20/1/26, 10:01:52 a. m.] Mati Tuscherr: 0001_2026_00024.pdf • ‎1 página ‎<adjunto: 00000502-0001_2026_00024.pdf>
+‎[20/1/26, 10:31:19 a. m.] Mati Tuscherr: ‎<adjunto: 00000503-PHOTO-2026-01-20-10-31-19.jpg>
+[20/1/26, 10:32:04 a. m.] Facu: Es gigante leaf?
+[20/1/26, 10:32:49 a. m.] Mati Tuscherr: 35x50
+[20/1/26, 10:33:18 a. m.] Mati Tuscherr: es mas grande que las que suelen llegar generalmente
+[20/1/26, 10:46:53 a. m.] Facu: Perffffff
+[20/1/26, 10:46:56 a. m.] Facu: Guarda muestras que va a servir
+[20/1/26, 10:47:30 a. m.] Mati Tuscherr: ya saque
+‎[20/1/26, 11:40:34 a. m.] Facu: ‎<adjunto: 00000510-AUDIO-2026-01-20-11-40-34.opus>
+‎[20/1/26, 11:40:34 a. m.] Facu: ‎<adjunto: 00000511-PHOTO-2026-01-20-11-40-34.jpg>
+[20/1/26, 11:40:34 a. m.] Facu: URGENCIA
+PERDIMOS UNAS MUESTRAS
+ARIEL LA ENTREGO CUANDO FUE CRISTIAN DICE
+‎[20/1/26, 2:28:32 p. m.] Facu: FA-A-0002-00013965.pdf • ‎1 página ‎<adjunto: 00000513-FA-A-0002-00013965.pdf>
+‎[23/1/26, 3:49:56 p. m.] Facu: Buenas! Podran los 3 chequear que no hay cortada y soldada a 1 color ‎<adjunto: 00000514-PHOTO-2026-01-23-15-49-56.jpg>
+[23/1/26, 3:50:01 p. m.] Facu: Esto aparecio???
+[23/1/26, 4:16:43 p. m.] Facu: $446000
+[23/1/26, 4:16:43 p. m.] Facu: Che pagamos esto de costo en polimeros fe m51???
+[23/1/26, 4:20:02 p. m.] Producto Avios Textiles: Nooo
+[23/1/26, 4:22:36 p. m.] Achu: Creo que no, yo estoy hablando con Ari por la nueva
+[23/1/26, 4:23:43 p. m.] Mati Tuscherr: nop ya la busque y le pregunte a cristisn y no esta
+[23/1/26, 4:24:30 p. m.] Facu: Perfectoo
+[23/1/26, 4:24:36 p. m.] Facu: Nos esta cobrando eso ecoflex
+[23/1/26, 4:24:37 p. m.] Facu: Dangerrr
+[23/1/26, 4:24:40 p. m.] Facu: Podemos resolver?
+[23/1/26, 4:25:31 p. m.] Producto Avios Textiles:
+‎[23/1/26, 4:25:31 p. m.] Producto Avios Textiles: ‎<adjunto: 00000526-PHOTO-2026-01-23-16-25-31.jpg>
+‎[23/1/26, 4:25:33 p. m.] Producto Avios Textiles: ‎<adjunto: 00000527-PHOTO-2026-01-23-16-25-33.jpg>
+[23/1/26, 4:25:39 p. m.] Producto Avios Textiles: Es la suma de esos dos m51
+[23/1/26, 4:25:56 p. m.] Producto Avios Textiles: Te estará sumando otro más viejo que quedó pendiente de pago?
+‎[23/1/26, 6:26:18 p. m.] Facu: ‎<adjunto: 00000530-PHOTO-2026-01-23-18-26-18.jpg>
+‎[23/1/26, 6:26:18 p. m.] Facu: ‎<adjunto: 00000531-PHOTO-2026-01-23-18-26-18.jpg>
+‎[23/1/26, 6:26:18 p. m.] Facu: ‎<adjunto: 00000532-PHOTO-2026-01-23-18-26-18.jpg>
+[23/1/26, 6:26:18 p. m.] Facu: Mile confirmas el lunes fon dani?
+‎[23/1/26, 6:31:48 p. m.] Producto Avios Textiles: ‎<adjunto: 00000534-AUDIO-2026-01-23-18-31-48.opus>
+‎[26/1/26, 12:48:49 p. m.] Mati Tuscherr: ‎<adjunto: 00000535-PHOTO-2026-01-26-12-48-49.jpg>
+‎[26/1/26, 12:52:06 p. m.] Mati Tuscherr: 0001_2026_00026.pdf • ‎1 página ‎<adjunto: 00000536-0001_2026_00026.pdf>
+‎[26/1/26, 1:01:33 p. m.] Mati Tuscherr: 33718580329_001_00001_00000196.pdf • ‎3 páginas ‎<adjunto: 00000537-33718580329_001_00001_00000196.pdf>
+[26/1/26, 1:10:30 p. m.] Facu: Perfectoo
+[26/1/26, 1:10:41 p. m.] Facu: Mati no esta la odeden de pedido en la facaaa
+[26/1/26, 1:11:10 p. m.] Mati Tuscherr: la iba a agregar escrito
+‎[26/1/26, 1:11:22 p. m.] Facu: ‎<adjunto: 00000541-AUDIO-2026-01-26-13-11-22.opus>
+[26/1/26, 1:11:50 p. m.] Mati Tuscherr: oka ahi la rehago
+[26/1/26, 1:12:23 p. m.] Facu: Gracias
+‎[26/1/26, 1:20:57 p. m.] Mati Tuscherr: 33718580329_001_00001_00000197.pdf • ‎3 páginas ‎<adjunto: 00000544-33718580329_001_00001_00000197.pdf>
+[26/1/26, 1:21:45 p. m.] Facu: cancelaste la otra??
+[26/1/26, 1:23:51 p. m.] Mati Tuscherr: como se cancela??
+[26/1/26, 1:24:44 p. m.] Facu: hay que hacer una nota de credito x esa factura
+[26/1/26, 1:31:40 p. m.] Facu: Esta
+‎[26/1/26, 1:34:53 p. m.] Mati Tuscherr: 33718580329_003_00001_00000064.pdf • ‎3 páginas ‎<adjunto: 00000549-33718580329_003_00001_00000064.pdf>
+[26/1/26, 1:35:44 p. m.] Facu: Acordate del remito oficial para que impriman
+‎[26/1/26, 1:40:48 p. m.] Mati Tuscherr: ahí lo hice ‎<adjunto: 00000551-PHOTO-2026-01-26-13-40-48.jpg>
+‎[28/1/26, 2:47:38 p. m.] Mati Tuscherr: ‎<adjunto: 00000552-PHOTO-2026-01-28-14-47-38.jpg>
+‎[28/1/26, 2:51:47 p. m.] Mati Tuscherr: 0001_2026_00028.pdf • ‎1 página ‎<adjunto: 00000553-0001_2026_00028.pdf>
+‎[28/1/26, 2:53:52 p. m.] Mati Tuscherr: 0001_2026_00029.pdf • ‎1 página ‎<adjunto: 00000554-0001_2026_00029.pdf>
+‎[28/1/26, 2:59:41 p. m.] Mati Tuscherr: 33718580329_001_00001_00000199.pdf • ‎3 páginas ‎<adjunto: 00000555-33718580329_001_00001_00000199.pdf>
+[29/1/26, 9:00:20 a. m.] Facu: es muy grande exprress??
+[29/1/26, 9:01:43 a. m.] Mati Tuscherr: nah es chico
+[29/1/26, 9:01:56 a. m.] Facu: te animas a llevarlo en bondi o achu cuando salenn????
+[29/1/26, 9:02:19 a. m.] Facu: que vaya con remito oficiallll
+[29/1/26, 9:02:43 a. m.] Mati Tuscherr: pasame la dire y veo con achu
+[29/1/26, 9:04:07 a. m.] Facu: achu creo que va mejorque vivie a 3 cuadras y ya fuee
+[29/1/26, 9:04:21 a. m.] Achu: Yo lo llevo al final del diaa
+‎[30/1/26, 2:52:15 p. m.] Mati Tuscherr: ‎<adjunto: 00000563-PHOTO-2026-01-30-14-52-15.jpg>
+[30/1/26, 2:58:53 p. m.] Facu: Porfi enyregan expres hoy?
+‎[30/1/26, 3:00:10 p. m.] Mati Tuscherr: 0001_2026_00030.pdf • ‎1 página ‎<adjunto: 00000565-0001_2026_00030.pdf>
+‎[30/1/26, 3:06:22 p. m.] Mati Tuscherr: 0001_2026_00031.pdf • ‎1 página ‎<adjunto: 00000566-0001_2026_00031.pdf>
+[30/1/26, 3:06:32 p. m.] Mati Tuscherr: ‎Se eliminó este mensaje.
+‎[30/1/26, 3:09:59 p. m.] Mati Tuscherr: 0001_2026_00032.pdf • ‎1 página ‎<adjunto: 00000568-0001_2026_00032.pdf>
+‎[30/1/26, 3:31:03 p. m.] Mati Tuscherr: 33718580329_001_00001_00000200.pdf • ‎3 páginas ‎<adjunto: 00000569-33718580329_001_00001_00000200.pdf>
+‎[30/1/26, 3:39:01 p. m.] Mati Tuscherr: 33718580329_003_00001_00000066.pdf • ‎3 páginas ‎<adjunto: 00000570-33718580329_003_00001_00000066.pdf>
+[2/2/26, 9:49:13 a. m.] Facu: Buenasss
+[2/2/26, 9:49:18 a. m.] Facu: Llego la muestra de Bento?
+[2/2/26, 9:49:20 a. m.] Facu: La mandamoos??
+[2/2/26, 9:49:43 a. m.] Achu: Sisi, yo mañana ae la alcanzoo
+[2/2/26, 9:51:16 a. m.] Facu: Perfff
+[2/2/26, 9:51:39 a. m.] Facu: El te tiene que dar una cajita 🙏🏻
+‎[2/2/26, 12:43:02 p. m.] Mati Tuscherr: 33718580329_006_00001_00000007.pdf • ‎3 páginas ‎<adjunto: 00000577-33718580329_006_00001_00000007.pdf>
+‎[4/2/26, 2:45:14 p. m.] Facu: Presupuesto - 2026-02-04T143316.454.pdf • ‎1 página ‎<adjunto: 00000578-Presupuesto - 2026-02-04T143316.454.pdf>
+[4/2/26, 2:45:14 p. m.] Facu: Entrega tif printmax
+[4/2/26, 2:45:20 p. m.] Facu: Remitas para cliente
+‎[4/2/26, 2:47:44 p. m.] Mati Tuscherr: 0001_2026_00034.pdf • ‎1 página ‎<adjunto: 00000581-0001_2026_00034.pdf>
+[4/2/26, 2:57:57 p. m.] Facu: graciasss
+‎[5/2/26, 1:42:36 p. m.] Mati Tuscherr: ‎<adjunto: 00000583-PHOTO-2026-02-05-13-42-36.jpg>
+[6/2/26, 6:36:15 p. m.] Producto Avios Textiles: Está sem se mando a producir:
+
+Ey mami poliamida
+Ey mami bordada x2
+Bento calce algodón 
+Juanitas bordada
+Titto bordada
+Nina bordada
+Textile nx plastisol
+Delpa saten
+
+
+En fecha para recibir la sem q viene:
+
+Bs Sport plastisol 
+Bento saten printmax 
+M51 natalfilm
+[6/2/26, 7:45:23 p. m.] Facu: Lunes chequiemos con ventas confirmadas que no haya quedado nada colgado 👏👏
+[9/2/26, 12:57:34 p. m.] Producto Avios Textiles: Chequeado siii está princess pendiente de confirmación, calzón esperando logo para estampada
+‎[9/2/26, 2:51:05 p. m.] Facu: ‎<adjunto: 00000587-STICKER-2026-02-09-14-51-04.webp>
+‎[11/2/26, 10:29:48 a. m.] Facu: ‎<adjunto: 00000588-PHOTO-2026-02-11-10-29-47.jpg>
+[11/2/26, 10:29:48 a. m.] Facu: Este de 500 que es??
+No tengo remito
+[11/2/26, 11:09:18 a. m.] Mati Tuscherr: son las ultimas bolsas de pp que llegaron de cadaruve
+[11/2/26, 11:12:28 a. m.] Facu: Las que estan en deposito o las que mandamosv
+[11/2/26, 11:12:29 a. m.] Facu: ??
+[11/2/26, 11:12:48 a. m.] Mati Tuscherr: las que estan en el depo
+[11/2/26, 11:12:53 a. m.] Facu: Ah okaa
+[11/2/26, 11:12:54 a. m.] Facu: Anulalo
+[11/2/26, 11:12:55 a. m.] Facu: Porfisss
+[11/2/26, 11:13:02 a. m.] Mati Tuscherr: Dale
+‎[11/2/26, 11:46:12 a. m.] Mati Tuscherr: ‎<adjunto: 00000598-PHOTO-2026-02-11-11-46-12.jpg>
+‎[11/2/26, 12:09:43 p. m.] Mati Tuscherr: 0001_2026_00035.pdf • ‎1 página ‎<adjunto: 00000599-0001_2026_00035.pdf>
+‎[11/2/26, 1:15:19 p. m.] Mati Tuscherr: ‎<adjunto: 00000600-PHOTO-2026-02-11-13-15-19.jpg>
+‎[11/2/26, 1:17:48 p. m.] Mati Tuscherr: 0001_2026_00036.pdf • ‎1 página ‎<adjunto: 00000601-0001_2026_00036.pdf>
+[12/2/26, 10:47:00 a. m.] Facu: Hecho?
+[12/2/26, 10:47:29 a. m.] Mati Tuscherr: Sip, lo anule en ese momento
+[12/2/26, 10:47:50 a. m.] Facu: Graxx
+‎[18/2/26, 9:13:09 a. m.] Mati Tuscherr: 0001_2026_00037.pdf • ‎1 página ‎<adjunto: 00000605-0001_2026_00037.pdf>
+[18/2/26, 9:14:12 a. m.] Facu: Gracias
+‎[25/2/26, 4:56:07 p. m.] Facu: ‎<adjunto: 00000607-PHOTO-2026-02-25-16-56-07.jpg>
+[25/2/26, 4:56:07 p. m.] Facu: Tiene carvi para entregar 
+‎[3/3/26, 12:50:03 p. m.] Facu: 0001_2026_00039.pdf • ‎1 página ‎<adjunto: 00000609-0001_2026_00039.pdf>
+‎[3/3/26, 12:50:18 p. m.] Facu: 0001_2026_00038 (1).pdf • ‎1 página ‎<adjunto: 00000610-0001_2026_00038 (1).pdf>
+‎[3/3/26, 12:52:08 p. m.] Facu: 0001_2026_00040_proforma.pdf • ‎1 página ‎<adjunto: 00000611-0001_2026_00040_proforma.pdf>
+‎[4/3/26, 12:45:19 p. m.] Facu: 0001_2026_00041.pdf • ‎1 página ‎<adjunto: 00000612-0001_2026_00041.pdf>
+[4/3/26, 6:40:12 p. m.] Guido Avios: ‎Guido Avios salió del grupo.
+[4/3/26, 6:40:17 p. m.] Mati Tuscherr: ‎Mati Tuscherr salió del grupo.
+[4/3/26, 6:40:21 p. m.] Mile Diseño: ‎Mile Diseño salió del grupo.
+‎[6/3/26, 11:20:57 a. m.] Facu: Bento compo.pdf • ‎1 página ‎<adjunto: 00000616-Bento compo.pdf>
+‎[6/3/26, 11:20:57 a. m.] Facu: Bento calces.pdf • ‎1 página ‎<adjunto: 00000617-Bento calces.pdf>
+‎[6/3/26, 11:26:27 a. m.] Facu: Michee algodon.pdf • ‎1 página ‎<adjunto: 00000618-Michee algodon.pdf>
+‎[6/3/26, 11:34:59 a. m.] Facu: Elastico Finger.pdf • ‎1 página ‎<adjunto: 00000619-Elastico Finger.pdf>
+‎[7/3/26, 4:06:41 p. m.] Facu: Asturias.pdf • ‎1 página ‎<adjunto: 00000620-Asturias.pdf>
+‎[7/3/26, 4:06:47 p. m.] Facu: Alison.pdf • ‎1 página ‎<adjunto: 00000621-Alison.pdf>
+‎[12/3/26, 9:42:09 a. m.] Facu: Presupuesto - 2026-03-12T093255.137.pdf • ‎1 página ‎<adjunto: 00000622-Presupuesto - 2026-03-12T093255.137.pdf>
+[12/3/26, 9:42:09 a. m.] Facu: Delpa
+[13/3/26, 9:00:47 a. m.] Facu: Falta del rey rto carvi
+[13/3/26, 9:00:57 a. m.] Facu: Santi taller plast entrego 3.000 ftl
+‎[13/3/26, 10:05:44 a. m.] Facu: ‎<adjunto: 00000626-PHOTO-2026-03-13-10-05-44.jpg>
+[13/3/26, 10:05:45 a. m.] Facu: michee
+[13/3/26, 10:22:53 a. m.] Facu: debe $ 1.097.780,00
+‎[13/3/26, 10:27:13 a. m.] Facu: Del rey.pdf • ‎1 página ‎<adjunto: 00000629-Del rey.pdf>
+‎[13/3/26, 10:30:15 a. m.] Facu: FCA Lordzaid 00000641.pdf • ‎3 páginas ‎<adjunto: 00000630-FCA Lordzaid 00000641.pdf>
+‎[13/3/26, 10:30:15 a. m.] Facu: RTO Lordzaid.pdf • ‎1 página ‎<adjunto: 00000631-RTO Lordzaid.pdf>
+‎[13/3/26, 10:45:22 a. m.] Facu: Plastisoles FTL.pdf • ‎1 página ‎<adjunto: 00000632-Plastisoles FTL.pdf>
+[13/3/26, 10:47:24 a. m.] Achu: Cuando puedas estoo
+[13/3/26, 10:47:52 a. m.] Facu: Voyy
+‎[13/3/26, 10:48:47 a. m.] Facu: Remito Delpa.pdf • ‎1 página ‎<adjunto: 00000635-Remito Delpa.pdf>
+[13/3/26, 10:48:57 a. m.] Facu: saldo $ 99.558,80
+[13/3/26, 10:49:01 a. m.] Facu: lleva fca arca no??
+‎[13/3/26, 10:50:38 a. m.] Facu: FCA Delpa00000642.pdf • ‎3 páginas ‎<adjunto: 00000638-FCA Delpa00000642.pdf>
+[13/3/26, 10:50:45 a. m.] Facu: lo podriamos entregar el lunes cuando bajamos de la salada
+‎[16/3/26, 6:09:35 p. m.] Achu: ‎<adjunto: 00000640-PHOTO-2026-03-16-18-09-35.jpg>
+‎[17/3/26, 4:37:12 p. m.] Facu: Bolsas Euphoria.pdf • ‎1 página ‎<adjunto: 00000641-Bolsas Euphoria.pdf>
+‎[19/3/26, 1:45:35 p. m.] Avios Textiles Ventas: ‎<adjunto: 00000642-PHOTO-2026-03-19-13-45-35.jpg>
+‎[20/3/26, 11:06:41 a. m.] Facu: ‎<adjunto: 00000643-PHOTO-2026-03-20-11-06-41.jpg>
+[20/3/26, 11:06:42 a. m.] Facu: carvi
+‎[20/3/26, 11:10:57 a. m.] Facu: Becar.pdf • ‎1 página ‎<adjunto: 00000645-Becar.pdf>
+[20/3/26, 11:11:33 a. m.] Achu: Dca??????
+‎[20/3/26, 11:11:49 a. m.] Facu: Tito Jeans.pdf • ‎1 página ‎<adjunto: 00000647-Tito Jeans.pdf>
+[20/3/26, 11:11:56 a. m.] Facu: ya habiamos dicho que no amigo
+[20/3/26, 11:12:02 a. m.] Facu: me dijo semana que viene
+‎[20/3/26, 11:13:02 a. m.] Facu: Parcial bordadas Juanitas.pdf • ‎1 página ‎<adjunto: 00000650-Parcial bordadas Juanitas.pdf>
+[23/3/26, 12:12:05 p. m.] Facu: Falta fca naranja y remito nina
+‎[24/3/26, 10:38:20 a. m.] Facu: FCA Textil Brother.pdf • ‎3 páginas ‎<adjunto: 00000652-FCA Textil Brother.pdf>
+‎[24/3/26, 10:38:21 a. m.] Facu: Remito Textil Brother.pdf • ‎1 página ‎<adjunto: 00000653-Remito Textil Brother.pdf>
+[24/3/26, 10:38:39 a. m.] Facu: saldo textil brother $947.889,80
+‎[30/3/26, 10:35:44 a. m.] Facu: DCA saldo $762.402.pdf • ‎1 página ‎<adjunto: 00000655-DCA saldo $762.402.pdf>
+‎[30/3/26, 10:35:49 a. m.] Facu: Tendencia saldo $306.637.pdf • ‎1 página ‎<adjunto: 00000656-Tendencia saldo $306.637.pdf>
+‎[30/3/26, 10:35:56 a. m.] Facu: Jhonkey saldo $469.813.pdf • ‎1 página ‎<adjunto: 00000657-Jhonkey saldo $469.813.pdf>
+‎[30/3/26, 10:36:05 a. m.] Facu: Recreate saldo $90.978.pdf • ‎1 página ‎<adjunto: 00000658-Recreate saldo $90.978.pdf>
+‎[30/3/26, 10:36:18 a. m.] Facu: Princes saldo 375.462.pdf • ‎1 página ‎<adjunto: 00000659-Princes saldo 375.462.pdf>
+‎[30/3/26, 10:55:52 a. m.] Facu: Grecar saldo $510.000.pdf • ‎1 página ‎<adjunto: 00000660-Grecar saldo $510.000.pdf>
+[30/3/26, 11:13:50 a. m.] Facu: Vivi ropa
+Juanitas saldo
+Extremo Uniformes
+Cardena
+Holstner
+Valentino
+Queill
+Versao
+[30/3/26, 11:14:03 a. m.] Facu: hacele un papel a  carla con eso anotado
+[30/3/26, 11:14:12 a. m.] Facu: para coordinar proximas entregas
+[30/3/26, 5:09:12 p. m.] Producto Avios Textiles: hay fotoss o videos de eso q llegóo?
+[30/3/26, 6:04:29 p. m.] Facu: @⁨Achu⁩ podes mañana dedicarle 10/15 mins a filmar cajas x afuera
+[30/3/26, 6:04:35 p. m.] Facu: Y abrir añgunas cajas y mover muestras
+[30/3/26, 6:12:16 p. m.] Achu: El miércoles bien temprano que quedaron en lo de mi vieja
+‎[1/4/26, 1:52:21 p. m.] Facu: FA-A-0019-00009618.pdf • ‎1 página ‎<adjunto: 00000668-FA-A-0019-00009618.pdf>
+[1/4/26, 1:52:42 p. m.] Facu: Bolsas Juanitas
+‎[8/4/26, 11:00:24 a. m.] Facu: FA-A-0002-00014365.pdf • ‎1 página ‎<adjunto: 00000670-FA-A-0002-00014365.pdf>
+[10/4/26, 11:04:20 a. m.] Producto Avios Textiles: buenaas! ya recibieron holster y cardenna ? no veo remito y no estan en el excel ‎<Se editó este mensaje.>
+[10/4/26, 11:05:36 a. m.] Facu: Holster parcialll y cardena si
+[10/4/26, 11:05:38 a. m.] Facu: No remite?
+[10/4/26, 11:05:40 a. m.] Facu: Pense que si
+[10/4/26, 11:05:44 a. m.] Facu: Ahi hago en un toquesiinnn
+[10/4/26, 11:06:14 a. m.] Producto Avios Textiles: oki no se aca en el grupo no lo veoo, calzon quitao?
+‎[10/4/26, 11:09:06 a. m.] Producto Avios Textiles: veo como si lorzaid lo hubiesen recivido pero no veo remito, valido? ‎<adjunto: 00000677-PHOTO-2026-04-10-11-09-06.jpg>
+‎[10/4/26, 11:10:45 a. m.] Producto Avios Textiles: cuando puedan necesito los costos de estos para confirmar las comprass🙌🏻 ‎<adjunto: 00000678-PHOTO-2026-04-10-11-10-45.jpg>
+[10/4/26, 11:54:10 a. m.] Facu: sii lordzaid rrecibimos
+[10/4/26, 11:54:12 a. m.] Facu: facure directo
+[10/4/26, 11:55:51 a. m.] Facu: nos unimos $115
+unlimeted $321,04
+michee $60+120k de matriz
+lo de diego esta en stand by
+[10/4/26, 11:56:00 a. m.] Facu: si calzon todo entregado
+‎[10/4/26, 11:58:16 a. m.] Facu: 0001_2026_00069_proforma.pdf • ‎1 página ‎<adjunto: 00000683-0001_2026_00069_proforma.pdf>
+‎[10/4/26, 11:58:55 a. m.] Facu: 0001_2026_00070_proforma.pdf • ‎1 página ‎<adjunto: 00000684-0001_2026_00070_proforma.pdf>
+‎[10/4/26, 12:00:08 p. m.] Facu: 0001_2026_00068_proforma.pdf • ‎1 página ‎<adjunto: 00000685-0001_2026_00068_proforma.pdf>
+[10/4/26, 12:29:19 p. m.] Producto Avios Textiles: perfe valido tonce
+[10/4/26, 12:30:44 p. m.] Producto Avios Textiles: perf graciass
+[13/4/26, 12:10:42 p. m.] Producto Avios Textiles: Holiiss como va?
+[13/4/26, 12:10:44 p. m.] Producto Avios Textiles: https://docs.google.com/spreadsheets/d/1HMIsKaaz_ndcirctIoqQ1I-4q2l5l7E3Jcyovc4VffE/edit?gid=0#gid=0
+[13/4/26, 12:10:55 p. m.] Producto Avios Textiles: les dejo el sheet actualizado con lo que está en produccion!
+‎[15/4/26, 9:08:41 a. m.] Facu: ‎<adjunto: 00000691-PHOTO-2026-04-15-09-08-41.jpg>
+[15/4/26, 9:08:41 a. m.] Facu: Entregas carvi
+[15/4/26, 10:52:16 a. m.] Producto Avios Textiles: da seria dca?
+[15/4/26, 10:56:32 a. m.] Facu: Nopp alejandro
+[15/4/26, 11:06:56 a. m.] Producto Avios Textiles: perfe validados
+‎[15/4/26, 11:15:21 a. m.] Facu: ‎<adjunto: 00000696-STICKER-2026-04-15-11-15-21.webp>
+‎[16/4/26, 6:25:49 p. m.] Facu: FCA PAssantino.pdf • ‎3 páginas ‎<adjunto: 00000697-FCA PAssantino.pdf>
+‎[16/4/26, 6:25:49 p. m.] Facu: Remito Pasantino bordadas.pdf • ‎1 página ‎<adjunto: 00000698-Remito Pasantino bordadas.pdf>
+‎[16/4/26, 6:28:57 p. m.] Facu: Cardena.pdf • ‎1 página ‎<adjunto: 00000699-Cardena.pdf>
+‎[16/4/26, 6:28:58 p. m.] Facu: Queill.pdf • ‎1 página ‎<adjunto: 00000700-Queill.pdf>
+‎[16/4/26, 6:28:59 p. m.] Facu: Alejandor bordada 20.pdf • ‎1 página ‎<adjunto: 00000701-Alejandor bordada 20.pdf>
+‎[16/4/26, 6:28:59 p. m.] Facu: Pierrs bordadas.pdf • ‎1 página ‎<adjunto: 00000702-Pierrs bordadas.pdf>
+[16/4/26, 6:29:09 p. m.] Facu: alejandro y cardena son parciales, ojo mile que deberian quedar como entrega parcial
+‎[17/4/26, 10:56:53 a. m.] Facu: Tags buenos hijos saldo $535.700,00.pdf • ‎1 página ‎<adjunto: 00000704-Tags buenos hijos saldo $535.700,00.pdf>
+[17/4/26, 12:26:56 p. m.] Producto Avios Textiles: uuu ya los habia validado aca, y cardenna sem pasada
+[17/4/26, 12:27:02 p. m.] Producto Avios Textiles: por esto digo
+[17/4/26, 2:41:31 p. m.] Facu: Okiss
+[17/4/26, 2:41:41 p. m.] Facu: Acordemos el lunes cuando veamos que falta de carvi
+‎[21/4/26, 11:01:31 a. m.] Facu: ‎<adjunto: 00000709-PHOTO-2026-04-21-11-01-31.jpg>
+[21/4/26, 11:01:32 a. m.] Facu: Eso entrega Carvi asi actualizamos pendientes
+Mile Fijate que es parcial y que no
+[21/4/26, 11:01:58 a. m.] Facu: Ya active que se envie automatico la fca al numero de cliente cargado por si @⁨Achu⁩ lo queres editar antes que facture
+‎[21/4/26, 11:45:53 a. m.] Facu: 0001_2026_00083.pdf • ‎1 página ‎<adjunto: 00000712-0001_2026_00083.pdf>
+‎[21/4/26, 11:45:54 a. m.] Facu: 0001_2026_00084.pdf • ‎1 página ‎<adjunto: 00000713-0001_2026_00084.pdf>
+‎[21/4/26, 11:45:54 a. m.] Facu: 0001_2026_00085.pdf • ‎1 página ‎<adjunto: 00000714-0001_2026_00085.pdf>
+[21/4/26, 11:46:10 a. m.] Facu: juanitas versao y diegmarc

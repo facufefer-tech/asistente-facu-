@@ -1,0 +1,18 @@
+{
+  "sessionId": "pagos_fix_1777058788149_0.04721889007515401",
+  "savedAt": 1777058788416,
+  "history": [
+    {
+      "role": "system",
+      "content": "Contexto de sesión inicial."
+    },
+    {
+      "role": "user",
+      "content": "entró plata de Gary 85000 por mp"
+    },
+    {
+      "role": "assistant",
+      "content": "No entendí bien qué querés hacer. ¿Es alguna de estas opciones?"
+    }
+  ]
+}
