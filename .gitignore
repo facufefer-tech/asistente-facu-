@@ -1,5 +1,20 @@
+# dependencies
 node_modules/
+
+# local env
 .env
+
+# app output / media (kept out of VCS in this repo)
 propuestas/
 logos/
+
+# local scratch & tests (not for git)
+tmp/
+tmp_pdfs/
+tmp-whatsapp/
+pruebas-diseno/
+data/sesiones/
+*.log
+
+# legacy / alternate name
 .tmp_whatsapp/
